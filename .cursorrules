@@ -1,0 +1,210 @@
+# DJ Tag Generator - AI Assistant Rules
+
+## Project Context
+
+This is a Laravel 12 application for generating professional DJ tags (audio voice-overs). The app uses Vue 3 + Inertia.js for the frontend, with TailwindCSS 4 for styling. Audio generation will use TTS APIs and FFmpeg for processing.
+
+## Technology Stack
+
+### Backend
+- Laravel 12 (streamlined structure, no Kernel.php)
+- PHP 8.2+
+- Inertia Laravel 2.x
+- Laravel Fortify (authentication)
+- Laravel Wayfinder (type-safe routing)
+- Pest 4 (testing with browser support)
+- Laravel Sail (Docker development)
+
+### Frontend
+- Vue 3.5 (Composition API, script setup)
+- Inertia Vue 3 2.x
+- TypeScript 5.2
+- TailwindCSS 4.x (CSS-first config with @theme)
+- Reka UI (headless components)
+- Vite 7
+
+## Development Commands
+
+All commands MUST be run through Laravel Sail:
+
+```bash
+# Start services
+vendor/bin/sail up -d
+
+# Development server (includes Vite, queue, logs)
+vendor/bin/sail composer run dev
+
+# Run tests
+vendor/bin/sail artisan test
+vendor/bin/sail artisan test --filter=TestName
+
+# Code formatting
+vendor/bin/sail bin pint
+vendor/bin/sail npm run format
+
+# Database
+vendor/bin/sail artisan migrate
+vendor/bin/sail artisan db:seed
+
+# Artisan commands
+vendor/bin/sail artisan make:model Tag -mfs
+vendor/bin/sail artisan make:controller TagController
+vendor/bin/sail artisan make:test TagTest --pest
+
+# Open in browser
+vendor/bin/sail open
+```
+
+## Code Conventions
+
+### Laravel Specific
+- Use action classes for business logic (app/Actions/)
+- Use Form Requests for validation (never inline validation)
+- Follow existing model conventions for casts() method vs $casts property
+- Use Eloquent relationships with return type hints
+- Avoid DB::, prefer Model::query()
+- Use eager loading to prevent N+1 queries
+- Use named routes: route('tags.show', $tag)
+- Never use env() outside config files
+
+### Vue/TypeScript
+- Use Composition API with script setup
+- Import Wayfinder actions: `import { store } from '@/actions/App/Http/Controllers/TagController'`
+- Use Inertia Form component for forms when possible
+- Follow existing component structure in resources/js/Components/
+- Use TailwindCSS classes, check existing conventions
+- Use gap utilities for spacing, not margins
+- Support dark mode with dark: prefix if other pages do
+
+### Testing
+- Write Pest tests (not PHPUnit)
+- Use `it('description', function() {})` syntax
+- Create tests with: `vendor/bin/sail artisan make:test --pest`
+- Use model factories for test data
+- Use specific assertions: assertSuccessful(), assertForbidden(), not assertStatus()
+- Run minimal tests with --filter before finalizing changes
+
+### Code Quality
+- Run Pint before committing: `vendor/bin/sail bin pint`
+- Use PHP 8 constructor property promotion
+- Always use explicit return type declarations
+- Use descriptive variable/method names
+- Check sibling files for conventions before creating new ones
+
+## Audio Processing Strategy
+
+### TTS Integration
+- Create interface: TextToSpeechService
+- Implement adapters for different TTS providers
+- Store API keys in .env, access via config()
+- Consider: OpenAI TTS, Google Cloud TTS, ElevenLabs
+
+### Audio Processing
+- Use FFmpeg via php-ffmpeg package
+- Queue jobs for async processing: TagGenerationJob
+- Store files in private storage
+- Use signed URLs for downloads
+
+## Database Models
+
+### Tag (DjTag)
+- Belongs to User
+- Fields: name, voice_type, effects (JSON), audio_path, status, duration
+- Status enum: pending, processing, completed, failed
+
+### TagPreset
+- Belongs to User (nullable for system presets)
+- Fields: name, voice_type, effects (JSON), is_public
+
+## File Structure
+
+```
+app/
+├── Actions/          # Business logic (TagGenerator, etc.)
+├── Http/
+│   ├── Controllers/  # Thin controllers
+│   └── Requests/     # Form validation
+├── Models/           # Eloquent models
+└── Services/         # TTS, Audio processing
+
+resources/js/
+├── Components/
+│   ├── UI/          # Reusable UI components
+│   └── Tag/         # Tag-specific components
+├── Pages/
+│   ├── Tags/        # Tag CRUD pages
+│   └── Dashboard.vue
+└── types/           # TypeScript definitions
+
+tests/
+├── Feature/         # Feature tests (most tests)
+└── Unit/            # Unit tests
+```
+
+## Important Notes
+
+### Laravel 12 Structure
+- No app/Console/Kernel.php - use bootstrap/app.php
+- No app/Http/Kernel.php - middleware in bootstrap/app.php
+- Commands auto-register from app/Console/Commands/
+
+### Inertia Best Practices
+- Use Inertia::render() in controllers
+- Use <Link> or router.visit() for navigation
+- Use deferred props for heavy data with skeleton states
+- Use Form component with resetOnSuccess, etc.
+
+### Wayfinder Usage
+- Import named functions: `import { show, store } from '@/actions/.../TagController'`
+- Get route object: `show(1)` → `{ url: "/tags/1", method: "get" }`
+- Get URL only: `show.url(1)` → `"/tags/1"`
+- Form binding: `<Form v-bind="store.form()">`
+
+### TailwindCSS 4
+- Use @import "tailwindcss" not @tailwind directives
+- Configure with @theme in CSS, not tailwind.config.js
+- Use new utilities: bg-black/50 not bg-opacity-50
+- Use shrink-* not flex-shrink-*
+
+## Search Documentation First
+
+Before implementing features:
+1. Use search-docs tool for Laravel ecosystem packages
+2. Use multiple broad queries: ['audio processing', 'file uploads', 'queues']
+3. Don't add package names to queries (already included)
+
+## Verification Requirements
+
+Every change must be tested:
+1. Write/update a test
+2. Run tests with --filter
+3. Ask user if they want full test suite run
+
+## Questions to Ask
+
+When unclear:
+- Which TTS service to use?
+- Audio format preferences (MP3, WAV, OGG)?
+- Storage strategy (local, S3)?
+- Voice options to support?
+- Effects to implement first?
+
+## Do Not
+
+- Create README or docs files unless explicitly requested
+- Use @tailwind directives (use @import)
+- Use env() outside config files
+- Use DB:: when Eloquent works
+- Make inline validation (use Form Requests)
+- Run commands without vendor/bin/sail prefix
+- Create tests without --pest flag
+- Use assertStatus() when specific methods exist
+
+## Always
+
+- Run Pint before finalizing: `vendor/bin/sail bin pint`
+- Run relevant tests: `vendor/bin/sail artisan test --filter=TagTest`
+- Check existing conventions in sibling files
+- Use Laravel Boost tools (tinker, database-query, search-docs)
+- Follow the Laravel Boost guidelines in GEMINI.md
+- Be concise in explanations - focus on what's important
