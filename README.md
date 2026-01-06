@@ -2,6 +2,8 @@
 
 A Laravel application for generating professional DJ tags - the audio clips that DJs and producers play at the start of their tracks or during their DJ sets to identify themselves.
 
+> 📋 **Development Progress**: See [TASKS.md](file:///Users/liamthursfield/code/dj-tag-generator/TASKS.md) for the complete task list and current status.
+
 ## Features
 
 ### Core Functionality

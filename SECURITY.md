@@ -104,6 +104,9 @@ if (!in_array($file->extension(), $allowedFormats)) {
 
 **Storage:**
 - User API keys stored with Laravel's encrypted casting
+- Separate field per TTS service:
+  - `openai_api_key` - OpenAI TTS API key
+  - `elevenlabs_api_key` - ElevenLabs API key
 - Never logged or exposed in error messages
 - Separate encryption key from application key
 
@@ -111,14 +114,14 @@ if (!in_array($file->extension(), $allowedFormats)) {
 ```php
 // app/Models/User.php
 protected $casts = [
-    'tts_api_key' => 'encrypted',
-    'storage_credentials' => 'encrypted:array',
+    'openai_api_key' => 'encrypted',
+    'elevenlabs_api_key' => 'encrypted',
 ];
 
 protected $hidden = [
     'password',
-    'tts_api_key',
-    'storage_credentials',
+    'openai_api_key',
+    'elevenlabs_api_key',
 ];
 ```
 
@@ -130,6 +133,12 @@ if (!$service->validateCredentials($apiKey)) {
     throw new ValidationException('Invalid API key');
 }
 ```
+
+**User Flexibility:**
+- Users can configure OpenAI only
+- Users can configure ElevenLabs only
+- Users can configure both services
+- Switch between services per tag generation
 
 ### 3. Resource Limits
 
