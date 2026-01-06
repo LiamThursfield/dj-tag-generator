@@ -2,6 +2,9 @@
 
 namespace App\Jobs;
 
+use App\Contracts\AudioProcessor;
+use App\Models\DjTag;
+use App\Services\TTS\TtsServiceFactory;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
@@ -13,13 +16,13 @@ class GenerateDjTagJob implements ShouldQueue
 
     public $timeout = 120;
 
-    public function __construct(public \App\Models\DjTag $djTag)
+    public function __construct(public DjTag $djTag)
     {
     }
 
     public function handle(
-        \App\Services\TTS\TtsServiceFactory $ttsFactory,
-        \App\Contracts\AudioProcessor $audioProcessor
+        TtsServiceFactory $ttsFactory,
+        AudioProcessor $audioProcessor
     ): void {
         try {
             $this->djTag->update(['status' => 'processing']);

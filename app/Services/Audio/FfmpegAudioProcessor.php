@@ -33,10 +33,9 @@ class FfmpegAudioProcessor implements AudioProcessor
         $format = $this->getAudioFormat(config('audio.output_format', 'mp3'));
         $format->setAudioKiloBitrate((int) str_replace('k', '', config('audio.bitrate', '192k')));
 
-        if (! empty($filters)) {
+        if (!empty($filters)) {
             $audio->filters()
-                ->custom(implode(',', $filters))
-                ->synchronize();
+                ->custom(implode(',', $filters));
         }
 
         $audio->save($format, $outputPath);
@@ -82,8 +81,7 @@ class FfmpegAudioProcessor implements AudioProcessor
         $normalizeFilter = config('audio.effects.normalize.filter', 'loudnorm=I=-16:TP=-1.5:LRA=11');
 
         $audio->filters()
-            ->custom($normalizeFilter)
-            ->synchronize();
+            ->custom($normalizeFilter);
 
         $audio->save($format, $outputPath);
 
@@ -101,8 +99,7 @@ class FfmpegAudioProcessor implements AudioProcessor
 
         // Remove silence from start and end
         $audio->filters()
-            ->custom('silenceremove=start_periods=1:start_duration=0.1:start_threshold=-50dB:stop_periods=-1:stop_duration=0.5:stop_threshold=-50dB')
-            ->synchronize();
+            ->custom('silenceremove=start_periods=1:start_duration=0.1:start_threshold=-50dB:stop_periods=-1:stop_duration=0.5:stop_threshold=-50dB');
 
         $audio->save($format, $outputPath);
 
@@ -161,8 +158,14 @@ class FfmpegAudioProcessor implements AudioProcessor
     protected function generateOutputPath(string $inputPath, ?string $extension = null): string
     {
         $extension = $extension ?? pathinfo($inputPath, PATHINFO_EXTENSION);
-        $filename = Str::uuid().'.'.$extension;
+        $filename = Str::uuid() . '.' . $extension;
 
-        return storage_path('app/processed/'.$filename);
+        $path = storage_path('app/processed/' . $filename);
+
+        if (!file_exists(dirname($path))) {
+            mkdir(dirname($path), 0755, true);
+        }
+
+        return $path;
     }
 }

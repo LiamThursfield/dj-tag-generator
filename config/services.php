@@ -54,7 +54,7 @@ return [
 
     'elevenlabs' => [
         'api_key' => env('ELEVENLABS_API_KEY'),
-        'model' => env('ELEVENLABS_MODEL', 'eleven_monolingual_v1'),
+        'model' => env('ELEVENLABS_MODEL', 'eleven_multilingual_v2'),
     ],
 
     /*

@@ -24,18 +24,18 @@ class ElevenLabsTtsService implements TextToSpeechService
             'xi-api-key' => $this->apiKey,
             'Content-Type' => 'application/json',
         ])->post("{$this->baseUrl}/text-to-speech/{$voiceId}", [
-            'text' => $text,
-            'model_id' => $options['model'] ?? config('services.elevenlabs.model', 'eleven_monolingual_v1'),
-            'voice_settings' => [
-                'stability' => $options['stability'] ?? 0.5,
-                'similarity_boost' => $options['similarity'] ?? 0.75,
-                'style' => $options['style'] ?? 0,
-                'use_speaker_boost' => $options['speaker_boost'] ?? true,
-            ],
-        ]);
+                    'text' => $text,
+                    'model_id' => $options['model'] ?? config('services.elevenlabs.model', 'eleven_multilingual_v2'),
+                    'voice_settings' => [
+                        'stability' => $options['stability'] ?? 0.5,
+                        'similarity_boost' => $options['similarity'] ?? 0.75,
+                        'style' => $options['style'] ?? 0,
+                        'use_speaker_boost' => $options['speaker_boost'] ?? true,
+                    ],
+                ]);
 
         if ($response->failed()) {
-            throw new \Exception('ElevenLabs API request failed: '.$response->body());
+            throw new \Exception('ElevenLabs API request failed: ' . $response->body());
         }
 
         return $response->body();
@@ -101,13 +101,21 @@ class ElevenLabsTtsService implements TextToSpeechService
 
     protected function getDefaultVoiceId(): string
     {
-        // Rachel - a popular default voice
-        return '21m00Tcm4TlvDq8ikWAM';
+        // Rex - a good default for DJ Tags
+        return 'mtrellq69YZsNwzUSyXh';
     }
 
     protected function getDefaultVoices(): array
     {
         return [
+            'mtrellq69YZsNwzUSyXh' => [
+                'id' => 'mtrellq69YZsNwzUSyXh',
+                'name' => 'Rex Thunder',
+                'description' => 'Promo voice with deep and powerful tone',
+                'category' => 'premade',
+                'preview_url' => null,
+                'labels' => ['american', 'male'],
+            ],
             '21m00Tcm4TlvDq8ikWAM' => [
                 'id' => '21m00Tcm4TlvDq8ikWAM',
                 'name' => 'Rachel',

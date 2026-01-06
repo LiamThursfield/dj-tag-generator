@@ -20,7 +20,7 @@ return [
 
     'max_duration' => env('AUDIO_MAX_DURATION', 10), // seconds - prevents abuse
 
-    'storage_disk' => env('AUDIO_STORAGE_DISK', 'local'),
+    'storage_disk' => env('AUDIO_STORAGE_DISK', 'public'),
 
     'cleanup_days' => env('AUDIO_CLEANUP_DAYS', 30),
 

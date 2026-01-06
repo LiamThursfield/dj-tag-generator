@@ -34,7 +34,7 @@ class GenerateDjTag
         ]);
 
         // 3. Dispatch the Job
-        GenerateDjTagJob::dispatch($tag);
+        GenerateDjTagJob::dispatchSync($tag);
 
         return $tag;
     }
