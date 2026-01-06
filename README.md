@@ -6,9 +6,19 @@ A Laravel application for generating professional DJ tags - the audio clips that
 
 ### Core Functionality
 - **Text-to-Speech Generation**: Convert any phrase, word, or DJ name into a professional audio tag
-- **Voice Customization**: Multiple voice types and styles to choose from
-- **Sound Effects**: Add professional effects to make your tag stand out
-- **Audio Export**: Download your generated tags in various formats
+- **Multiple TTS Providers**: 
+  - **OpenAI TTS**: 6 high-quality voices (alloy, echo, fable, onyx, nova, shimmer)
+  - **ElevenLabs**: Ultra-realistic voices with emotion control and voice cloning
+- **Audio Processing**: Professional effects powered by FFmpeg
+  - Pitch shifting
+  - Speed control
+  - Reverb (small room, large hall, stadium)
+  - Bass boost
+  - Audio normalization
+  - Silence trimming
+- **Flexible Storage**: Local, MinIO (S3-compatible), or Cloudflare R2
+- **BYOK (Bring Your Own API Key)**: Users provide their own TTS API keys to minimize platform costs
+- **Audio Export**: Download generated tags in MP3 or WAV format
 
 ### Planned Features
 - Multiple voice options (male, female, robotic, etc.)
@@ -172,9 +182,39 @@ APP_ENV=local
 APP_DEBUG=true
 APP_URL=http://localhost
 
-# Audio Processing (to be configured)
-# TTS_SERVICE=
-# TTS_API_KEY=
+# Queue & Cache (Redis)
+QUEUE_CONNECTION=redis
+CACHE_STORE=redis
+
+# Text-to-Speech Service
+TTS_SERVICE=openai  # or elevenlabs
+
+# OpenAI TTS
+OPENAI_API_KEY=your-api-key-here
+OPENAI_TTS_MODEL=tts-1  # or tts-1-hd
+OPENAI_TTS_VOICE=alloy  # alloy, echo, fable, onyx, nova, shimmer
+
+# ElevenLabs (optional)
+ELEVENLABS_API_KEY=your-api-key-here
+ELEVENLABS_MODEL=eleven_monolingual_v1
+
+# Audio Processing
+AUDIO_OUTPUT_FORMAT=mp3
+AUDIO_SAMPLE_RATE=44100
+AUDIO_BITRATE=192k
+AUDIO_STORAGE_DISK=minio  # local, minio, or r2
+
+# MinIO (local development)
+MINIO_ENDPOINT=http://minio:9000
+MINIO_ACCESS_KEY_ID=sail
+MINIO_SECRET_ACCESS_KEY=password
+MINIO_BUCKET=dj-tags
+
+# Cloudflare R2 (production)
+# R2_ACCESS_KEY_ID=
+# R2_SECRET_ACCESS_KEY=
+# R2_BUCKET=
+# R2_ENDPOINT=https://[account-id].r2.cloudflarestorage.com
 ```
 
 ## Contributing

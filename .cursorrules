@@ -94,16 +94,36 @@ vendor/bin/sail open
 ## Audio Processing Strategy
 
 ### TTS Integration
-- Create interface: TextToSpeechService
-- Implement adapters for different TTS providers
-- Store API keys in .env, access via config()
-- Consider: OpenAI TTS, Google Cloud TTS, ElevenLabs
+- **Implemented Services**: OpenAI TTS, ElevenLabs
+- **Interface**: TextToSpeechService contract in app/Contracts/
+- **Factory**: TtsServiceFactory for service instantiation
+- **API Keys**: Stored encrypted in user model or config
+- **Services**:
+  - OpenAI TTS: 6 voices, $15/1M chars, tts-1 and tts-1-hd models
+  - ElevenLabs: 100+ voices, voice cloning, emotion control
 
 ### Audio Processing
-- Use FFmpeg via php-ffmpeg package
-- Queue jobs for async processing: TagGenerationJob
-- Store files in private storage
-- Use signed URLs for downloads
+- **Engine**: FFmpeg via php-ffmpeg/php-ffmpeg package
+- **Interface**: AudioProcessor contract in app/Contracts/
+- **Implementation**: FfmpegAudioProcessor in app/Services/Audio/
+- **Effects**: Pitch shift, speed, reverb, bass boost, normalize, trim silence
+- **Queue**: Redis-based async processing via TagGenerationJob
+- **Storage**: MinIO (local), Cloudflare R2 (production), or local disk
+
+### Service Usage
+```php
+// TTS Generation
+$tts = app(TtsServiceFactory::class)->make('openai', $user->tts_api_key);
+$audio = $tts->generate('DJ Phoenix', ['voice' => 'onyx']);
+
+// Audio Processing
+$processor = app(FfmpegAudioProcessor::class);
+$processed = $processor->applyEffects($audioPath, [
+    'pitch' => 2,
+    'reverb' => 'large_hall',
+    'normalize' => true,
+]);
+```
 
 ## Database Models
 

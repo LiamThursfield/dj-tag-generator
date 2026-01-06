@@ -76,25 +76,87 @@ The DJ Tag Generator is a Laravel 12 application that enables DJs and music prod
 
 ## Audio Processing Strategy
 
-### Text-to-Speech Integration
-Options to consider:
-1. **Google Cloud Text-to-Speech**: High quality, multiple voices
-2. **Amazon Polly**: Good variety, neural voices
-3. **ElevenLabs**: Very realistic, expensive
-4. **OpenAI TTS**: Good quality, simple API
-5. **Local TTS**: Piper, Coqui TTS (self-hosted)
+### Text-to-Speech Integration ✅ IMPLEMENTED
 
-### Audio Effects Processing
-- **FFmpeg**: For audio manipulation (pitch, speed, reverb, etc.)
-- **SoX**: Alternative audio processing tool
-- **PHP Audio Processing**: Libraries like php-ffmpeg
+**Implemented Services:**
+
+1. **OpenAI TTS** - Primary service
+   - 6 voices: alloy, echo, fable, onyx, nova, shimmer
+   - 2 models: tts-1 (faster), tts-1-hd (higher quality)
+   - Pricing: $15 per 1M characters
+   - Speed control: 0.25x to 4.0x
+   - Formats: MP3, Opus, AAC, FLAC, WAV, PCM
+
+2. **ElevenLabs** - Premium service
+   - 100+ pre-made voices
+   - Voice cloning capability
+   - Emotion and style control
+   - Pricing: ~$0.30 per 1000 characters
+   - Free tier: 10,000 characters/month
+
+**Implementation:**
+```php
+// app/Contracts/TextToSpeechService.php
+interface TextToSpeechService
+{
+    public function generate(string $text, array $options = []): string;
+    public function getAvailableVoices(): array;
+    public function getVoicePreview(string $voiceId): ?string;
+    public function estimateCost(string $text): float;
+    public function validateCredentials(string $apiKey): bool;
+}
+
+// app/Services/TTS/OpenAiTtsService.php
+class OpenAiTtsService implements TextToSpeechService { }
+
+// app/Services/TTS/ElevenLabsTtsService.php
+class ElevenLabsTtsService implements TextToSpeechService { }
+
+// app/Services/TTS/TtsServiceFactory.php
+class TtsServiceFactory
+{
+    public function make(?string $service = null, ?string $apiKey = null): TextToSpeechService;
+}
+```
+
+### Audio Effects Processing ✅ IMPLEMENTED
+
+**FFmpeg Integration:**
+- Package: `php-ffmpeg/php-ffmpeg`
+- Binary: Installed in Docker container
+- Interface: `app/Contracts/AudioProcessor.php`
+- Implementation: `app/Services/Audio/FfmpegAudioProcessor.php`
+
+**Available Effects:**
+- **Pitch Shifting**: -12 to +12 semitones
+- **Speed Control**: 0.5x to 2.0x
+- **Reverb**: Small room, large hall, stadium
+- **Bass Boost**: Enhanced low frequencies
+- **Normalization**: Loudness normalization (EBU R128)
+- **Silence Trimming**: Remove silence from start/end
+
+**Implementation:**
+```php
+// app/Contracts/AudioProcessor.php
+interface AudioProcessor
+{
+    public function applyEffects(string $inputPath, array $effects): string;
+    public function getDuration(string $path): float;
+    public function convert(string $inputPath, string $format, array $options = []): string;
+    public function normalize(string $inputPath): string;
+    public function trimSilence(string $inputPath): string;
+}
+
+// app/Services/Audio/FfmpegAudioProcessor.php
+class FfmpegAudioProcessor implements AudioProcessor { }
+```
 
 ### Processing Flow
 1. User submits tag request → Validation
-2. Job dispatched to queue → TagGenerationJob
+2. Job dispatched to Redis queue → TagGenerationJob
 3. TTS API call → Generate base audio
 4. Apply effects via FFmpeg → Process audio
-5. Store file → Update database
+5. Store file in MinIO/R2/local → Update database
 6. Notify user → WebSocket/polling
 
 ## Frontend Architecture
@@ -136,27 +198,53 @@ resources/js/Components/
 - Type-safe route parameters
 - Automatic form action/method generation
 
-## API Integration Points
+## API Integration Points ✅ IMPLEMENTED
 
 ### TTS Service Interface
 ```php
+// app/Contracts/TextToSpeechService.php
 interface TextToSpeechService
 {
-    public function generate(string $text, array $options): string;
-    public function getVoices(): array;
-    public function getVoicePreview(string $voiceId): string;
+    public function generate(string $text, array $options = []): string;
+    public function getAvailableVoices(): array;
+    public function getVoicePreview(string $voiceId): ?string;
+    public function estimateCost(string $text): float;
+    public function validateCredentials(string $apiKey): bool;
 }
 ```
 
+**Implementations:**
+- `app/Services/TTS/OpenAiTtsService.php`
+- `app/Services/TTS/ElevenLabsTtsService.php`
+
 ### Audio Processing Interface
 ```php
+// app/Contracts/AudioProcessor.php
 interface AudioProcessor
 {
     public function applyEffects(string $inputPath, array $effects): string;
     public function getDuration(string $path): float;
-    public function convert(string $input, string $format): string;
+    public function convert(string $inputPath, string $format, array $options = []): string;
+    public function normalize(string $inputPath): string;
+    public function trimSilence(string $inputPath): string;
 }
 ```
+
+**Implementation:**
+- `app/Services/Audio/FfmpegAudioProcessor.php`
+
+### Storage Configuration ✅ IMPLEMENTED
+
+**Available Disks:**
+- `local`: Laravel's default local storage
+- `minio`: S3-compatible storage for local development
+- `r2`: Cloudflare R2 for production
+- `s3`: AWS S3 (if needed)
+
+**Configuration:**
+- `config/filesystems.php`: Disk configurations
+- `config/services.php`: Service credentials
+- `config/audio.php`: Audio processing settings
 
 ## Queue Configuration
 
