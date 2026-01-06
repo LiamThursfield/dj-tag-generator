@@ -163,7 +163,7 @@ create.form = createForm
 
 /**
 * @see \App\Http\Controllers\DjTagController::store
-* @see app/Http/Controllers/DjTagController.php:35
+* @see app/Http/Controllers/DjTagController.php:36
 * @route '/dj-tags'
 */
 export const store = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -178,7 +178,7 @@ store.definition = {
 
 /**
 * @see \App\Http\Controllers\DjTagController::store
-* @see app/Http/Controllers/DjTagController.php:35
+* @see app/Http/Controllers/DjTagController.php:36
 * @route '/dj-tags'
 */
 store.url = (options?: RouteQueryOptions) => {
@@ -187,7 +187,7 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\DjTagController::store
-* @see app/Http/Controllers/DjTagController.php:35
+* @see app/Http/Controllers/DjTagController.php:36
 * @route '/dj-tags'
 */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -197,7 +197,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\DjTagController::store
-* @see app/Http/Controllers/DjTagController.php:35
+* @see app/Http/Controllers/DjTagController.php:36
 * @route '/dj-tags'
 */
 const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -207,7 +207,7 @@ const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => 
 
 /**
 * @see \App\Http\Controllers\DjTagController::store
-* @see app/Http/Controllers/DjTagController.php:35
+* @see app/Http/Controllers/DjTagController.php:36
 * @route '/dj-tags'
 */
 storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -219,7 +219,7 @@ store.form = storeForm
 
 /**
 * @see \App\Http\Controllers\DjTagController::show
-* @see app/Http/Controllers/DjTagController.php:42
+* @see app/Http/Controllers/DjTagController.php:43
 * @route '/dj-tags/{dj_tag}'
 */
 export const show = (args: { dj_tag: string | number } | [dj_tag: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -234,7 +234,7 @@ show.definition = {
 
 /**
 * @see \App\Http\Controllers\DjTagController::show
-* @see app/Http/Controllers/DjTagController.php:42
+* @see app/Http/Controllers/DjTagController.php:43
 * @route '/dj-tags/{dj_tag}'
 */
 show.url = (args: { dj_tag: string | number } | [dj_tag: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -261,7 +261,7 @@ show.url = (args: { dj_tag: string | number } | [dj_tag: string | number ] | str
 
 /**
 * @see \App\Http\Controllers\DjTagController::show
-* @see app/Http/Controllers/DjTagController.php:42
+* @see app/Http/Controllers/DjTagController.php:43
 * @route '/dj-tags/{dj_tag}'
 */
 show.get = (args: { dj_tag: string | number } | [dj_tag: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -271,7 +271,7 @@ show.get = (args: { dj_tag: string | number } | [dj_tag: string | number ] | str
 
 /**
 * @see \App\Http\Controllers\DjTagController::show
-* @see app/Http/Controllers/DjTagController.php:42
+* @see app/Http/Controllers/DjTagController.php:43
 * @route '/dj-tags/{dj_tag}'
 */
 show.head = (args: { dj_tag: string | number } | [dj_tag: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -281,7 +281,7 @@ show.head = (args: { dj_tag: string | number } | [dj_tag: string | number ] | st
 
 /**
 * @see \App\Http\Controllers\DjTagController::show
-* @see app/Http/Controllers/DjTagController.php:42
+* @see app/Http/Controllers/DjTagController.php:43
 * @route '/dj-tags/{dj_tag}'
 */
 const showForm = (args: { dj_tag: string | number } | [dj_tag: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -291,7 +291,7 @@ const showForm = (args: { dj_tag: string | number } | [dj_tag: string | number ]
 
 /**
 * @see \App\Http\Controllers\DjTagController::show
-* @see app/Http/Controllers/DjTagController.php:42
+* @see app/Http/Controllers/DjTagController.php:43
 * @route '/dj-tags/{dj_tag}'
 */
 showForm.get = (args: { dj_tag: string | number } | [dj_tag: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -301,7 +301,7 @@ showForm.get = (args: { dj_tag: string | number } | [dj_tag: string | number ] |
 
 /**
 * @see \App\Http\Controllers\DjTagController::show
-* @see app/Http/Controllers/DjTagController.php:42
+* @see app/Http/Controllers/DjTagController.php:43
 * @route '/dj-tags/{dj_tag}'
 */
 showForm.head = (args: { dj_tag: string | number } | [dj_tag: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

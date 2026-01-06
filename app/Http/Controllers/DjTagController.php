@@ -21,6 +21,7 @@ class DjTagController extends Controller
     public function create()
     {
         return \Inertia\Inertia::render('dj-tags/Create', [
+            'preferred_service' => auth()->user()->preferred_tts_service,
             'voices' => [
                 'openai' => array_keys(\App\Services\TTS\OpenAiTtsService::VOICES),
                 // We'll need a way to fetch ElevenLabs voices dynamically, ideally via an API call in the frontend or cached here
