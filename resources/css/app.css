@@ -77,6 +77,15 @@
     ::file-selector-button {
         border-color: var(--color-gray-200, currentColor);
     }
+
+    button,
+    [button] {
+        @apply cursor-pointer;
+    }
+
+    button:disabled {
+        @apply cursor-default;
+    }
 }
 
 @layer utilities {

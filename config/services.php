@@ -35,4 +35,46 @@ return [
         ],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Text-to-Speech Services
+    |--------------------------------------------------------------------------
+    */
+
+    'tts' => [
+        'default' => env('TTS_SERVICE', 'openai'),
+    ],
+
+    'openai' => [
+        'api_key' => env('OPENAI_API_KEY'),
+        'organization' => env('OPENAI_ORGANIZATION'),
+        'model' => env('OPENAI_TTS_MODEL', 'tts-1'),
+        'voice' => env('OPENAI_TTS_VOICE', 'alloy'),
+    ],
+
+    'elevenlabs' => [
+        'api_key' => env('ELEVENLABS_API_KEY'),
+        'model' => env('ELEVENLABS_MODEL', 'eleven_multilingual_v2'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Storage Services
+    |--------------------------------------------------------------------------
+    */
+
+    'minio' => [
+        'endpoint' => env('MINIO_ENDPOINT'),
+        'access_key_id' => env('MINIO_ACCESS_KEY_ID'),
+        'secret_access_key' => env('MINIO_SECRET_ACCESS_KEY'),
+        'bucket' => env('MINIO_BUCKET'),
+        'use_path_style_endpoint' => env('MINIO_USE_PATH_STYLE_ENDPOINT', true),
+    ],
+
+    'r2' => [
+        'access_key_id' => env('R2_ACCESS_KEY_ID'),
+        'secret_access_key' => env('R2_SECRET_ACCESS_KEY'),
+        'bucket' => env('R2_BUCKET'),
+        'endpoint' => env('R2_ENDPOINT'),
+    ],
 ];

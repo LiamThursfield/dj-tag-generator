@@ -1,11 +1,13 @@
 import ProfileController from './ProfileController'
 import PasswordController from './PasswordController'
 import TwoFactorAuthenticationController from './TwoFactorAuthenticationController'
+import ApiServicesController from './ApiServicesController'
 
 const Settings = {
     ProfileController: Object.assign(ProfileController, ProfileController),
     PasswordController: Object.assign(PasswordController, PasswordController),
     TwoFactorAuthenticationController: Object.assign(TwoFactorAuthenticationController, TwoFactorAuthenticationController),
+    ApiServicesController: Object.assign(ApiServicesController, ApiServicesController),
 }
 
 export default Settings

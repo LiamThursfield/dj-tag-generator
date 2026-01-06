@@ -18,6 +18,13 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'openai_api_key' => 'sk-test-key-123',
+            'elevenlabs_api_key' => 'eleven-test-key-456',
+        ]);
+
+        $this->call([
+            DjTagPresetSeeder::class,
+            DjTagSeeder::class,
         ]);
     }
 }

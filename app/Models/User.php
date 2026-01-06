@@ -22,6 +22,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'openai_api_key',
+        'elevenlabs_api_key',
+        'preferred_tts_service',
     ];
 
     /**
@@ -34,6 +37,8 @@ class User extends Authenticatable
         'two_factor_secret',
         'two_factor_recovery_codes',
         'remember_token',
+        'openai_api_key',
+        'elevenlabs_api_key',
     ];
 
     /**
@@ -46,7 +51,33 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'openai_api_key' => 'encrypted',
+            'elevenlabs_api_key' => 'encrypted',
             'two_factor_confirmed_at' => 'datetime',
         ];
+    }
+
+    public function djTags()
+    {
+        return $this->hasMany(DjTag::class);
+    }
+
+    public function djTagPresets()
+    {
+        return $this->hasMany(DjTagPreset::class);
+    }
+
+    public function getApiKeyForService(string $service): ?string
+    {
+        return match ($service) {
+            'openai' => $this->openai_api_key,
+            'elevenlabs' => $this->elevenlabs_api_key,
+            default => null,
+        };
+    }
+
+    public function hasServiceConfigured(string $service): bool
+    {
+        return !empty($this->getApiKeyForService($service));
     }
 }
