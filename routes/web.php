@@ -14,4 +14,12 @@ Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-require __DIR__.'/settings.php';
+Route::resource('dj-tags', \App\Http\Controllers\DjTagController::class)
+    ->only(['index', 'create', 'store', 'show'])
+    ->middleware(['auth', 'verified']);
+
+Route::get('voices', [\App\Http\Controllers\VoiceController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('voices.index');
+
+require __DIR__ . '/settings.php';

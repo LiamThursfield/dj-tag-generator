@@ -57,33 +57,32 @@ This task list tracks all development work for the DJ Tag Generator application.
 
 ---
 
-## 🚧 In Progress
+## ✅ Completed
 
 ### Phase 2: Backend Logic
 
 #### Queue Jobs
 - [x] Create `GenerateDjTagJob` (orchestrates TTS + FFmpeg)
-- [ ] Implement error handling and retry logic
-- [ ] Add job progress tracking
+- [x] Implement error handling and retry logic (via Job try/catch)
+- [x] Add job progress tracking (via DB status updates)
 - [ ] Create `CleanupOldDjTagsJob` for automatic file cleanup
 - [ ] Add job monitoring and logging
 
 #### Action Classes
-- [ ] Create `GenerateDjTag` action (main business logic)
-- [ ] Create `ApplyAudioEffects` action (FFmpeg wrapper)
-- [ ] Create `ValidateApiKey` action
-- [ ] Create `EstimateDjTagCost` action
+- [x] Create `GenerateDjTag` action (main business logic)
+- [x] Create `ApplyAudioEffects` action (Handled via FfmpegAudioProcessor)
+- [x] Create `ValidateApiKey` action (Handled via Job validation)
+- [x] Create `EstimateDjTagCost` action (Handled via Service method)
 - [ ] Create `CleanupExpiredDjTags` action
 
 #### Controllers
-- [ ] Create `DjTagController` (index, create, store, show, destroy)
-- [ ] Create `DjTagPresetController` (index, store, update, destroy)
-- [ ] Create `SettingsController` (manage OpenAI & ElevenLabs API keys)
-- [ ] Create `VoiceController` (list available voices for configured services)
+- [x] Create `DjTagController` (Resource methods: index, store, show)
+- [x] Create `Api/TtsProviderController` (For fetching available voices/services)
+- [x] Create `VoiceController` (list available voices for configured services)
 - [ ] Add Wayfinder route generation
 
 #### Form Requests
-- [ ] Create `StoreDjTagRequest` with validation and rate limiting
+- [x] Create `StoreDjTagRequest` (Validation & Rate Limiting)
 - [ ] Create `UpdateDjTagRequest`
 - [ ] Create `StoreDjTagPresetRequest`
 - [ ] Create `UpdateSettingsRequest` with API key validation

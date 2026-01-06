@@ -8,6 +8,51 @@ use OpenAI\Client;
 
 class OpenAiTtsService implements TextToSpeechService
 {
+    public const VOICES = [
+        'alloy' => [
+            'id' => 'alloy',
+            'name' => 'Alloy',
+            'description' => 'Neutral and balanced voice',
+            'gender' => 'neutral',
+            'preview_url' => null,
+        ],
+        'echo' => [
+            'id' => 'echo',
+            'name' => 'Echo',
+            'description' => 'Male voice with clarity',
+            'gender' => 'male',
+            'preview_url' => null,
+        ],
+        'fable' => [
+            'id' => 'fable',
+            'name' => 'Fable',
+            'description' => 'British male voice',
+            'gender' => 'male',
+            'preview_url' => null,
+        ],
+        'onyx' => [
+            'id' => 'onyx',
+            'name' => 'Onyx',
+            'description' => 'Deep male voice',
+            'gender' => 'male',
+            'preview_url' => null,
+        ],
+        'nova' => [
+            'id' => 'nova',
+            'name' => 'Nova',
+            'description' => 'Female voice with energy',
+            'gender' => 'female',
+            'preview_url' => null,
+        ],
+        'shimmer' => [
+            'id' => 'shimmer',
+            'name' => 'Shimmer',
+            'description' => 'Soft female voice',
+            'gender' => 'female',
+            'preview_url' => null,
+        ],
+    ];
+
     protected Client $client;
 
     public function __construct(?string $apiKey = null)
@@ -38,50 +83,7 @@ class OpenAiTtsService implements TextToSpeechService
 
     public function getAvailableVoices(): array
     {
-        return [
-            'alloy' => [
-                'id' => 'alloy',
-                'name' => 'Alloy',
-                'description' => 'Neutral and balanced voice',
-                'gender' => 'neutral',
-                'preview_url' => null,
-            ],
-            'echo' => [
-                'id' => 'echo',
-                'name' => 'Echo',
-                'description' => 'Male voice with clarity',
-                'gender' => 'male',
-                'preview_url' => null,
-            ],
-            'fable' => [
-                'id' => 'fable',
-                'name' => 'Fable',
-                'description' => 'British male voice',
-                'gender' => 'male',
-                'preview_url' => null,
-            ],
-            'onyx' => [
-                'id' => 'onyx',
-                'name' => 'Onyx',
-                'description' => 'Deep male voice',
-                'gender' => 'male',
-                'preview_url' => null,
-            ],
-            'nova' => [
-                'id' => 'nova',
-                'name' => 'Nova',
-                'description' => 'Female voice with energy',
-                'gender' => 'female',
-                'preview_url' => null,
-            ],
-            'shimmer' => [
-                'id' => 'shimmer',
-                'name' => 'Shimmer',
-                'description' => 'Soft female voice',
-                'gender' => 'female',
-                'preview_url' => null,
-            ],
-        ];
+        return self::VOICES;
     }
 
     public function getVoicePreview(string $voiceId): ?string

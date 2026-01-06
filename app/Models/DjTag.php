@@ -10,7 +10,19 @@ class DjTag extends Model
     /** @use HasFactory<\Database\Factories\DjTagFactory> */
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'user_id',
+        'text',
+        'service',
+        'voice_id',
+        'voice_settings',
+        'audio_effects',
+        'audio_path',
+        'format',
+        'duration',
+        'status',
+        'error_message',
+    ];
 
     protected function casts(): array
     {
