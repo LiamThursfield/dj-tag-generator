@@ -209,6 +209,46 @@ When unclear:
 - Voice options to support?
 - Effects to implement first?
 
+## Security & Cost Considerations
+
+**CRITICAL**: Always implement with security and cost controls in mind:
+
+1. **Input Validation**:
+   - Validate text length (max 500 chars by default)
+   - Sanitize user input (strip_tags, htmlspecialchars)
+   - Validate file sizes and types
+
+2. **Rate Limiting**:
+   - Implement per-user rate limits (10/hour, 50/day default)
+   - Track and log rate limit violations
+   - Consider temporary bans for repeated violations
+
+3. **Resource Limits**:
+   - Set timeouts on all external API calls
+   - Limit FFmpeg processing time (60 seconds)
+   - Limit memory usage (256MB)
+   - Set max audio duration (10 seconds)
+
+4. **Cost Controls**:
+   - Estimate costs before generation
+   - Track TTS API usage per user
+   - Alert on unusual spending patterns
+   - Implement cost caps if needed
+
+5. **API Key Security**:
+   - Always encrypt API keys (use Laravel's encrypted casting)
+   - Never log or expose API keys
+   - Validate API keys before storing
+   - Provide key rotation mechanism
+
+6. **Storage Security**:
+   - Use signed URLs for downloads
+   - Implement automatic file cleanup (30 days default)
+   - Validate file paths to prevent traversal
+   - Monitor storage growth
+
+**See SECURITY.md for comprehensive guidelines**
+
 ## Do Not
 
 - Create README or docs files unless explicitly requested

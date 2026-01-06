@@ -217,6 +217,24 @@ MINIO_BUCKET=dj-tags
 # R2_ENDPOINT=https://[account-id].r2.cloudflarestorage.com
 ```
 
+## Security & Cost Controls
+
+This application implements several security and cost control measures to prevent abuse:
+
+- **Text Length Limit**: 500 characters max (typical DJ tag is 20-100 chars)
+- **Rate Limiting**: 10 tags/hour, 50 tags/day per user
+- **Duration Limit**: 10 seconds max audio length
+- **File Size Limit**: 5MB max (DJ tags are typically 100-500KB)
+- **Resource Limits**: 60-second processing timeout, 256MB memory limit
+
+**Why these limits matter:**
+- Prevents accidental high TTS API costs
+- Protects against bandwidth abuse
+- Limits storage growth
+- Prevents resource exhaustion
+
+See [SECURITY.md](file:///Users/liamthursfield/code/dj-tag-generator/SECURITY.md) for detailed security guidelines and cost control measures.
+
 ## Contributing
 
 1. Follow Laravel and Vue.js best practices
