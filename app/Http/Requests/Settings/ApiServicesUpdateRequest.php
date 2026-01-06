@@ -4,7 +4,7 @@ namespace App\Http\Requests\Settings;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ApiKeysUpdateRequest extends FormRequest
+class ApiServicesUpdateRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.

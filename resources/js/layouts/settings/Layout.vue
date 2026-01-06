@@ -5,7 +5,7 @@ import { Separator } from '@/components/ui/separator';
 import { toUrl, urlIsActive } from '@/lib/utils';
 import { edit as editAppearance } from '@/routes/settings/appearance';
 import { edit as editProfile } from '@/routes/settings/profile';
-import { edit as editApiKeys } from '@/routes/settings/api-keys';
+import { edit as editApiKeys } from '@/routes/settings/api-services';
 import { show } from '@/routes/settings/two-factor';
 import { edit as editPassword } from '@/routes/settings/user-password';
 import { type NavItem } from '@/types';
@@ -25,7 +25,7 @@ const sidebarNavItems: NavItem[] = [
         href: show(),
     },
     {
-        title: 'API Keys',
+        title: 'API Services',
         href: editApiKeys(),
     },
     {

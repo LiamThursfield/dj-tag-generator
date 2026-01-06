@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Settings;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Settings\ApiKeysUpdateRequest;
+use App\Http\Requests\Settings\ApiServicesUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class ApiKeysController extends Controller
+class ApiServicesController extends Controller
 {
     /**
      * This placeholder value exists so that we don't have to return the API Key back to the client.
@@ -21,7 +21,7 @@ class ApiKeysController extends Controller
      */
     public function edit(Request $request): Response
     {
-        return Inertia::render('settings/ApiKeys', [
+        return Inertia::render('settings/ApiServices', [
             'status' => $request->session()->get('status'),
             'api_keys' => [
                 // We don't want to send the actual keys back to the client if they exist
@@ -36,7 +36,7 @@ class ApiKeysController extends Controller
     /**
      * Update the user's API keys.
      */
-    public function update(ApiKeysUpdateRequest $request): RedirectResponse
+    public function update(ApiServicesUpdateRequest $request): RedirectResponse
     {
         $user = $request->user();
         $validated = $request->validated();
@@ -57,6 +57,6 @@ class ApiKeysController extends Controller
         $user->preferred_tts_service = $validated['preferred_tts_service'];
         $user->save();
 
-        return to_route('settings.api-keys.edit')->with('status', 'api-keys-updated');
+        return to_route('settings.api-services.edit')->with('status', 'api-services-updated');
     }
 }

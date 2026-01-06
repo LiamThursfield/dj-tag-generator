@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import SettingsLayout from '@/layouts/settings/Layout.vue';
-import { edit, update } from '@/routes/settings/api-keys';
+import { edit, update } from '@/routes/settings/api-services';
 import { Head, useForm } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import HeadingSmall from '@/components/HeadingSmall.vue';
@@ -27,7 +27,7 @@ const form = useForm({
 
 const breadcrumbItems: BreadcrumbItem[] = [
     {
-        title: 'Api Keys',
+        title: 'API Services',
         href: edit().url,
     },
 ];
@@ -44,12 +44,12 @@ const submit = () => {
 
 <template>
     <AppLayout :breadcrumbs="breadcrumbItems">
-        <Head title="API Keys" />
+        <Head title="API Services" />
 
         <SettingsLayout>
             <div class="space-y-6">
                 <HeadingSmall
-                    title="API Keys"
+                    title="API Services"
                     description="Manage your third-party TTS service credentials. Your keys are stored encrypted for security."
                 />
 

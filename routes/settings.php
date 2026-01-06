@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Settings\ApiKeysController;
+use App\Http\Controllers\Settings\ApiServicesController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\TwoFactorAuthenticationController;
@@ -31,9 +31,9 @@ Route::middleware('auth')->group(function () {
             Route::get('two-factor', [TwoFactorAuthenticationController::class, 'show'])
                 ->name('two-factor.show');
 
-            Route::get('api-keys', [ApiKeysController::class, 'edit'])
-                ->name('api-keys.edit');
-            Route::patch('api-keys', [ApiKeysController::class, 'update'])
-                ->name('api-keys.update');
+            Route::get('api-services', [ApiServicesController::class, 'edit'])
+                ->name('api-services.edit');
+            Route::patch('api-services', [ApiServicesController::class, 'update'])
+                ->name('api-services.update');
     });
 });
