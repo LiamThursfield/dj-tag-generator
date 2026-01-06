@@ -8,7 +8,7 @@ import { dashboard } from '@/routes';
 import { index, create, store } from '@/routes/dj-tags';
 
 const props = defineProps<{
-    voices: Record<string, any>;
+    preferred_service: string;
     presets: any[];
 }>();
 
@@ -20,7 +20,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 const form = useForm({
     text: '',
-    service: 'openai',
+    service: props.preferred_service || 'openai',
     voice_id: '',
     voice_settings: {
         speed: 1.0,
@@ -83,7 +83,6 @@ const submit = () => {
                     <VoicePicker
                         v-model="form.voice_id"
                         :service="form.service"
-                        :initial-voices="props.voices[form.service]"
                     />
                     <div v-if="form.errors.voice_id" class="text-red-500 text-sm mt-1">{{ form.errors.voice_id }}</div>
                 </div>
@@ -93,23 +92,23 @@ const submit = () => {
                     <!-- Voice Settings -->
                     <div class="space-y-4">
                         <h4 class="font-medium text-gray-900 dark:text-gray-100 border-b dark:border-gray-700 pb-2">Voice Settings</h4>
-                        
+
                         <div class="grid gap-2">
                             <label class="text-sm text-gray-700 dark:text-gray-300">Speed (x{{ form.voice_settings.speed }})</label>
-                            <input 
-                                type="range" 
-                                v-model.number="form.voice_settings.speed" 
-                                min="0.25" max="4.0" step="0.25" 
+                            <input
+                                type="range"
+                                v-model.number="form.voice_settings.speed"
+                                min="0.25" max="4.0" step="0.25"
                                 class="w-full accent-indigo-600"
                             />
                         </div>
 
                          <div class="grid gap-2" v-if="form.service === 'elevenlabs'">
                             <label class="text-sm text-gray-700 dark:text-gray-300">Stability ({{ Math.round(form.voice_settings.stability * 100) }}%)</label>
-                            <input 
-                                type="range" 
-                                v-model.number="form.voice_settings.stability" 
-                                min="0" max="1" step="0.05" 
+                            <input
+                                type="range"
+                                v-model.number="form.voice_settings.stability"
+                                min="0" max="1" step="0.05"
                                 class="w-full accent-indigo-600"
                             />
                         </div>
@@ -118,20 +117,20 @@ const submit = () => {
                     <!-- Audio Effects -->
                     <div class="space-y-4">
                         <h4 class="font-medium text-gray-900 dark:text-gray-100 border-b dark:border-gray-700 pb-2">Post-Processing</h4>
-                        
+
                         <div class="grid gap-2">
                             <label class="text-sm text-gray-700 dark:text-gray-300">Pitch Shift ({{ form.audio_effects.pitch > 0 ? '+' : '' }}{{ form.audio_effects.pitch }} semitones)</label>
-                            <input 
-                                type="range" 
-                                v-model.number="form.audio_effects.pitch" 
-                                min="-12" max="12" step="1" 
+                            <input
+                                type="range"
+                                v-model.number="form.audio_effects.pitch"
+                                min="-12" max="12" step="1"
                                 class="w-full accent-indigo-600"
                             />
                         </div>
 
                         <div class="grid gap-2">
                             <label class="text-sm text-gray-700 dark:text-gray-300">Reverb</label>
-                            <select 
+                            <select
                                 v-model="form.audio_effects.reverb"
                                 class="rounded-md border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-gray-900 dark:text-gray-100 text-sm focus:border-indigo-500 focus:ring-indigo-500"
                             >
@@ -146,8 +145,8 @@ const submit = () => {
 
                 <!-- Actions -->
                 <div class="flex items-center justify-end gap-4 pt-4 border-t dark:border-gray-700">
-                    <button 
-                        type="submit" 
+                    <button
+                        type="submit"
                         class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded-md shadow transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
                         :disabled="form.processing"
                     >
@@ -159,7 +158,7 @@ const submit = () => {
                         <span v-else>Generate Tag</span>
                     </button>
                 </div>
-                
+
                 <div v-if="form.errors.rate_limit" class="p-3 bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400 rounded-md text-sm">
                     {{ form.errors.rate_limit }}
                 </div>

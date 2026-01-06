@@ -25,11 +25,6 @@ const error = ref<string | null>(null);
 
 const fetchVoices = async () => {
     if (!props.service) return;
-    
-    // If we have initial voices for OpenAI (passed from backend props), use them
-    if (props.service === 'openai' && props.initialVoices && props.initialVoices.length > 0) {
-       // logic to map if needed, or just fetch to be consistent
-    }
 
     loading.value = true;
     error.value = null;
@@ -37,16 +32,16 @@ const fetchVoices = async () => {
 
     try {
         const response = await axios.get(index.url({ query: { service: props.service }}));
-        
+
         // Handle array response or object response
         const data = response.data.voices;
         if (Array.isArray(data)) {
             voices.value = data;
         } else {
             // If it's an object (key-value), convert to array
-            voices.value = Object.values(data); 
+            voices.value = Object.values(data);
         }
-        
+
         // Select first voice if nothing selected
         if (!props.modelValue && voices.value.length > 0) {
             emit('update:modelValue', voices.value[0].id);
@@ -75,7 +70,7 @@ onMounted(() => {
         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
             Voice
         </label>
-        
+
         <div v-if="loading" class="flex items-center space-x-2 text-sm text-muted-foreground">
             <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -101,7 +96,7 @@ onMounted(() => {
                 <span v-if="voice.description" class="text-xs text-muted-foreground line-clamp-1">
                     {{ voice.description }}
                 </span>
-                
+
                 <!-- Helper badge for gender if available -->
                 <span v-if="voice.gender" class="absolute top-2 right-2 flex h-2 w-2">
                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" :class="modelValue === voice.id ? 'bg-primary' : ''"></span>
@@ -109,7 +104,7 @@ onMounted(() => {
                 </span>
             </button>
         </div>
-        
+
         <p v-if="!loading && !error && voices.length === 0" class="text-sm text-muted-foreground">
             No voices found for this service.
         </p>
