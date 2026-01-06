@@ -26,17 +26,14 @@ class OpenAiTtsService implements TextToSpeechService
      */
     public function generate(string $text, array $options = []): string
     {
-        // OpenAI's audio()->speech()->create() returns binary audio content as a string
-        $response = $this->client->audio()->speech()->create([
+        // OpenAI's audio()->speech() takes parameters and returns binary audio content as a string
+        return $this->client->audio()->speech([
             'model' => $options['model'] ?? config('services.openai.model', 'tts-1'),
             'voice' => $options['voice'] ?? config('services.openai.voice', 'alloy'),
             'input' => $text,
             'speed' => $options['speed'] ?? 1.0,
             'response_format' => $options['format'] ?? 'mp3',
         ]);
-
-        // The response is already the binary audio content
-        return $response;
     }
 
     public function getAvailableVoices(): array
