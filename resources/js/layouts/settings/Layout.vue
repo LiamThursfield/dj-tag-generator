@@ -3,10 +3,11 @@ import Heading from '@/components/Heading.vue';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { toUrl, urlIsActive } from '@/lib/utils';
-import { edit as editAppearance } from '@/routes/appearance';
-import { edit as editProfile } from '@/routes/profile';
-import { show } from '@/routes/two-factor';
-import { edit as editPassword } from '@/routes/user-password';
+import { edit as editAppearance } from '@/routes/settings/appearance';
+import { edit as editProfile } from '@/routes/settings/profile';
+import { edit as editApiKeys } from '@/routes/settings/api-keys';
+import { show } from '@/routes/settings/two-factor';
+import { edit as editPassword } from '@/routes/settings/user-password';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
 
@@ -22,6 +23,10 @@ const sidebarNavItems: NavItem[] = [
     {
         title: 'Two-Factor Auth',
         href: show(),
+    },
+    {
+        title: 'API Keys',
+        href: editApiKeys(),
     },
     {
         title: 'Appearance',

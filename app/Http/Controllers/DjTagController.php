@@ -13,14 +13,14 @@ class DjTagController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-        return \Inertia\Inertia::render('DjTags/Index', [
+        return \Inertia\Inertia::render('dj-tags/Index', [
             'tags' => $tags,
         ]);
     }
 
     public function create()
     {
-        return \Inertia\Inertia::render('DjTags/Create', [
+        return \Inertia\Inertia::render('dj-tags/Create', [
             'voices' => [
                 'openai' => array_keys(\App\Services\TTS\OpenAiTtsService::VOICES),
                 // We'll need a way to fetch ElevenLabs voices dynamically, ideally via an API call in the frontend or cached here
@@ -45,7 +45,7 @@ class DjTagController extends Controller
             abort(403);
         }
 
-        return \Inertia\Inertia::render('DjTags/Show', [
+        return \Inertia\Inertia::render('dj-tags/Show', [
             'tag' => $djTag,
         ]);
     }
