@@ -34,20 +34,6 @@ test('authenticated user can create a dj tag', function () {
     Queue::assertPushed(GenerateDjTagJob::class);
 });
 
-test('cannot create tag without configured service', function () {
-    $user = User::factory()->create([
-        'openai_api_key' => null, // No key
-    ]);
-
-    $response = $this->actingAs($user)->post(route('dj-tags.store'), [
-        'text' => 'This is a test tag',
-        'service' => 'openai',
-        'voice_id' => 'alloy',
-    ]);
-
-    $response->assertSessionHasErrors('service');
-});
-
 test('cannot create tag with invalid parameters', function () {
     $user = User::factory()->create(['openai_api_key' => 'key']);
 

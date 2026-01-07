@@ -43,6 +43,10 @@ return [
 
     'tts' => [
         'default' => env('TTS_SERVICE', 'openai'),
+        'fake' => [
+            'enabled' => env('TTS_FAKE_ENABLED', false),
+            'file_path' => env('TTS_FAKE_FILE_PATH', 'storage/app/fake/fake-tag-01.mp3'),
+        ],
     ],
 
     'openai' => [

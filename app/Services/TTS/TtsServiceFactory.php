@@ -17,7 +17,11 @@ class TtsServiceFactory
      */
     public function make(?string $service = null, ?string $apiKey = null): TextToSpeechService
     {
-        $service = $service ?? config('services.tts.default');
+        if (config('services.tts.fake.enabled')) {
+            return app(FakeTtsService::class);
+        }
+
+        $service = $service ?? config('services.tts.default', 'openai');
 
         return match ($service) {
             'openai' => app(OpenAiTtsService::class, ['apiKey' => $apiKey]),

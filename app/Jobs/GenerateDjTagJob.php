@@ -16,9 +16,7 @@ class GenerateDjTagJob implements ShouldQueue
 
     public $timeout = 120;
 
-    public function __construct(public DjTag $djTag)
-    {
-    }
+    public function __construct(public DjTag $djTag) {}
 
     public function handle(
         TtsServiceFactory $ttsFactory,
@@ -28,10 +26,13 @@ class GenerateDjTagJob implements ShouldQueue
             $this->djTag->update(['status' => 'processing']);
 
             // 1. Validate API Credential
-            $apiKey = $this->djTag->user->getApiKeyForService($this->djTag->service);
+            $apiKey = null;
+            if (! config('services.tts.fake.enabled')) {
+                $apiKey = $this->djTag->user->getApiKeyForService($this->djTag->service);
 
-            if (empty($apiKey)) {
-                throw new \Exception("Missing API key for service: {$this->djTag->service}");
+                if (empty($apiKey)) {
+                    throw new \Exception("Missing API key for service: {$this->djTag->service}");
+                }
             }
 
             // 2. Generate TTS Audio
@@ -47,8 +48,8 @@ class GenerateDjTagJob implements ShouldQueue
             $rawAudioContent = $ttsService->generate($this->djTag->text, $voiceOptions);
 
             // 3. Save Raw Audio to Temp File
-            $tempRawPath = storage_path('app/temp/' . \Illuminate\Support\Str::uuid() . '.mp3');
-            if (!file_exists(dirname($tempRawPath))) {
+            $tempRawPath = storage_path('app/temp/'.\Illuminate\Support\Str::uuid().'.mp3');
+            if (! file_exists(dirname($tempRawPath))) {
                 mkdir(dirname($tempRawPath), 0755, true);
             }
             file_put_contents($tempRawPath, $rawAudioContent);
@@ -68,7 +69,7 @@ class GenerateDjTagJob implements ShouldQueue
             $duration = $audioProcessor->getDuration($processedPath);
 
             // 6. Store to Permanent Storage
-            $fileName = 'tags/' . date('Y-m-d') . '/' . \Illuminate\Support\Str::uuid() . '.' . $this->djTag->format;
+            $fileName = 'tags/'.date('Y-m-d').'/'.\Illuminate\Support\Str::uuid().'.'.$this->djTag->format;
             $fileContent = file_get_contents($processedPath);
 
             \Illuminate\Support\Facades\Storage::disk(config('audio.storage_disk'))->put(
@@ -101,10 +102,12 @@ class GenerateDjTagJob implements ShouldQueue
             ]);
 
             // Ensure temp files are cleaned up even on error
-            if (isset($tempRawPath) && file_exists($tempRawPath))
+            if (isset($tempRawPath) && file_exists($tempRawPath)) {
                 @unlink($tempRawPath);
-            if (isset($processedPath) && file_exists($processedPath))
+            }
+            if (isset($processedPath) && file_exists($processedPath)) {
                 @unlink($processedPath);
+            }
 
             throw $e; // Ensure job is marked as failed in queue
         }
