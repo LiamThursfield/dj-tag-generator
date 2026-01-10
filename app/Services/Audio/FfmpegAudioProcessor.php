@@ -33,7 +33,7 @@ class FfmpegAudioProcessor implements AudioProcessor
         $format = $this->getAudioFormat(config('audio.output_format', 'mp3'));
         $format->setAudioKiloBitrate((int) str_replace('k', '', config('audio.bitrate', '192k')));
 
-        if (!empty($filters)) {
+        if (! empty($filters)) {
             $audio->filters()
                 ->custom(implode(',', $filters));
         }
@@ -158,11 +158,11 @@ class FfmpegAudioProcessor implements AudioProcessor
     protected function generateOutputPath(string $inputPath, ?string $extension = null): string
     {
         $extension = $extension ?? pathinfo($inputPath, PATHINFO_EXTENSION);
-        $filename = Str::uuid() . '.' . $extension;
+        $filename = Str::uuid().'.'.$extension;
 
-        $path = storage_path('app/processed/' . $filename);
+        $path = storage_path('app/processed/'.$filename);
 
-        if (!file_exists(dirname($path))) {
+        if (! file_exists(dirname($path))) {
             mkdir(dirname($path), 0755, true);
         }
 

@@ -1,6 +1,5 @@
 <?php
 
-use App\Actions\GenerateDjTag;
 use App\Jobs\GenerateDjTagJob;
 use App\Models\User;
 use Illuminate\Support\Facades\Queue;

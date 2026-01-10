@@ -24,18 +24,18 @@ class ElevenLabsTtsService implements TextToSpeechService
             'xi-api-key' => $this->apiKey,
             'Content-Type' => 'application/json',
         ])->post("{$this->baseUrl}/text-to-speech/{$voiceId}", [
-                    'text' => $text,
-                    'model_id' => $options['model'] ?? config('services.elevenlabs.model', 'eleven_multilingual_v2'),
-                    'voice_settings' => [
-                        'stability' => $options['stability'] ?? 0.5,
-                        'similarity_boost' => $options['similarity'] ?? 0.75,
-                        'style' => $options['style'] ?? 0,
-                        'use_speaker_boost' => $options['speaker_boost'] ?? true,
-                    ],
-                ]);
+            'text' => $text,
+            'model_id' => $options['model'] ?? config('services.elevenlabs.model', 'eleven_multilingual_v2'),
+            'voice_settings' => [
+                'stability' => $options['stability'] ?? 0.5,
+                'similarity_boost' => $options['similarity'] ?? 0.75,
+                'style' => $options['style'] ?? 0,
+                'use_speaker_boost' => $options['speaker_boost'] ?? true,
+            ],
+        ]);
 
         if ($response->failed()) {
-            throw new \Exception('ElevenLabs API request failed: ' . $response->body());
+            throw new \Exception('ElevenLabs API request failed: '.$response->body());
         }
 
         return $response->body();

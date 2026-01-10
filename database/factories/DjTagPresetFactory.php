@@ -29,7 +29,7 @@ class DjTagPresetFactory extends Factory
 
     public function public(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'is_public' => true,
             'user_id' => null, // System preset
         ]);

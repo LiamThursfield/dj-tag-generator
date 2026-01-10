@@ -8,12 +8,13 @@ The Laravel Boost guidelines are specifically curated by Laravel maintainers for
 ## Foundational Context
 This application is a Laravel application and its main Laravel ecosystems package & versions are below. You are an expert with them all. Ensure you abide by these specific packages & versions.
 
-- php - 8.5.0
+- php - 8.5.1
 - inertiajs/inertia-laravel (INERTIA) - v2
 - laravel/fortify (FORTIFY) - v1
 - laravel/framework (LARAVEL) - v12
 - laravel/prompts (PROMPTS) - v0
 - laravel/wayfinder (WAYFINDER) - v0
+- larastan/larastan (LARASTAN) - v3
 - laravel/mcp (MCP) - v0
 - laravel/pint (PINT) - v1
 - laravel/sail (SAIL) - v1
@@ -25,6 +26,7 @@ This application is a Laravel application and its main Laravel ecosystems packag
 - @laravel/vite-plugin-wayfinder (WAYFINDER) - v0
 - eslint (ESLINT) - v9
 - prettier (PRETTIER) - v3
+- barryvdh/laravel-ide-helper (IDE HELPER) - v3
 
 ## Conventions
 - You must follow all existing code conventions used in this application. When creating or editing a file, check sibling files for the correct structure, approach, naming.
@@ -195,6 +197,9 @@ Route::get('/users', function () {
 - Generate code that prevents N+1 query problems by using eager loading.
 - Use Laravel's query builder for very complex database operations.
 
+### Database & Models
+- After creating or modifying a migration, you MUST run `vendor/bin/sail artisan ide-helper:models -W` (write-mixin) to ensure all new columns are recognized by the IDE and static analysis.
+
 ### Model Creation
 - When creating new models, create useful factories and seeders for them too. Ask the user if they need any other things, using `list-artisan-commands` to check the available options to `vendor/bin/sail artisan make:model`.
 
@@ -302,12 +307,24 @@ If your application uses the `<Form>` component from Inertia, you can use Wayfin
 </code-snippet>
 
 
+=== laravel-ide-helper rules ===
+
+## Laravel IDE Helper
+
+- Use this package to generate helper files for IDE autocompletion and static analysis.
+- Always run helper commands through Sail: `vendor/bin/sail artisan ide-helper:generate`.
+- **Models:** When modifying Eloquent models, run `vendor/bin/sail artisan ide-helper:models --write-mixin`.
+    - This adds a `@mixin` to the model, allowing Larastan and your IDE to recognize magic methods/properties without cluttering the model file with all properties.
+- **Meta:** Run `vendor/bin/sail artisan ide-helper:meta` after adding new service container bindings to generate the `.phpstorm.meta.php` file.
+
+
 === pint/core rules ===
 
 ## Laravel Pint Code Formatter
 
 - You must run `vendor/bin/sail bin pint --dirty` before finalizing changes to ensure your code matches the project's expected style.
 - Do not run `vendor/bin/sail bin pint --test`, simply run `vendor/bin/sail bin pint` to fix any formatting issues.
+- If `ide-helper` commands modify existing PHP files, run `vendor/bin/sail bin pint --dirty` immediately after to ensure the generated PHPDoc matches the project's style.
 
 
 === pest/core rules ===

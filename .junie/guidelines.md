@@ -8,12 +8,13 @@ The Laravel Boost guidelines are specifically curated by Laravel maintainers for
 ## Foundational Context
 This application is a Laravel application and its main Laravel ecosystems package & versions are below. You are an expert with them all. Ensure you abide by these specific packages & versions.
 
-- php - 8.5.0
+- php - 8.5.1
 - inertiajs/inertia-laravel (INERTIA) - v2
 - laravel/fortify (FORTIFY) - v1
 - laravel/framework (LARAVEL) - v12
 - laravel/prompts (PROMPTS) - v0
 - laravel/wayfinder (WAYFINDER) - v0
+- larastan/larastan (LARASTAN) - v3
 - laravel/mcp (MCP) - v0
 - laravel/pint (PINT) - v1
 - laravel/sail (SAIL) - v1
@@ -25,6 +26,7 @@ This application is a Laravel application and its main Laravel ecosystems packag
 - @laravel/vite-plugin-wayfinder (WAYFINDER) - v0
 - eslint (ESLINT) - v9
 - prettier (PRETTIER) - v3
+- barryvdh/laravel-ide-helper (IDE HELPER) - v3
 
 ## Conventions
 - You must follow all existing code conventions used in this application. When creating or editing a file, check sibling files for the correct structure, approach, naming.
@@ -195,6 +197,9 @@ Route::get('/users', function () {
 - Generate code that prevents N+1 query problems by using eager loading.
 - Use Laravel's query builder for very complex database operations.
 
+### Database & Models
+- After creating or modifying a migration, you MUST run `vendor/bin/sail artisan ide-helper:models -W` (write-mixin) to ensure all new columns are recognized by the IDE and static analysis.
+
 ### Model Creation
 - When creating new models, create useful factories and seeders for them too. Ask the user if they need any other things, using `list-artisan-commands` to check the available options to `vendor/bin/sail artisan make:model`.
 
@@ -302,12 +307,24 @@ If your application uses the `<Form>` component from Inertia, you can use Wayfin
 </code-snippet>
 
 
+=== laravel-ide-helper rules ===
+
+## Laravel IDE Helper
+
+- Use this package to generate helper files for IDE autocompletion and static analysis.
+- Always run helper commands through Sail: `vendor/bin/sail artisan ide-helper:generate`.
+- **Models:** When modifying Eloquent models, run `vendor/bin/sail artisan ide-helper:models --write-mixin`.
+    - This adds a `@mixin` to the model, allowing Larastan and your IDE to recognize magic methods/properties without cluttering the model file with all properties.
+- **Meta:** Run `vendor/bin/sail artisan ide-helper:meta` after adding new service container bindings to generate the `.phpstorm.meta.php` file.
+
+
 === pint/core rules ===
 
 ## Laravel Pint Code Formatter
 
 - You must run `vendor/bin/sail bin pint --dirty` before finalizing changes to ensure your code matches the project's expected style.
 - Do not run `vendor/bin/sail bin pint --test`, simply run `vendor/bin/sail bin pint` to fix any formatting issues.
+- If `ide-helper` commands modify existing PHP files, run `vendor/bin/sail bin pint --dirty` immediately after to ensure the generated PHPDoc matches the project's style.
 
 
 === pest/core rules ===
@@ -322,11 +339,11 @@ If your application uses the `<Form>` component from Inertia, you can use Wayfin
 - Tests should test all of the happy paths, failure paths, and weird paths.
 - Tests live in the `tests/Feature` and `tests/Unit` directories.
 - Pest tests look and behave like this:
-<code-snippet name="Basic Pest Test Example" lang="php">
-it('is true', function () {
-    expect(true)->toBeTrue();
-});
-</code-snippet>
+  <code-snippet name="Basic Pest Test Example" lang="php">
+  it('is true', function () {
+  expect(true)->toBeTrue();
+  });
+  </code-snippet>
 
 ### Running Tests
 - Run the minimal number of tests using an appropriate filter before finalizing code edits.
@@ -337,13 +354,13 @@ it('is true', function () {
 
 ### Pest Assertions
 - When asserting status codes on a response, use the specific method like `assertForbidden` and `assertNotFound` instead of using `assertStatus(403)` or similar, e.g.:
-<code-snippet name="Pest Example Asserting postJson Response" lang="php">
-it('returns all', function () {
-    $response = $this->postJson('/api/docs', []);
+  <code-snippet name="Pest Example Asserting postJson Response" lang="php">
+  it('returns all', function () {
+  $response = $this->postJson('/api/docs', []);
 
-    $response->assertSuccessful();
-});
-</code-snippet>
+  $response->assertSuccessful();
+  });
+  </code-snippet>
 
 ### Mocking
 - Mocking can be very helpful when appropriate.
@@ -430,23 +447,23 @@ $pages->assertNoJavascriptErrors()->assertNoConsoleLogs();
 <code-snippet name="`<Form>` Component Example" lang="vue">
 
 <Form
-    action="/users"
-    method="post"
-    #default="{
-        errors,
-        hasErrors,
-        processing,
-        progress,
-        wasSuccessful,
-        recentlySuccessful,
-        setError,
-        clearErrors,
-        resetAndClearErrors,
-        defaults,
-        isDirty,
-        reset,
-        submit,
-  }"
+action="/users"
+method="post"
+#default="{
+errors,
+hasErrors,
+processing,
+progress,
+wasSuccessful,
+recentlySuccessful,
+setError,
+clearErrors,
+resetAndClearErrors,
+defaults,
+isDirty,
+reset,
+submit,
+}"
 >
     <input type="text" name="name" />
 
@@ -496,11 +513,11 @@ $pages->assertNoJavascriptErrors()->assertNoConsoleLogs();
 - Always use Tailwind CSS v4 - do not use the deprecated utilities.
 - `corePlugins` is not supported in Tailwind v4.
 - In Tailwind v4, configuration is CSS-first using the `@theme` directive — no separate `tailwind.config.js` file is needed.
-<code-snippet name="Extending Theme in CSS" lang="css">
-@theme {
+  <code-snippet name="Extending Theme in CSS" lang="css">
+  @theme {
   --color-brand: oklch(0.72 0.11 178);
-}
-</code-snippet>
+  }
+  </code-snippet>
 
 - In Tailwind v4, you import Tailwind using a regular CSS `@import` statement, not using the `@tailwind` directives used in v3:
 
@@ -554,8 +571,8 @@ Fortify is a headless authentication backend that provides authentication routes
 - `Features::registration()` for user registration.
 - `Features::emailVerification()` to verify new user emails.
 - `Features::twoFactorAuthentication()` for 2FA with QR codes and recovery codes.
-  - Add options: `['confirmPassword' => true, 'confirm' => true]` to require password confirmation and OTP confirmation before enabling 2FA.
+    - Add options: `['confirmPassword' => true, 'confirm' => true]` to require password confirmation and OTP confirmation before enabling 2FA.
 - `Features::updateProfileInformation()` to let users update their profile.
 - `Features::updatePasswords()` to let users change their passwords.
 - `Features::resetPasswords()` for password reset via email.
-</laravel-boost-guidelines>
+  </laravel-boost-guidelines>

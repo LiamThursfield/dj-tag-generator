@@ -22,4 +22,4 @@ Route::get('voices', [\App\Http\Controllers\VoiceController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('voices.index');
 
-require __DIR__ . '/settings.php';
+require __DIR__.'/settings.php';

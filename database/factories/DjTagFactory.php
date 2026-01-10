@@ -32,16 +32,16 @@ class DjTagFactory extends Factory
 
     public function completed(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'status' => 'completed',
-            'audio_path' => 'tags/' . fake()->uuid() . '.mp3',
+            'audio_path' => 'tags/'.fake()->uuid().'.mp3',
             'duration' => fake()->randomFloat(2, 2, 8),
         ]);
     }
 
     public function failed(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'status' => 'failed',
             'error_message' => 'TTS generation failed',
         ]);

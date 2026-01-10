@@ -25,7 +25,7 @@ Route::middleware('auth')->group(function () {
                 ->name('user-password.update');
 
             Route::get('appearance', function () {
-                return Inertia::render('Appearance');
+                return Inertia::render('settings/Appearance');
             })->name('appearance.edit');
 
             Route::get('two-factor', [TwoFactorAuthenticationController::class, 'show'])
@@ -35,5 +35,5 @@ Route::middleware('auth')->group(function () {
                 ->name('api-services.edit');
             Route::patch('api-services', [ApiServicesController::class, 'update'])
                 ->name('api-services.update');
-    });
+        });
 });

@@ -5,6 +5,44 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property string $text
+ * @property string $service
+ * @property string $voice_id
+ * @property array<array-key, mixed>|null $voice_settings
+ * @property array<array-key, mixed>|null $audio_effects
+ * @property string|null $audio_path
+ * @property string $format
+ * @property float|null $duration
+ * @property string $status
+ * @property string|null $error_message
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\User $user
+ *
+ * @method static \Database\Factories\DjTagFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereAudioEffects($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereAudioPath($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereErrorMessage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereFormat($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereService($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereText($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereVoiceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereVoiceSettings($value)
+ *
+ * @mixin \Eloquent
+ */
 class DjTag extends Model
 {
     /** @use HasFactory<\Database\Factories\DjTagFactory> */

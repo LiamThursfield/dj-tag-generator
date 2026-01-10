@@ -16,7 +16,7 @@ class VoiceController extends Controller
         $user = $request->user();
 
         // Check if user has API key for this service
-        if (!$user->hasServiceConfigured($service)) {
+        if (! $user->hasServiceConfigured($service)) {
             return response()->json([
                 'error' => "API key for {$service} not configured",
                 'voices' => [],
@@ -34,7 +34,7 @@ class VoiceController extends Controller
             return response()->json(['voices' => $voices]);
         } catch (\Exception $e) {
             return response()->json([
-                'error' => 'Failed to fetch voices: ' . $e->getMessage(),
+                'error' => 'Failed to fetch voices: '.$e->getMessage(),
                 'voices' => [],
             ], 500);
         }
