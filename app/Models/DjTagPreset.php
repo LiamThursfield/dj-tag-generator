@@ -35,6 +35,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTagPreset whereVoiceId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTagPreset whereVoiceSettings($value)
  *
+ * @mixin IdeHelperDjTagPreset
  * @mixin \Eloquent
  */
 class DjTagPreset extends Model

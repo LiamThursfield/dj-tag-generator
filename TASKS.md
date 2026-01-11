@@ -62,23 +62,21 @@ This task list tracks all development work for the DJ Tag Generator application.
 ### Phase 2: Backend Logic
 
 #### Queue Jobs
-- [x] Create `GenerateDjTagJob` (orchestrates TTS + FFmpeg)
-- [x] Implement error handling and retry logic (via Job try/catch)
-- [x] Add job progress tracking (via DB status updates)
-- [ ] Create `CleanupOldDjTagsJob` for automatic file cleanup
+- [x] Create `GenerateDjTagJob` (TTS → Raw Storage → Version 1)
+- [x] Create `ReprocessDjTagJob` (Raw Storage → New Version)
+- [x] Implement error handling and retry logic
+- [ ] Create `CleanupOldDjTagsJob` for automatic file cleanup (raw + versions)
 - [ ] Add job monitoring and logging
 
 #### Action Classes
-- [x] Create `GenerateDjTag` action (main business logic)
-- [x] Create `ApplyAudioEffects` action (Handled via FfmpegAudioProcessor)
-- [x] Create `ValidateApiKey` action (Handled via Job validation)
-- [x] Create `EstimateDjTagCost` action (Handled via Service method)
-- [ ] Create `CleanupExpiredDjTags` action
+- [x] Create `GenerateDjTag` action (Master + Job Dispatch)
+- [x] Create `ReprocessDjTag` logic (Handle via Job)
 
 #### Controllers
-- [x] Create `DjTagController` (Resource methods: index, store, show)
-- [x] Create `Api/TtsProviderController` (For fetching available voices/services)
-- [x] Create `VoiceController` (list available voices for configured services)
+- [x] Create `DjTagController` (index, store, show, reprocess)
+- [x] Create `Api/TtsProviderController`
+- [x] Create `VoiceController`
+- [x] Add reprocess route
 - [ ] Add Wayfinder route generation
 
 #### Form Requests

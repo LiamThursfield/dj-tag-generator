@@ -76,7 +76,7 @@ it('GenerateDjTag action succeeds without API key when fake is enabled', functio
         ->and($tag->service)->toBe('openai');
 
     $tag->refresh();
-    expect($tag->status)->toBe('completed');
+    expect($tag->latestVersion->status)->toBe('completed');
 });
 
 it('GenerateDjTagJob completes correctly with fake service', function () {
@@ -89,17 +89,17 @@ it('GenerateDjTagJob completes correctly with fake service', function () {
         'text' => 'Test tag',
         'service' => 'openai',
         'voice_id' => 'alloy',
-        'status' => 'pending',
     ]);
 
     $job = new GenerateDjTagJob($tag);
     $job->handle(new TtsServiceFactory, app(\App\Contracts\AudioProcessor::class));
 
     $tag->refresh();
-    expect($tag->status)->toBe('completed')
-        ->and($tag->audio_path)->not->toBeNull()
-        ->and($tag->duration)->toBe(1.5);
+    $version = $tag->latestVersion;
+    expect($version->status)->toBe('completed')
+        ->and($version->audio_path)->not->toBeNull()
+        ->and($version->duration)->toBe(1.5);
 
-    Storage::disk('local')->assertExists($tag->audio_path);
-    expect(Storage::disk('local')->get($tag->audio_path))->toBe('processed-audio-content');
+    Storage::disk('local')->assertExists($version->audio_path);
+    expect(Storage::disk('local')->get($version->audio_path))->toBe('processed-audio-content');
 });

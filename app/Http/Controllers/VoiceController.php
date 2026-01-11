@@ -18,7 +18,7 @@ class VoiceController extends Controller
         // Check if user has API key for this service
         if (! $user->hasServiceConfigured($service)) {
             return response()->json([
-                'error' => "API key for {$service} not configured",
+                'error' => "API key for {$service} not configured, visit your profile settings to add it.",
                 'voices' => [],
             ], 422); // Unprocessable Entity
         }

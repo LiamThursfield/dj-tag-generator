@@ -36,6 +36,13 @@ The DJ Tag Generator is a Laravel 12 application that enables DJs and music prod
 - **Reka UI**: Headless UI components
 - **Lucide Vue**: Icon library
 - **VueUse**: Composition utilities
+- **Wayfinder**: Typed routing for Laravel
+- **Shadcn Vue**: Professionally crafted UI components
+
+### UI Standards
+- **Theme Variables**: NEVER use hardcoded Tailwind colors (e.g., `text-indigo-600`). ALWAYS use theme variables (`text-primary`, `bg-background`, `border-border`, etc.) to ensure Light/Dark mode compatibility.
+- **Component Consistency**: Use Shadcn Vue components where available (Select, Checkbox, Button, etc.) for all interactive elements. If a component exists but is not yet in the project, the latest version should be added via the `npx shadcn-vue@latest add` command. Components can be found https://www.shadcn-vue.com/docs/components
+- **Badge Styling**: Use the standard `getStatusColor` utility for status badges to maintain a unified visual language for 'completed', 'failed', 'processing', and 'pending' states.
 
 ### Development Tools
 - **Laravel Sail**: Docker-based local development
@@ -54,24 +61,27 @@ The DJ Tag Generator is a Laravel 12 application that enables DJs and music prod
 - Authentication via Fortify
 - Relationships: hasMany tags, hasMany favorites
 
-#### Tag (DjTag)
+#### Tag (DjTag) - Master Record
 - `id`: Primary key
 - `user_id`: Foreign key to users
-- `name`: Tag name/phrase
-- `voice_type`: Selected voice option
-- `effects`: JSON array of applied effects
-- `audio_path`: Path to generated audio file
-- `duration`: Audio duration in seconds
-- `status`: pending|processing|completed|failed
+- `text`: Script text
+- `service`: Selected service (openai|elevenlabs)
+- `voice_id`: Selected voice
+- `voice_settings`: JSON configuration
+- `format`: Output format (mp3/wav)
+- `raw_audio_path`: Path to original AI-generated audio (non-processed)
+- `raw_audio_duration`: Duration of raw audio
 - `created_at`, `updated_at`
 
-#### TagPreset
+#### TagVersion (DjTagVersion)
 - `id`: Primary key
-- `user_id`: Foreign key (nullable for system presets)
-- `name`: Preset name
-- `voice_type`: Voice configuration
-- `effects`: JSON effects configuration
-- `is_public`: Boolean for sharing
+- `dj_tag_id`: Foreign key to masters
+- `version_number`: Incrementing integer
+- `effects`: JSON array of applied effects
+- `audio_path`: Path to processed audio file
+- `duration`: Audio duration in seconds
+- `status`: pending|processing|completed|failed
+- `error_message`: Error details if failed
 - `created_at`, `updated_at`
 
 ## Audio Processing Strategy

@@ -11,30 +11,30 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $text
  * @property string $service
  * @property string $voice_id
- * @property array<array-key, mixed>|null $voice_settings
- * @property array<array-key, mixed>|null $audio_effects
- * @property string|null $audio_path
+ * @property array|null $voice_settings
  * @property string $format
- * @property float|null $duration
- * @property string $status
- * @property string|null $error_message
+ * @property string|null $raw_audio_path
+ * @property float|null $raw_audio_duration
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User $user
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\DjTagVersion[] $versions
+ *
+ * @mixin IdeHelperDjTag
+ *
+ * @property-read \App\Models\DjTagVersion|null $latestVersion
+ * @property-read int|null $versions_count
  *
  * @method static \Database\Factories\DjTagFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereAudioEffects($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereAudioPath($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereDuration($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereErrorMessage($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereFormat($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereRawAudioDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereRawAudioPath($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereService($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereText($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereUserId($value)
@@ -54,20 +54,16 @@ class DjTag extends Model
         'service',
         'voice_id',
         'voice_settings',
-        'audio_effects',
-        'audio_path',
         'format',
-        'duration',
-        'status',
-        'error_message',
+        'raw_audio_path',
+        'raw_audio_duration',
     ];
 
     protected function casts(): array
     {
         return [
             'voice_settings' => 'array',
-            'audio_effects' => 'array',
-            'duration' => 'float',
+            'raw_audio_duration' => 'float',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
@@ -78,23 +74,18 @@ class DjTag extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function isPending(): bool
+    public function versions(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->status === 'pending';
+        return $this->hasMany(DjTagVersion::class);
     }
 
-    public function isProcessing(): bool
+    public function latestVersion(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
-        return $this->status === 'processing';
+        return $this->hasOne(DjTagVersion::class)->latestOfMany();
     }
 
-    public function isCompleted(): bool
+    public function hasRawAudio(): bool
     {
-        return $this->status === 'completed';
-    }
-
-    public function isFailed(): bool
-    {
-        return $this->status === 'failed';
+        return ! empty($this->raw_audio_path);
     }
 }

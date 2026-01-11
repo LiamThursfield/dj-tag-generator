@@ -16,15 +16,23 @@ class GenerateDjTagJob implements ShouldQueue
 
     public $timeout = 120;
 
-    public function __construct(public DjTag $djTag) {}
+    public function __construct(
+        public DjTag $djTag,
+        public array $audioEffects = []
+    ) {}
 
     public function handle(
         TtsServiceFactory $ttsFactory,
         AudioProcessor $audioProcessor
     ): void {
-        try {
-            $this->djTag->update(['status' => 'processing']);
+        // Create the initial version record
+        $version = $this->djTag->versions()->create([
+            'version_number' => 1,
+            'audio_effects' => $this->audioEffects,
+            'status' => 'processing',
+        ]);
 
+        try {
             // 1. Validate API Credential
             $apiKey = null;
             if (! config('services.tts.fake.enabled')) {
@@ -54,22 +62,39 @@ class GenerateDjTagJob implements ShouldQueue
             }
             file_put_contents($tempRawPath, $rawAudioContent);
 
-            // 4. Apply Audio Effects (FFmpeg)
-            $effects = $this->djTag->audio_effects ?? [];
+            // 4. Store Raw Audio to Permanent Storage
+            $rawFileName = 'tags/raw/'.date('Y-m-d').'/'.\Illuminate\Support\Str::uuid().'.mp3';
+            \Illuminate\Support\Facades\Storage::disk(config('audio.storage_disk'))->put(
+                $rawFileName,
+                $rawAudioContent,
+                'private'
+            );
+
+            $rawDuration = $audioProcessor->getDuration($tempRawPath);
+
+            $this->djTag->update([
+                'raw_audio_path' => $rawFileName,
+                'raw_audio_duration' => $rawDuration,
+            ]);
+
+            // 5. Apply Audio Effects (FFmpeg)
+            // We need to get the effects from somewhere. Since I removed them from DjTag,
+            // I should have passed them to this job or kept them in a temporary place.
+            // Actually, version was already created with effects.
+            // Wait, I need to fix DjTagController to pass these effects.
+
+            $effects = $version->audio_effects ?? [];
             if (empty($effects)) {
-                // If no effects, just use the raw file (but ensure it's valid via processor or just copy)
-                // We'll run it through applyEffects with empty array to ensure consistent formatting/validation if needed
-                // Or just use the raw file path. Let's use processor to be safe with formats.
                 $processedPath = $audioProcessor->applyEffects($tempRawPath, []);
             } else {
                 $processedPath = $audioProcessor->applyEffects($tempRawPath, $effects);
             }
 
-            // 5. Get Duration
+            // 6. Get Processed Duration
             $duration = $audioProcessor->getDuration($processedPath);
 
-            // 6. Store to Permanent Storage
-            $fileName = 'tags/'.date('Y-m-d').'/'.\Illuminate\Support\Str::uuid().'.'.$this->djTag->format;
+            // 7. Store Processed to Permanent Storage
+            $fileName = 'tags/processed/'.date('Y-m-d').'/'.\Illuminate\Support\Str::uuid().'.'.$this->djTag->format;
             $fileContent = file_get_contents($processedPath);
 
             \Illuminate\Support\Facades\Storage::disk(config('audio.storage_disk'))->put(
@@ -78,25 +103,26 @@ class GenerateDjTagJob implements ShouldQueue
                 'public'
             );
 
-            // 7. Update Tag Record
-            $this->djTag->update([
+            // 8. Update Version Record
+            $version->update([
                 'status' => 'completed',
                 'audio_path' => $fileName,
                 'duration' => $duration,
             ]);
 
-            // 8. Cleanup Temp Files
+            // 9. Cleanup Temp Files
             @unlink($tempRawPath);
             @unlink($processedPath);
 
         } catch (\Throwable $e) {
             \Illuminate\Support\Facades\Log::error('DJ Tag Generation Failed', [
                 'tag_id' => $this->djTag->id,
+                'version_id' => $version->id,
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
 
-            $this->djTag->update([
+            $version->update([
                 'status' => 'failed',
                 'error_message' => $e->getMessage(),
             ]);
@@ -109,7 +135,7 @@ class GenerateDjTagJob implements ShouldQueue
                 @unlink($processedPath);
             }
 
-            throw $e; // Ensure job is marked as failed in queue
+            throw $e;
         }
     }
 }

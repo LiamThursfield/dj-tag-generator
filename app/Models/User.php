@@ -49,6 +49,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereTwoFactorSecret($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
  *
+ * @mixin IdeHelperUser
  * @mixin \Eloquent
  */
 class User extends Authenticatable

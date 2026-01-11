@@ -7,7 +7,16 @@ import { type BreadcrumbItem } from '@/types';
 import { dashboard } from '@/routes';
 import { index, create, store } from '@/routes/dj-tags';
 import { Textarea } from '@/components/ui/textarea';
- import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const props = defineProps<{
     preferred_service: string;
@@ -31,8 +40,9 @@ const form = useForm({
     audio_effects: {
         pitch: 0,
         speed: 1.0,
-        reverb: 'none',
-        normalize: false,
+        reverb: null,
+        bass_boost: false,
+        normalize: true,
     },
     format: 'mp3',
 });
@@ -53,12 +63,12 @@ const submit = () => {
         <div class="max-w-4xl mx-auto p-4 w-full sm:p-6 lg:p-8">
             <h1 class="text-2xl font-bold mb-6">Create New DJ Tag</h1>
 
-            <form @submit.prevent="submit" class="space-y-8 bg-white dark:bg-[#18181b] p-6 rounded-lg shadow border border-gray-200 dark:border-gray-800">
+            <form @submit.prevent="submit" class="space-y-8 bg-card p-6 rounded-lg shadow border border-border">
                 <!-- Service Selector -->
                 <div>
                     <h3 class="text-lg font-medium mb-3 ">1. Select Service</h3>
                     <ServiceSelector v-model="form.service" />
-                    <div v-if="form.errors.service" class="text-red-500 text-sm mt-1">{{ form.errors.service }}</div>
+                    <div v-if="form.errors.service" class="text-destructive text-sm mt-1">{{ form.errors.service }}</div>
                 </div>
 
                 <!-- Text Input -->
@@ -71,8 +81,8 @@ const submit = () => {
                             placeholder="Type your DJ drop text here..."
                             v-model="form.text"
                         />
-                        <div v-if="form.errors.text" class="text-red-500 text-sm">{{ form.errors.text }}</div>
-                        <div class="text-xs text-gray-500 dark:text-gray-400 text-right">
+                        <div v-if="form.errors.text" class="text-destructive text-sm">{{ form.errors.text }}</div>
+                        <div class="text-xs text-muted-foreground text-right">
                             {{ form.text.length }} / {{ 500 }} characters
                         </div>
                     </div>
@@ -85,14 +95,14 @@ const submit = () => {
                         v-model="form.voice_id"
                         :service="form.service"
                     />
-                    <div v-if="form.errors.voice_id" class="text-red-500 text-sm mt-1">{{ form.errors.voice_id }}</div>
+                    <div v-if="form.errors.voice_id" class="text-destructive text-sm mt-1">{{ form.errors.voice_id }}</div>
                 </div>
 
                 <!-- Settings & Effects -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <!-- Voice Settings -->
                     <div class="space-y-4">
-                        <h4 class="font-medium  border-b dark:border-gray-700 pb-2">Voice Settings</h4>
+                        <h4 class="font-medium  border-b border-border pb-2">Voice Settings</h4>
 
                         <div class="grid gap-2">
                             <label class="text-sm text-muted-foreground">Speed (x{{ form.voice_settings.speed }})</label>
@@ -100,7 +110,7 @@ const submit = () => {
                                 type="range"
                                 v-model.number="form.voice_settings.speed"
                                 min="0.25" max="4.0" step="0.25"
-                                class="w-full accent-indigo-600"
+                                class="w-full accent-primary"
                             />
                         </div>
 
@@ -110,14 +120,14 @@ const submit = () => {
                                 type="range"
                                 v-model.number="form.voice_settings.stability"
                                 min="0" max="1" step="0.05"
-                                class="w-full accent-indigo-600"
+                                class="w-full accent-primary"
                             />
                         </div>
                     </div>
 
                     <!-- Audio Effects -->
                     <div class="space-y-4">
-                        <h4 class="font-medium  border-b dark:border-gray-700 pb-2">Post-Processing</h4>
+                        <h4 class="font-medium  border-b border-border pb-2">Post-Processing</h4>
 
                         <div class="grid gap-2">
                             <label class="text-sm text-muted-foreground">Pitch Shift ({{ form.audio_effects.pitch > 0 ? '+' : '' }}{{ form.audio_effects.pitch }} semitones)</label>
@@ -125,27 +135,61 @@ const submit = () => {
                                 type="range"
                                 v-model.number="form.audio_effects.pitch"
                                 min="-12" max="12" step="1"
-                                class="w-full accent-indigo-600"
+                                class="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
+                            />
+                        </div>
+
+                        <div class="grid gap-2">
+                            <label class="text-sm text-muted-foreground">Speed ({{ form.audio_effects.speed }}x)</label>
+                            <input
+                                type="range"
+                                v-model.number="form.audio_effects.speed"
+                                min="0.5" max="2.0" step="0.1"
+                                class="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
                             />
                         </div>
 
                         <div class="grid gap-2">
                             <label class="text-sm text-muted-foreground">Reverb</label>
-                            <select
-                                v-model="form.audio_effects.reverb"
-                                class="rounded-md border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-900  text-sm focus:border-indigo-500 focus:ring-indigo-500"
+                            <Select v-model="form.audio_effects.reverb">
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select Reverb" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectItem :value="null">None</SelectItem>
+                                        <SelectItem value="small_room">Small Room</SelectItem>
+                                        <SelectItem value="large_hall">Large Hall</SelectItem>
+                                        <SelectItem value="stadium">Stadium</SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                         <div class="flex items-center justify-between">
+                            <label
+                                class="cursor-pointer flex-1 text-sm text-muted-foreground select-none"
+                                for="bass_boost"
                             >
-                                <option value="none">None</option>
-                                <option value="small_room">Small Room</option>
-                                <option value="large_hall">Large Hall</option>
-                                <option value="stadium">Stadium</option>
-                            </select>
+                                Bass Boost
+                            </label>
+                            <Checkbox id="bass_boost" class="cursor-pointer" v-model:checked="form.audio_effects.bass_boost" />
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <label
+                                class="cursor-pointer flex-1 text-sm text-muted-foreground select-none"
+                                for="normalize"
+                            >
+                                Normalize
+                            </label>
+                            <Checkbox id="normalize" class="cursor-pointer" v-model:checked="form.audio_effects.normalize" />
                         </div>
                     </div>
                 </div>
 
                 <!-- Actions -->
-                <div class="flex items-center justify-end gap-4 pt-4 border-t dark:border-gray-700">
+                <div class="flex items-center justify-end gap-4 pt-4 border-t border-border">
                     <Button
                         type="submit"
                         :disabled="form.processing"
@@ -160,7 +204,7 @@ const submit = () => {
                     </Button>
                 </div>
 
-                <div v-if="form.errors.rate_limit" class="p-3 bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400 rounded-md text-sm">
+                <div v-if="form.errors.rate_limit" class="p-3 bg-destructive/10 text-destructive rounded-md text-sm">
                     {{ form.errors.rate_limit }}
                 </div>
             </form>

@@ -28,13 +28,11 @@ class GenerateDjTag
             'service' => $service,
             'voice_id' => $data['voice_id'],
             'voice_settings' => $data['voice_settings'] ?? [],
-            'audio_effects' => $data['audio_effects'] ?? [],
             'format' => $data['format'] ?? 'mp3',
-            'status' => 'pending',
         ]);
 
         // 3. Dispatch the Job
-        GenerateDjTagJob::dispatchSync($tag);
+        GenerateDjTagJob::dispatch($tag, $data['audio_effects'] ?? []);
 
         return $tag;
     }

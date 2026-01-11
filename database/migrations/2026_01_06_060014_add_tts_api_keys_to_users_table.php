@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->text('openai_api_key')->nullable()->after('email');
             $table->text('elevenlabs_api_key')->nullable()->after('openai_api_key');
-            $table->string('preferred_tts_service')->default('openai')->after('elevenlabs_api_key');
+            $table->string('preferred_tts_service')->default('elevenlabs')->after('elevenlabs_api_key');
         });
     }
 

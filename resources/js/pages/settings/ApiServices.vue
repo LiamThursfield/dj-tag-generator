@@ -25,6 +25,8 @@ const form = useForm({
     preferred_tts_service: props.preferred_tts_service,
 });
 
+const elevenlabsApiKeyUrl = 'https://elevenlabs.io/app/settings/api-keys';
+
 const breadcrumbItems: BreadcrumbItem[] = [
     {
         title: 'API Services',
@@ -95,20 +97,6 @@ const submit = () => {
                         </div>
 
                         <div class="space-y-4 pt-4 border-t dark:border-zinc-800">
-                            <!-- OpenAI API Key -->
-                            <div class="space-y-2">
-                                <Label for="openai_api_key">OpenAI API Key</Label>
-                                <Input
-                                    id="openai_api_key"
-                                    v-model="form.openai_api_key"
-                                    type="password"
-                                    autocomplete="off"
-                                    placeholder="sk-..."
-                                />
-                                <p class="text-xs text-gray-500">Required for OpenAI TTS voices.</p>
-                                <InputError :message="form.errors.openai_api_key" />
-                            </div>
-
                             <!-- ElevenLabs API Key -->
                             <div class="space-y-2 pt-2">
                                 <Label for="elevenlabs_api_key">ElevenLabs API Key</Label>
@@ -117,9 +105,34 @@ const submit = () => {
                                     v-model="form.elevenlabs_api_key"
                                     type="password"
                                     autocomplete="off"
+                                    placeholder="ElevenLabs API Key"
                                 />
-                                <p class="text-xs text-gray-500">Required for ElevenLabs premium voices.</p>
+                                <p class="text-xs text-gray-500">
+                                    Required for ElevenLabs premium voices. To get an API Key
+                                    <a
+                                        class="text-primary hover:underline"
+                                        :href="elevenlabsApiKeyUrl"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        click here
+                                    </a>, you will need to create a free account if you don't already have one.
+                                </p>
                                 <InputError :message="form.errors.elevenlabs_api_key" />
+                            </div>
+
+                            <!-- OpenAI API Key -->
+                            <div class="space-y-2">
+                                <Label for="openai_api_key">OpenAI API Key</Label>
+                                <Input
+                                    id="openai_api_key"
+                                    v-model="form.openai_api_key"
+                                    type="password"
+                                    autocomplete="off"
+                                    placeholder="OpenAI API Key"
+                                />
+                                <p class="text-xs text-gray-500">Required for OpenAI TTS voices.</p>
+                                <InputError :message="form.errors.openai_api_key" />
                             </div>
                         </div>
 

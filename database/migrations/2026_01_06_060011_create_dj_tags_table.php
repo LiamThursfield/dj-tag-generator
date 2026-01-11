@@ -18,12 +18,9 @@ return new class extends Migration
             $table->string('service')->default('openai'); // openai, elevenlabs
             $table->string('voice_id');
             $table->json('voice_settings')->nullable(); // speed, stability, etc.
-            $table->json('audio_effects')->nullable(); // pitch, reverb, etc.
-            $table->string('audio_path')->nullable();
             $table->string('format')->default('mp3');
-            $table->float('duration')->nullable(); // in seconds
-            $table->string('status')->default('pending'); // pending, processing, completed, failed
-            $table->text('error_message')->nullable();
+            $table->string('raw_audio_path')->nullable();
+            $table->float('raw_audio_duration')->nullable();
             $table->timestamps();
 
             $table->index(['user_id', 'created_at']);
