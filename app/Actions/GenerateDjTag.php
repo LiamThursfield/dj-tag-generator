@@ -16,7 +16,7 @@ class GenerateDjTag
     {
         // 1. Validate Service Availability
         $service = $data['service'] ?? 'elevenlabs';
-        if (!config('services.tts.fake.enabled') && !$user->hasServiceConfigured($service)) {
+        if (! config('services.tts.fake.enabled') && ! $user->hasServiceConfigured($service)) {
             throw ValidationException::withMessages([
                 'service' => ["You haven't configured an API key for {$service}. Please check your settings."],
             ]);

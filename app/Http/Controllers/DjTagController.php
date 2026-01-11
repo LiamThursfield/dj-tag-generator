@@ -43,7 +43,7 @@ class DjTagController extends Controller
         }
 
         return \Inertia\Inertia::render('dj-tags/Show', [
-            'tag' => $djTag->load(['versions' => fn($q) => $q->latest()]),
+            'tag' => $djTag->load(['versions' => fn ($q) => $q->latest()]),
         ]);
     }
 

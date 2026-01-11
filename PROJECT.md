@@ -36,6 +36,13 @@ The DJ Tag Generator is a Laravel 12 application that enables DJs and music prod
 - **Reka UI**: Headless UI components
 - **Lucide Vue**: Icon library
 - **VueUse**: Composition utilities
+- **Wayfinder**: Typed routing for Laravel
+- **Shadcn Vue**: Professionally crafted UI components
+
+### UI Standards
+- **Theme Variables**: NEVER use hardcoded Tailwind colors (e.g., `text-indigo-600`). ALWAYS use theme variables (`text-primary`, `bg-background`, `border-border`, etc.) to ensure Light/Dark mode compatibility.
+- **Component Consistency**: Use Shadcn Vue components where available (Select, Checkbox, Button, etc.) for all interactive elements. If a component exists but is not yet in the project, the latest version should be added via the `npx shadcn-vue@latest add` command. Components can be found https://www.shadcn-vue.com/docs/components
+- **Badge Styling**: Use the standard `getStatusColor` utility for status badges to maintain a unified visual language for 'completed', 'failed', 'processing', and 'pending' states.
 
 ### Development Tools
 - **Laravel Sail**: Docker-based local development

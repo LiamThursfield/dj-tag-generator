@@ -19,8 +19,7 @@ class GenerateDjTagJob implements ShouldQueue
     public function __construct(
         public DjTag $djTag,
         public array $audioEffects = []
-    ) {
-    }
+    ) {}
 
     public function handle(
         TtsServiceFactory $ttsFactory,
@@ -36,7 +35,7 @@ class GenerateDjTagJob implements ShouldQueue
         try {
             // 1. Validate API Credential
             $apiKey = null;
-            if (!config('services.tts.fake.enabled')) {
+            if (! config('services.tts.fake.enabled')) {
                 $apiKey = $this->djTag->user->getApiKeyForService($this->djTag->service);
 
                 if (empty($apiKey)) {
@@ -57,14 +56,14 @@ class GenerateDjTagJob implements ShouldQueue
             $rawAudioContent = $ttsService->generate($this->djTag->text, $voiceOptions);
 
             // 3. Save Raw Audio to Temp File
-            $tempRawPath = storage_path('app/temp/' . \Illuminate\Support\Str::uuid() . '.mp3');
-            if (!file_exists(dirname($tempRawPath))) {
+            $tempRawPath = storage_path('app/temp/'.\Illuminate\Support\Str::uuid().'.mp3');
+            if (! file_exists(dirname($tempRawPath))) {
                 mkdir(dirname($tempRawPath), 0755, true);
             }
             file_put_contents($tempRawPath, $rawAudioContent);
 
             // 4. Store Raw Audio to Permanent Storage
-            $rawFileName = 'tags/raw/' . date('Y-m-d') . '/' . \Illuminate\Support\Str::uuid() . '.mp3';
+            $rawFileName = 'tags/raw/'.date('Y-m-d').'/'.\Illuminate\Support\Str::uuid().'.mp3';
             \Illuminate\Support\Facades\Storage::disk(config('audio.storage_disk'))->put(
                 $rawFileName,
                 $rawAudioContent,
@@ -79,9 +78,9 @@ class GenerateDjTagJob implements ShouldQueue
             ]);
 
             // 5. Apply Audio Effects (FFmpeg)
-            // We need to get the effects from somewhere. Since I removed them from DjTag, 
+            // We need to get the effects from somewhere. Since I removed them from DjTag,
             // I should have passed them to this job or kept them in a temporary place.
-            // Actually, version was already created with effects. 
+            // Actually, version was already created with effects.
             // Wait, I need to fix DjTagController to pass these effects.
 
             $effects = $version->audio_effects ?? [];
@@ -95,7 +94,7 @@ class GenerateDjTagJob implements ShouldQueue
             $duration = $audioProcessor->getDuration($processedPath);
 
             // 7. Store Processed to Permanent Storage
-            $fileName = 'tags/processed/' . date('Y-m-d') . '/' . \Illuminate\Support\Str::uuid() . '.' . $this->djTag->format;
+            $fileName = 'tags/processed/'.date('Y-m-d').'/'.\Illuminate\Support\Str::uuid().'.'.$this->djTag->format;
             $fileContent = file_get_contents($processedPath);
 
             \Illuminate\Support\Facades\Storage::disk(config('audio.storage_disk'))->put(

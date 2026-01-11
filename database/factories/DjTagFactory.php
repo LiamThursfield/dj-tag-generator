@@ -30,8 +30,8 @@ class DjTagFactory extends Factory
 
     public function withRawAudio(): static
     {
-        return $this->state(fn(array $attributes) => [
-            'raw_audio_path' => 'tags/raw/' . fake()->uuid() . '.mp3',
+        return $this->state(fn (array $attributes) => [
+            'raw_audio_path' => 'tags/raw/'.fake()->uuid().'.mp3',
             'raw_audio_duration' => fake()->randomFloat(2, 2, 8),
         ]);
     }

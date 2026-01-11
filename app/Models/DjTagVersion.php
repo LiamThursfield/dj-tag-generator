@@ -7,6 +7,35 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @mixin IdeHelperDjTagVersion
+ *
+ * @property int $id
+ * @property int $dj_tag_id
+ * @property int $version_number
+ * @property array<array-key, mixed>|null $audio_effects
+ * @property string|null $audio_path
+ * @property float|null $duration
+ * @property string $status
+ * @property string|null $error_message
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\DjTag $djTag
+ *
+ * @method static \Database\Factories\DjTagVersionFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTagVersion newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTagVersion newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTagVersion query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTagVersion whereAudioEffects($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTagVersion whereAudioPath($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTagVersion whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTagVersion whereDjTagId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTagVersion whereDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTagVersion whereErrorMessage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTagVersion whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTagVersion whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTagVersion whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTagVersion whereVersionNumber($value)
+ *
+ * @mixin \Eloquent
  */
 class DjTagVersion extends Model
 {
@@ -32,7 +61,7 @@ class DjTagVersion extends Model
         ];
     }
 
-    public function djTag()
+    public function djTag(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(DjTag::class);
     }

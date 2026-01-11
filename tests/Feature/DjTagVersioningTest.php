@@ -1,5 +1,6 @@
 <?php
 
+use App\Contracts\AudioProcessor;
 use App\Jobs\GenerateDjTagJob;
 use App\Jobs\ReprocessDjTagJob;
 use App\Models\DjTag;
@@ -9,7 +10,6 @@ use App\Services\TTS\TtsServiceFactory;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use App\Contracts\AudioProcessor;
 
 beforeEach(function () {
     Storage::fake('local');
@@ -32,7 +32,7 @@ beforeEach(function () {
     $this->audioProcessor->shouldReceive('getDuration')->andReturn(2.0);
     $this->audioProcessor->shouldReceive('applyEffects')->andReturn($this->dummyProcessedPath);
 
-    app()->bind(AudioProcessor::class, fn() => $this->audioProcessor);
+    app()->bind(AudioProcessor::class, fn () => $this->audioProcessor);
 });
 
 afterEach(function () {

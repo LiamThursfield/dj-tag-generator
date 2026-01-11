@@ -481,6 +481,23 @@ submit,
 </code-snippet>
 
 
+=== shadcn-vue/core rules ===
+
+## Shadcn Vue
+
+- Use Shadcn Vue components for all major interactive elements (Select, Checkbox, Button, Dialog, etc.) for accessibility and visual consistency.
+- **Installation**: If a required component is missing from the `resources/js/components/ui` directory, you MUST add it using `vendor/bin/sail npx shadcn-vue@latest add [component]`.
+- **Customization**: Prefer using the preset components as-is, and customize them via Tailwind classes if necessary.
+
+## UI Theme Consistency
+
+- **Theme Variables**: NEVER use hardcoded Tailwind color names (e.g. `text-indigo-600`, `bg-white`). ALWAYS use theme variables defined in `resources/css/app.css` (e.g. `text-primary`, `bg-background`, `border-border`, `text-muted-foreground`).
+- **Status Badges**: Use standardized styling for statuses:
+  - `completed`: `bg-emerald-500/10 text-emerald-500`
+  - `processing` / `pending`: `bg-primary/10 text-primary`
+  - `failed`: `bg-destructive/10 text-destructive`
+
+
 === tailwindcss/core rules ===
 
 ## Tailwind Core

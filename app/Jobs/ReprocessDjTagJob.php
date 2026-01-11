@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Contracts\AudioProcessor;
 use App\Models\DjTag;
-use App\Models\DjTagVersion;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Storage;
@@ -15,13 +14,13 @@ class ReprocessDjTagJob implements ShouldQueue
     use Queueable;
 
     public $tries = 3;
+
     public $timeout = 120;
 
     public function __construct(
         public DjTag $djTag,
         public array $audioEffects = []
-    ) {
-    }
+    ) {}
 
     public function handle(AudioProcessor $audioProcessor): void
     {
@@ -37,13 +36,13 @@ class ReprocessDjTagJob implements ShouldQueue
         ]);
 
         try {
-            if (!$this->djTag->hasRawAudio()) {
+            if (! $this->djTag->hasRawAudio()) {
                 throw new \Exception("Master raw audio not found for tag: {$this->djTag->id}");
             }
 
             // 3. Download Raw Audio to Temp File
-            $tempRawPath = storage_path('app/temp/' . Str::uuid() . '.mp3');
-            if (!file_exists(dirname($tempRawPath))) {
+            $tempRawPath = storage_path('app/temp/'.Str::uuid().'.mp3');
+            if (! file_exists(dirname($tempRawPath))) {
                 mkdir(dirname($tempRawPath), 0755, true);
             }
 
@@ -57,7 +56,7 @@ class ReprocessDjTagJob implements ShouldQueue
             $duration = $audioProcessor->getDuration($processedPath);
 
             // 6. Store Processed to Permanent Storage
-            $fileName = 'tags/processed/' . date('Y-m-d') . '/' . Str::uuid() . '.' . $this->djTag->format;
+            $fileName = 'tags/processed/'.date('Y-m-d').'/'.Str::uuid().'.'.$this->djTag->format;
             $fileContent = file_get_contents($processedPath);
 
             Storage::disk(config('audio.storage_disk'))->put(

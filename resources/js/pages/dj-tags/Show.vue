@@ -4,7 +4,18 @@ import { Head, Link, useForm } from '@inertiajs/vue3';
 import { type BreadcrumbItem } from '@/types';
 import { computed, ref } from 'vue';
 import { dashboard } from '@/routes';
-import { index, create, show, reprocess } from '@/routes/dj-tags';
+import { index, show, reprocess } from '@/routes/dj-tags';
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Button } from '@/components/ui/button';
 
 interface TagVersion {
     id: number;
@@ -39,10 +50,10 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 const getStatusColor = (status: string) => {
     switch (status) {
-        case 'completed': return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400';
-        case 'failed': return 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400';
-        case 'processing': return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400';
-        default: return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
+        case 'completed': return 'bg-emerald-500/10 text-emerald-500';
+        case 'failed': return 'bg-destructive/10 text-destructive';
+        case 'processing': return 'bg-primary/10 text-primary';
+        default: return 'bg-muted text-muted-foreground';
     }
 };
 
@@ -73,7 +84,7 @@ const submitReprocess = () => {
 };
 
 const compareVersionId = ref<number | null>(null);
-const compareVersion = computed(() => 
+const compareVersion = computed(() =>
     props.tag.versions.find(v => v.id === compareVersionId.value) || null
 );
 </script>
@@ -84,7 +95,7 @@ const compareVersion = computed(() =>
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="max-w-5xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
             <!-- Master Info -->
-            <div class="bg-white dark:bg-[#18181b] shadow overflow-hidden sm:rounded-lg border border-gray-200 dark:border-gray-800">
+            <div class="bg-card shadow overflow-hidden sm:rounded-lg border border-border">
                 <div class="px-4 py-5 sm:px-6 flex justify-between items-center">
                     <div>
                         <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100">
@@ -95,7 +106,7 @@ const compareVersion = computed(() =>
                         </p>
                     </div>
                 </div>
-                
+
                 <div class="border-t border-gray-200 dark:border-gray-700 px-4 py-5 sm:p-0">
                     <dl class="sm:divide-y sm:divide-gray-200 dark:sm:divide-gray-700">
                         <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -113,26 +124,26 @@ const compareVersion = computed(() =>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <!-- Versions List -->
                 <div class="lg:col-span-2 space-y-4">
-                    <div v-for="version in tag.versions" :key="version.id" 
-                        class="bg-white dark:bg-[#18181b] shadow overflow-hidden sm:rounded-lg border border-gray-200 dark:border-gray-800"
-                        :class="{'border-indigo-500 ring-1 ring-indigo-500': version.id === latestVersion?.id}"
+                    <div v-for="version in tag.versions" :key="version.id"
+                        class="bg-card shadow overflow-hidden sm:rounded-lg border border-border"
+                        :class="{'border-primary ring-1 ring-primary': version.id === latestVersion?.id}"
                     >
-                        <div class="px-4 py-4 sm:px-6 flex justify-between items-center bg-gray-50/50 dark:bg-white/5">
+                        <div class="px-4 py-4 sm:px-6 flex justify-between items-center bg-muted/30">
                             <div class="flex items-center space-x-3">
-                                <span class="text-sm font-bold text-gray-900 dark:text-gray-100 text uppercase tracking-wider">
+                                <span class="text-sm font-bold text-foreground uppercase tracking-wider">
                                     Version {{ version.version_number }}
                                 </span>
-                                <span v-if="version.id === latestVersion?.id" class="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-100 text-indigo-800 dark:bg-indigo-900/40 dark:text-indigo-300 uppercase">
+                                <Badge v-if="version.id === latestVersion?.id" variant="secondary" class="uppercase text-xs">
                                     Current
-                                </span>
+                                </Badge>
                             </div>
                             <div class="flex items-center space-x-4">
-                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide" :class="getStatusColor(version.status)">
+                                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wide" :class="getStatusColor(version.status)">
                                     {{ version.status }}
                                 </span>
-                                <button v-if="version.status === 'completed' && version.id !== latestVersion?.id" 
+                                <button v-if="version.status === 'completed' && version.id !== latestVersion?.id"
                                     @click="compareVersionId = compareVersionId === version.id ? null : version.id"
-                                    class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300"
+                                    class="text-xs font-semibold text-primary hover:text-primary/80"
                                 >
                                     {{ compareVersionId === version.id ? 'Hide Comparison' : 'Compare' }}
                                 </button>
@@ -141,9 +152,9 @@ const compareVersion = computed(() =>
 
                         <div class="p-4 sm:p-6 space-y-4">
                             <!-- Comparison Player if active -->
-                            <div v-if="compareVersionId === version.id" class="p-4 bg-indigo-50 dark:bg-indigo-900/10 rounded-lg space-y-3 border border-indigo-100 dark:border-indigo-900/30">
-                                <div class="flex justify-between items-center text-xs font-bold text-indigo-800 dark:text-indigo-300 uppercase tracking-widest">
-                                    <span>Comparison Comparison</span>
+                            <div v-if="compareVersionId === version.id" class="p-4 bg-primary/5 rounded-lg space-y-3 border border-primary/20">
+                                <div class="flex justify-between items-center text-xs font-bold text-primary uppercase tracking-widest">
+                                    <span>Comparison</span>
                                     <span>Version {{ latestVersion?.version_number }} (Current)</span>
                                 </div>
                                 <audio controls class="w-full h-8">
@@ -170,7 +181,7 @@ const compareVersion = computed(() =>
                             </div>
 
                             <div v-if="version.status === 'processing' || version.status === 'pending'" class="flex items-center justify-center p-8">
-                                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div>
+                                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
                             </div>
                         </div>
                     </div>
@@ -178,66 +189,91 @@ const compareVersion = computed(() =>
 
                 <!-- Reprocess Sidebar -->
                 <div class="space-y-4">
-                    <div class="bg-white dark:bg-[#18181b] shadow sm:rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden sticky top-6">
-                        <div class="px-4 py-4 sm:px-6 bg-gray-50/50 dark:bg-white/5 border-b border-gray-200 dark:border-gray-800">
-                            <h4 class="text-sm font-bold text-gray-900 dark:text-gray-100 uppercase tracking-wider">
+                    <div class="bg-card shadow sm:rounded-lg border border-border overflow-hidden sticky top-6">
+                        <div class="px-4 py-4 sm:px-6 bg-muted/30 border-b border-border">
+                            <h4 class="text-sm font-bold text-foreground uppercase tracking-wider">
                                 Experiment with Effects
                             </h4>
-                            <p class="text-[10px] text-gray-500 dark:text-gray-400 mt-1">
+                            <p class="text-xs text-muted-foreground mt-1">
                                 Create a new version using the raw master audio. No extra AI credits used.
                             </p>
                         </div>
                         <div class="p-4 space-y-4">
                             <div class="space-y-4">
                                 <div>
-                                    <label class="block text-[10px] font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider mb-1">Reverb</label>
-                                    <select v-model="form.audio_effects.reverb" class="w-full rounded border-gray-300 dark:border-gray-700 dark:bg-[#09090b] text-sm focus:ring-indigo-500 dark:text-gray-300">
-                                        <option :value="null">None</option>
-                                        <option value="small_room">Small Room</option>
-                                        <option value="large_hall">Large Hall</option>
-                                        <option value="stadium">Stadium</option>
-                                    </select>
+                                    <label class="block text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">Reverb</label>
+                                    <Select v-model="form.audio_effects.reverb">
+                                        <SelectTrigger class="w-full h-8 text-xs">
+                                            <SelectValue placeholder="Select Reverb" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup>
+                                                <SelectItem :value="null">None</SelectItem>
+                                                <SelectItem value="small_room">Small Room</SelectItem>
+                                                <SelectItem value="large_hall">Large Hall</SelectItem>
+                                                <SelectItem value="stadium">Stadium</SelectItem>
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
                                 </div>
 
                                 <div>
-                                    <label class="block text-[10px] font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider mb-1">Pitch Shift ({{ form.audio_effects.pitch }} semitones)</label>
-                                    <input type="range" v-model.number="form.audio_effects.pitch" min="-12" max="12" step="1" class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-indigo-600" />
+                                    <label class="block text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">Pitch Shift ({{ form.audio_effects.pitch }} semitones)</label>
+                                    <input type="range" v-model.number="form.audio_effects.pitch" min="-12" max="12" step="1" class="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary" />
                                 </div>
 
                                 <div>
-                                    <label class="block text-[10px] font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider mb-1">Speed ({{ form.audio_effects.speed }}x)</label>
-                                    <input type="range" v-model.number="form.audio_effects.speed" min="0.5" max="2.0" step="0.1" class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-indigo-600" />
+                                    <label class="block text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">Speed ({{ form.audio_effects.speed }}x)</label>
+                                    <input type="range" v-model.number="form.audio_effects.speed" min="0.5" max="2.0" step="0.1" class="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary" />
                                 </div>
 
                                 <div class="flex items-center justify-between">
-                                    <label class="text-[10px] font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Bass Boost</label>
-                                    <input type="checkbox" v-model="form.audio_effects.bass_boost" class="rounded border-gray-300 dark:border-gray-700 text-indigo-600 focus:ring-indigo-500 bg-transparent" />
+                                    <label
+                                        class="cursor-pointer flex-1 text-xs font-bold text-muted-foreground uppercase tracking-wider"
+                                        for="bass_boost"
+                                    >
+                                        Bass Boost
+                                    </label>
+                                    <Checkbox
+                                        id="bass_boost"
+                                        class="cursor-pointer"
+                                        v-model:checked="form.audio_effects.bass_boost"
+                                    />
                                 </div>
 
                                 <div class="flex items-center justify-between">
-                                    <label class="text-[10px] font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Normalize</label>
-                                    <input type="checkbox" v-model="form.audio_effects.normalize" class="rounded border-gray-300 dark:border-gray-700 text-indigo-600 focus:ring-indigo-500 bg-transparent" />
+                                    <label
+                                        class="cursor-pointer flex-1 text-xs font-bold text-muted-foreground uppercase tracking-wider"
+                                        for="normalize"
+                                    >
+                                        Normalize
+                                    </label>
+                                    <Checkbox
+                                        id="normalize"
+                                        class="cursor-pointer"
+                                        v-model:checked="form.audio_effects.normalize"
+                                    />
                                 </div>
                             </div>
 
-                            <button 
+                            <Button
                                 @click="submitReprocess"
                                 :disabled="form.processing"
-                                class="w-full mt-4 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-bold py-2.5 px-4 rounded shadow transition-all text-xs uppercase tracking-widest"
+                                class="w-full mt-4 text-xs uppercase tracking-widest h-10"
                             >
                                 {{ form.processing ? 'Generating...' : 'Create New Version' }}
-                            </button>
+                            </Button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="flex justify-start pt-4 border-t border-gray-200 dark:border-gray-800">
-                 <Link 
-                    :href="index.url()" 
-                    class="text-xs font-bold text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white uppercase tracking-widest flex items-center"
+            <div class="flex justify-start pt-4 border-t border-border">
+                 <Link
+                    :href="index.url()"
+                    class="text-xs font-bold text-muted-foreground hover:text-foreground uppercase tracking-widest flex items-center"
                 >
-                    &larr; Back to Library
+                    &larr; Back to DJ Tags
                 </Link>
             </div>
         </div>
