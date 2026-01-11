@@ -4,8 +4,9 @@ import { Head, Link } from '@inertiajs/vue3';
 import { type BreadcrumbItem } from '@/types';
 import { dashboard } from '@/routes';
 import { index, create, show } from '@/routes/dj-tags';
+import { Button } from '@/components/ui/button';
 
-const props = defineProps<{
+defineProps<{
     tags: {
         data: any[];
         links: any[];
@@ -32,31 +33,33 @@ const statusClass = (status: string) => {
     <Head title="My DJ Tags" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
+        <div class="max-w-4xl mx-auto p-4 w-full sm:p-6 lg:p-8">
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">My DJ Tags</h1>
-                <Link 
-                    :href="create.url()"
-                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md shadow text-sm font-medium transition-colors"
-                >
-                    + New Tag
-                </Link>
+
+                <Button as-child>
+                    <Link
+                        :href="create.url()"
+                    >
+                        + New Tag
+                    </Link>
+                </Button>
             </div>
 
             <div class="bg-white dark:bg-[#18181b] shadow overflow-hidden sm:rounded-lg border border-gray-200 dark:border-gray-800">
                 <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
                     <li v-for="tag in tags.data" :key="tag.id">
-                        <Link 
+                        <Link
                             :href="show.url(tag.id)"
                             class="block hover:bg-gray-50 dark:hover:bg-zinc-900 transition duration-150 ease-in-out"
                         >
                             <div class="px-4 py-4 sm:px-6">
                                 <div class="flex items-center justify-between">
-                                    <p class="text-sm font-medium text-indigo-600 dark:text-indigo-400 truncate w-2/3">
+                                    <p class="text-sm font-medium text-primary truncate w-2/3">
                                         {{ tag.text }}
                                     </p>
                                     <div class="ml-2 flex-shrink-0 flex">
-                                        <p 
+                                        <p
                                             class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full uppercase"
                                             :class="statusClass(tag.status)"
                                         >
@@ -83,7 +86,7 @@ const statusClass = (status: string) => {
                         No tags generated yet. Click "New Tag" to get started!
                     </li>
                 </ul>
-                
+
                 <!-- Simple Pagination -->
                 <div v-if="tags.links && tags.links.length > 3" class="bg-white dark:bg-[#18181b] px-4 py-3 border-t border-gray-200 dark:border-gray-700 sm:px-6">
                     <div class="flex items-center justify-between">
