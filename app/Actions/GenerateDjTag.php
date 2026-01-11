@@ -16,7 +16,7 @@ class GenerateDjTag
     {
         // 1. Validate Service Availability
         $service = $data['service'] ?? 'elevenlabs';
-        if (! config('services.tts.fake.enabled') && ! $user->hasServiceConfigured($service)) {
+        if (!config('services.tts.fake.enabled') && !$user->hasServiceConfigured($service)) {
             throw ValidationException::withMessages([
                 'service' => ["You haven't configured an API key for {$service}. Please check your settings."],
             ]);
@@ -28,13 +28,11 @@ class GenerateDjTag
             'service' => $service,
             'voice_id' => $data['voice_id'],
             'voice_settings' => $data['voice_settings'] ?? [],
-            'audio_effects' => $data['audio_effects'] ?? [],
             'format' => $data['format'] ?? 'mp3',
-            'status' => 'pending',
         ]);
 
         // 3. Dispatch the Job
-        GenerateDjTagJob::dispatchSync($tag);
+        GenerateDjTagJob::dispatch($tag, $data['audio_effects'] ?? []);
 
         return $tag;
     }

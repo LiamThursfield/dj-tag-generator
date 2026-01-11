@@ -17,17 +17,30 @@ class DjTagSeeder extends Seeder
             'email' => 'demo@example.com',
         ]);
 
-        // Create completed tags
+        // Create completed tags with versions
         \App\Models\DjTag::factory()
             ->count(10)
             ->for($user)
-            ->completed()
-            ->create();
+            ->withRawAudio()
+            ->create()
+            ->each(function ($tag) {
+                \App\Models\DjTagVersion::factory()
+                    ->count(fake()->numberBetween(1, 3))
+                    ->for($tag)
+                    ->completed()
+                    ->create();
+            });
 
         // Create pending tags
         \App\Models\DjTag::factory()
             ->count(3)
             ->for($user)
-            ->create();
+            ->withRawAudio()
+            ->create()
+            ->each(function ($tag) {
+                \App\Models\DjTagVersion::factory()
+                    ->for($tag)
+                    ->create();
+            });
     }
 }

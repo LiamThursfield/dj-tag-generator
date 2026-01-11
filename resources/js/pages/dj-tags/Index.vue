@@ -60,10 +60,10 @@ const statusClass = (status: string) => {
                                     </p>
                                     <div class="ml-2 flex-shrink-0 flex">
                                         <p
-                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full uppercase"
-                                            :class="statusClass(tag.status)"
+                                            class="px-2 inline-flex text-xs leading-5 font-bold rounded-full uppercase tracking-widest"
+                                            :class="statusClass(tag.latest_version?.status || 'pending')"
                                         >
-                                            {{ tag.status }}
+                                            {{ tag.latest_version?.status || 'pending' }}
                                         </p>
                                     </div>
                                 </div>

@@ -17,7 +17,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User|null $user
- *
  * @method static \Database\Factories\DjTagPresetFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTagPreset forUser($userId)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTagPreset newModelQuery()
@@ -34,8 +33,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTagPreset whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTagPreset whereVoiceId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTagPreset whereVoiceSettings($value)
- *
  * @mixin \Eloquent
+ * @mixin IdeHelperDjTagPreset
  */
 class DjTagPreset extends Model
 {

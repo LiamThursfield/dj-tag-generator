@@ -22,28 +22,17 @@ class DjTagFactory extends Factory
             'service' => fake()->randomElement(['openai', 'elevenlabs']),
             'voice_id' => fake()->word(),
             'voice_settings' => ['speed' => 1.0, 'stability' => 0.5],
-            'audio_effects' => ['pitch' => 0, 'reverb' => 'none'],
-            'audio_path' => null,
             'format' => 'mp3',
-            'duration' => null,
-            'status' => 'pending',
+            'raw_audio_path' => null,
+            'raw_audio_duration' => null,
         ];
     }
 
-    public function completed(): static
+    public function withRawAudio(): static
     {
-        return $this->state(fn (array $attributes) => [
-            'status' => 'completed',
-            'audio_path' => 'tags/'.fake()->uuid().'.mp3',
-            'duration' => fake()->randomFloat(2, 2, 8),
-        ]);
-    }
-
-    public function failed(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'status' => 'failed',
-            'error_message' => 'TTS generation failed',
+        return $this->state(fn(array $attributes) => [
+            'raw_audio_path' => 'tags/raw/' . fake()->uuid() . '.mp3',
+            'raw_audio_duration' => fake()->randomFloat(2, 2, 8),
         ]);
     }
 }

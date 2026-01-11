@@ -18,8 +18,12 @@ Route::resource('dj-tags', \App\Http\Controllers\DjTagController::class)
     ->only(['index', 'create', 'store', 'show'])
     ->middleware(['auth', 'verified']);
 
+Route::post('dj-tags/{dj_tag}/reprocess', [\App\Http\Controllers\DjTagController::class, 'reprocess'])
+    ->middleware(['auth', 'verified'])
+    ->name('dj-tags.reprocess');
+
 Route::get('voices', [\App\Http\Controllers\VoiceController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('voices.index');
 
-require __DIR__.'/settings.php';
+require __DIR__ . '/settings.php';

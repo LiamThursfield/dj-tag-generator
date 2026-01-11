@@ -21,7 +21,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User $user
- *
  * @method static \Database\Factories\DjTagFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag newQuery()
@@ -40,8 +39,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereVoiceId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DjTag whereVoiceSettings($value)
- *
  * @mixin \Eloquent
+ * @mixin IdeHelperDjTag
  */
 class DjTag extends Model
 {
@@ -54,20 +53,16 @@ class DjTag extends Model
         'service',
         'voice_id',
         'voice_settings',
-        'audio_effects',
-        'audio_path',
         'format',
-        'duration',
-        'status',
-        'error_message',
+        'raw_audio_path',
+        'raw_audio_duration',
     ];
 
     protected function casts(): array
     {
         return [
             'voice_settings' => 'array',
-            'audio_effects' => 'array',
-            'duration' => 'float',
+            'raw_audio_duration' => 'float',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
@@ -78,23 +73,18 @@ class DjTag extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function isPending(): bool
+    public function versions()
     {
-        return $this->status === 'pending';
+        return $this->hasMany(DjTagVersion::class);
     }
 
-    public function isProcessing(): bool
+    public function latestVersion()
     {
-        return $this->status === 'processing';
+        return $this->hasOne(DjTagVersion::class)->latestOfMany();
     }
 
-    public function isCompleted(): bool
+    public function hasRawAudio(): bool
     {
-        return $this->status === 'completed';
-    }
-
-    public function isFailed(): bool
-    {
-        return $this->status === 'failed';
+        return !empty($this->raw_audio_path);
     }
 }
