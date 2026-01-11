@@ -1,15 +1,7 @@
 <script setup lang="ts">
+import AudioEffectsSelector from '@/components/dj-tags/AudioEffectsSelector.vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes';
 import { index, reprocess, show } from '@/routes/dj-tags';
@@ -68,13 +60,23 @@ const getAudioUrl = (path: string | null) => {
 
 const latestVersion = computed(() => props.tag.versions[0] || null);
 
+const defaultAudioEffects = {
+    pitch: 0,
+    speed: 1.0,
+    reverb: 'none',
+    bass_boost: false,
+    tremolo: false,
+    echo: false,
+    chorus: false,
+    lofi_telephone: false,
+    bitcrush: false,
+    normalize: true,
+};
+
 const form = useForm({
-    audio_effects: latestVersion.value?.audio_effects || {
-        reverb: null,
-        pitch: 0,
-        speed: 1.0,
-        bass_boost: false,
-        normalize: true,
+    audio_effects: {
+        ...defaultAudioEffects,
+        ...(latestVersion.value?.audio_effects || {}),
     },
 });
 
@@ -215,9 +217,7 @@ const compareVersion = computed(
                                     <span>Comparison</span>
                                     <span
                                         >Version
-                                        {{
-                                            latestVersion?.version_number
-                                        }}
+                                        {{ latestVersion?.version_number }}
                                         (Current)</span
                                     >
                                 </div>
@@ -325,110 +325,11 @@ const compareVersion = computed(
                             </p>
                         </div>
                         <div class="space-y-4 p-4">
-                            <div class="space-y-4">
-                                <div>
-                                    <label
-                                        class="mb-1 block text-xs font-bold tracking-wider text-muted-foreground uppercase"
-                                        >Reverb</label
-                                    >
-                                    <Select v-model="form.audio_effects.reverb">
-                                        <SelectTrigger
-                                            class="h-8 w-full text-xs"
-                                        >
-                                            <SelectValue
-                                                placeholder="Select Reverb"
-                                            />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectGroup>
-                                                <SelectItem :value="null"
-                                                    >None</SelectItem
-                                                >
-                                                <SelectItem value="small_room"
-                                                    >Small Room</SelectItem
-                                                >
-                                                <SelectItem value="large_hall"
-                                                    >Large Hall</SelectItem
-                                                >
-                                                <SelectItem value="stadium"
-                                                    >Stadium</SelectItem
-                                                >
-                                            </SelectGroup>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-
-                                <div>
-                                    <label
-                                        class="mb-1 block text-xs font-bold tracking-wider text-muted-foreground uppercase"
-                                        >Pitch Shift ({{
-                                            form.audio_effects.pitch
-                                        }}
-                                        semitones)</label
-                                    >
-                                    <input
-                                        type="range"
-                                        v-model.number="
-                                            form.audio_effects.pitch
-                                        "
-                                        min="-12"
-                                        max="12"
-                                        step="1"
-                                        class="h-2 w-full cursor-pointer appearance-none rounded-lg bg-muted accent-primary"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label
-                                        class="mb-1 block text-xs font-bold tracking-wider text-muted-foreground uppercase"
-                                        >Speed ({{
-                                            form.audio_effects.speed
-                                        }}x)</label
-                                    >
-                                    <input
-                                        type="range"
-                                        v-model.number="
-                                            form.audio_effects.speed
-                                        "
-                                        min="0.5"
-                                        max="2.0"
-                                        step="0.1"
-                                        class="h-2 w-full cursor-pointer appearance-none rounded-lg bg-muted accent-primary"
-                                    />
-                                </div>
-
-                                <div class="flex items-center justify-between">
-                                    <label
-                                        class="flex-1 cursor-pointer text-xs font-bold tracking-wider text-muted-foreground uppercase"
-                                        for="bass_boost"
-                                    >
-                                        Bass Boost
-                                    </label>
-                                    <Checkbox
-                                        id="bass_boost"
-                                        class="cursor-pointer"
-                                        v-model:checked="
-                                            form.audio_effects.bass_boost
-                                        "
-                                    />
-                                </div>
-
-                                <div class="flex items-center justify-between">
-                                    <label
-                                        class="flex-1 cursor-pointer text-xs font-bold tracking-wider text-muted-foreground uppercase"
-                                        for="normalize"
-                                    >
-                                        Normalize
-                                    </label>
-                                    <Checkbox
-                                        id="normalize"
-                                        class="cursor-pointer"
-                                        v-model:checked="
-                                            form.audio_effects.normalize
-                                        "
-                                    />
-                                </div>
-                            </div>
+                            <!-- Audio Effects Selector -->
+                            <AudioEffectsSelector
+                                v-model="form.audio_effects"
+                                compact
+                            />
 
                             <Button
                                 @click="submitReprocess"

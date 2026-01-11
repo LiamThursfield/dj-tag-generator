@@ -27,6 +27,12 @@ class StoreDjTagRequest extends FormRequest
             'audio_effects.pitch' => ['nullable', 'numeric', 'min:'.config('audio.effects.pitch.min', -12), 'max:'.config('audio.effects.pitch.max', 12)],
             'audio_effects.speed' => ['nullable', 'numeric', 'min:'.config('audio.effects.speed.min', 0.5), 'max:'.config('audio.effects.speed.max', 2.0)],
             'audio_effects.reverb' => ['nullable', 'string', 'in:none,small_room,large_hall,stadium'],
+            'audio_effects.bass_boost' => ['nullable', 'boolean'],
+            'audio_effects.tremolo' => ['nullable', 'boolean'],
+            'audio_effects.echo' => ['nullable', 'boolean'],
+            'audio_effects.chorus' => ['nullable', 'boolean'],
+            'audio_effects.lofi_telephone' => ['nullable', 'boolean'],
+            'audio_effects.bitcrush' => ['nullable', 'boolean'],
             'audio_effects.normalize' => ['nullable', 'boolean'],
             'format' => ['sometimes', 'string', 'in:mp3,wav'],
         ];

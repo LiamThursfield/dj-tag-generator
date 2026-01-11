@@ -80,6 +80,26 @@ return [
             ],
         ],
 
+        'tremolo' => [
+            'filter' => 'tremolo=f=5:d=0.5',
+        ],
+
+        'echo' => [
+            'filter' => 'aecho=0.8:0.9:500:0.3',
+        ],
+
+        'chorus' => [
+            'filter' => 'chorus=0.5:0.9:50:0.4:0.25:2',
+        ],
+
+        'lofi_telephone' => [
+            'filter' => 'bandpass=f=1500:width_type=h:w=1000',
+        ],
+
+        'bitcrush' => [
+            'filter' => 'acrusher=bits=8:samples=10:mode=lin:aa=0.4',
+        ],
+
         'pitch' => [
             'min' => -12, // semitones
             'max' => 12,
