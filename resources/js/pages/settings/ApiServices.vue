@@ -61,22 +61,6 @@ const submit = () => {
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <label
                                     class="relative flex cursor-pointer rounded-lg border bg-white dark:bg-zinc-900 p-4 shadow-sm focus:outline-none"
-                                    :class="form.preferred_tts_service === 'openai' ? 'border-indigo-500 ring-1 ring-indigo-500' : 'border-gray-200 dark:border-zinc-800'"
-                                >
-                                    <input type="radio" value="openai" v-model="form.preferred_tts_service" class="sr-only" />
-                                    <div class="flex flex-1">
-                                        <div class="flex flex-col">
-                                            <span class="block text-sm font-medium text-gray-900 dark:text-white">OpenAI</span>
-                                            <span class="mt-1 flex items-center text-sm text-gray-500 dark:text-gray-400">Fast & Efficient</span>
-                                        </div>
-                                    </div>
-                                    <div v-if="form.preferred_tts_service === 'openai'" class="flex h-5 w-5 items-center justify-center rounded-full bg-indigo-600">
-                                        <svg class="h-3 w-3 text-white" fill="currentColor" viewBox="0 0 12 12"><path d="M3.707 5.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 00-1.414-1.414L5 6.586 3.707 5.293z" /></svg>
-                                    </div>
-                                </label>
-
-                                <label
-                                    class="relative flex cursor-pointer rounded-lg border bg-white dark:bg-zinc-900 p-4 shadow-sm focus:outline-none"
                                     :class="form.preferred_tts_service === 'elevenlabs' ? 'border-indigo-500 ring-1 ring-indigo-500' : 'border-gray-200 dark:border-zinc-800'"
                                 >
                                     <input type="radio" value="elevenlabs" v-model="form.preferred_tts_service" class="sr-only" />
@@ -87,6 +71,22 @@ const submit = () => {
                                         </div>
                                     </div>
                                     <div v-if="form.preferred_tts_service === 'elevenlabs'" class="flex h-5 w-5 items-center justify-center rounded-full bg-indigo-600">
+                                        <svg class="h-3 w-3 text-white" fill="currentColor" viewBox="0 0 12 12"><path d="M3.707 5.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 00-1.414-1.414L5 6.586 3.707 5.293z" /></svg>
+                                    </div>
+                                </label>
+
+                                <label
+                                    class="relative flex cursor-not-allowed rounded-lg border bg-white dark:bg-zinc-900 opacity-50 p-4 shadow-sm focus:outline-none"
+                                    :class="form.preferred_tts_service === 'openai' ? 'border-indigo-500 ring-1 ring-indigo-500' : 'border-gray-200 dark:border-zinc-800'"
+                                >
+                                    <input type="radio" disabled value="openai" v-model="form.preferred_tts_service" class="sr-only" />
+                                    <div class="flex flex-1">
+                                        <div class="flex flex-col">
+                                            <span class="block text-sm font-medium text-gray-900 dark:text-white">OpenAI (Coming Soon)</span>
+                                            <span class="mt-1 flex items-center text-sm text-gray-500 dark:text-gray-400">Fast & Efficient</span>
+                                        </div>
+                                    </div>
+                                    <div v-if="form.preferred_tts_service === 'openai'" class="flex h-5 w-5 items-center justify-center rounded-full bg-indigo-600">
                                         <svg class="h-3 w-3 text-white" fill="currentColor" viewBox="0 0 12 12"><path d="M3.707 5.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 00-1.414-1.414L5 6.586 3.707 5.293z" /></svg>
                                     </div>
                                 </label>

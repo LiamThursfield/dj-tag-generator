@@ -21,7 +21,7 @@ class TtsServiceFactory
             return app(FakeTtsService::class);
         }
 
-        $service = $service ?? config('services.tts.default', 'openai');
+        $service = $service ?? config('services.tts.default', 'elevenlabs');
 
         return match ($service) {
             'openai' => app(OpenAiTtsService::class, ['apiKey' => $apiKey]),

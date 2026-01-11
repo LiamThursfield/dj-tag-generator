@@ -42,7 +42,7 @@ return [
     */
 
     'tts' => [
-        'default' => env('TTS_SERVICE', 'openai'),
+        'default' => env('TTS_SERVICE', 'elevenlabs'),
         'fake' => [
             'enabled' => env('TTS_FAKE_ENABLED', false),
             'file_path' => env('TTS_FAKE_FILE_PATH', 'storage/app/fake/fake-tag-01.mp3'),
@@ -50,14 +50,12 @@ return [
     ],
 
     'openai' => [
-        'api_key' => env('OPENAI_API_KEY'),
         'organization' => env('OPENAI_ORGANIZATION'),
         'model' => env('OPENAI_TTS_MODEL', 'tts-1'),
         'voice' => env('OPENAI_TTS_VOICE', 'alloy'),
     ],
 
     'elevenlabs' => [
-        'api_key' => env('ELEVENLABS_API_KEY'),
         'model' => env('ELEVENLABS_MODEL', 'eleven_multilingual_v2'),
     ],
 

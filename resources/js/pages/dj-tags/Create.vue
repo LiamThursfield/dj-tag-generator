@@ -21,7 +21,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 const form = useForm({
     text: '',
-    service: props.preferred_service || 'openai',
+    service: props.preferred_service || 'elevenlabs',
     voice_id: '',
     voice_settings: {
         speed: 1.0,

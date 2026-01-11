@@ -16,7 +16,8 @@ class ApiServicesUpdateRequest extends FormRequest
         return [
             'openai_api_key' => ['nullable', 'string', 'max:255'],
             'elevenlabs_api_key' => ['nullable', 'string', 'max:255'],
-            'preferred_tts_service' => ['required', 'string', 'in:openai,elevenlabs'],
+            // Currently only enable elevenlabs until OpenAI is added
+            'preferred_tts_service' => ['required', 'string', 'in:elevenlabs'],
         ];
     }
 }
