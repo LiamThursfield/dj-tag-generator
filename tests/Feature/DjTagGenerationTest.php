@@ -26,7 +26,6 @@ test('authenticated user can create a dj tag', function () {
         'user_id' => $user->id,
         'text' => 'This is a test tag',
         'service' => 'openai',
-        'status' => 'pending',
     ]);
 
     // Assert Job pushed
@@ -47,6 +46,9 @@ test('cannot create tag with invalid parameters', function () {
 
 test('rate limiting prevents spam', function () {
     $user = User::factory()->create(['openai_api_key' => 'key']);
+
+    Config::set('audio.rate_limiting.enabled', true);
+    Config::set('audio.rate_limiting.max_per_hour', 10);
 
     // Create max allowed tags (mocking previous tags)
     \App\Models\DjTag::factory()->count(10)->for($user)->create([

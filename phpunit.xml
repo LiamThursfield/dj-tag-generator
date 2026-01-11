@@ -31,5 +31,7 @@
         <env name="PULSE_ENABLED" value="false"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
         <env name="NIGHTWATCH_ENABLED" value="false"/>
+        <env name="TTS_FAKE_ENABLED" value="true"/>
+        <env name="AUDIO_STORAGE_DISK" value="local"/>
     </php>
 </phpunit>
