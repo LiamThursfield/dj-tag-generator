@@ -80,6 +80,30 @@ return [
             ],
         ],
 
+        'flanger' => [
+            'filter' => 'flanger=delay=0:depth=2:regen=0:width=71:speed=0.5:shape=sine:phase=25',
+        ],
+
+        'tremolo' => [
+            'filter' => 'tremolo=f=5:d=0.5',
+        ],
+
+        'echo' => [
+            'filter' => 'aecho=0.8:0.9:500:0.3',
+        ],
+
+        'chorus' => [
+            'filter' => 'chorus=0.5:0.9:50:0.4:0.25:2',
+        ],
+
+        'lofi_telephone' => [
+            'filter' => 'bandpass=f=1500:w=1000,highpass=f=300,lowpass=f=3000',
+        ],
+
+        'bitcrush' => [
+            'filter' => 'acrusher=level_in=1:level_out=1:bits=8:mode=log:aa=1',
+        ],
+
         'pitch' => [
             'min' => -12, // semitones
             'max' => 12,

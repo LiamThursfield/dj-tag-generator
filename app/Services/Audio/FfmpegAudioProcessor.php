@@ -138,6 +138,36 @@ class FfmpegAudioProcessor implements AudioProcessor
             $filters[] = config('audio.effects.bass_boost.filter', 'bass=g=10:f=110:w=0.3');
         }
 
+        // Flanger
+        if (isset($effects['flanger']) && $effects['flanger']) {
+            $filters[] = config('audio.effects.flanger.filter');
+        }
+
+        // Tremolo
+        if (isset($effects['tremolo']) && $effects['tremolo']) {
+            $filters[] = config('audio.effects.tremolo.filter');
+        }
+
+        // Echo
+        if (isset($effects['echo']) && $effects['echo']) {
+            $filters[] = config('audio.effects.echo.filter');
+        }
+
+        // Chorus
+        if (isset($effects['chorus']) && $effects['chorus']) {
+            $filters[] = config('audio.effects.chorus.filter');
+        }
+
+        // Lo-Fi / Telephone
+        if (isset($effects['lofi_telephone']) && $effects['lofi_telephone']) {
+            $filters[] = config('audio.effects.lofi_telephone.filter');
+        }
+
+        // Bitcrush
+        if (isset($effects['bitcrush']) && $effects['bitcrush']) {
+            $filters[] = config('audio.effects.bitcrush.filter');
+        }
+
         // Normalize
         if (isset($effects['normalize']) && $effects['normalize']) {
             $filters[] = config('audio.effects.normalize.filter', 'loudnorm=I=-16:TP=-1.5:LRA=11');

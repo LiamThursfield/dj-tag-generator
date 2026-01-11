@@ -1,16 +1,8 @@
-<script setup lang="ts">
+<script lang="ts" setup>
+import AudioEffectsSelector from '@/components/dj-tags/AudioEffectsSelector.vue';
 import ServiceSelector from '@/components/dj-tags/ServiceSelector.vue';
 import VoicePicker from '@/components/dj-tags/VoicePicker.vue';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes';
@@ -40,9 +32,15 @@ const form = useForm({
     audio_effects: {
         pitch: 0,
         speed: 1.0,
-        reverb: null,
+        reverb: 'none',
         bass_boost: false,
-        normalize: true,
+        flanger: false,
+        tremolo: false,
+        echo: false,
+        chorus: false,
+        lofi_telephone: false,
+        bitcrush: false,
+        normalize: false,
     },
     format: 'mp3',
 });
@@ -88,9 +86,9 @@ const submit = () => {
                             >Text to Speak</label
                         >
                         <Textarea
+                            v-model="form.text"
                             class="min-h-24"
                             placeholder="Type your DJ drop text here..."
-                            v-model="form.text"
                         />
                         <div
                             v-if="form.errors.text"
@@ -132,18 +130,18 @@ const submit = () => {
                                 >Speed (x{{ form.voice_settings.speed }})</label
                             >
                             <input
-                                type="range"
                                 v-model.number="form.voice_settings.speed"
-                                min="0.25"
-                                max="4.0"
-                                step="0.25"
                                 class="w-full accent-primary"
+                                max="4.0"
+                                min="0.25"
+                                step="0.25"
+                                type="range"
                             />
                         </div>
 
                         <div
-                            class="grid gap-2"
                             v-if="form.service === 'elevenlabs'"
+                            class="grid gap-2"
                         >
                             <label class="text-sm text-muted-foreground"
                                 >Stability ({{
@@ -153,12 +151,12 @@ const submit = () => {
                                 }}%)</label
                             >
                             <input
-                                type="range"
                                 v-model.number="form.voice_settings.stability"
-                                min="0"
-                                max="1"
-                                step="0.05"
                                 class="w-full accent-primary"
+                                max="1"
+                                min="0"
+                                step="0.05"
+                                type="range"
                             />
                         </div>
                     </div>
@@ -169,93 +167,7 @@ const submit = () => {
                             Post-Processing
                         </h4>
 
-                        <div class="grid gap-2">
-                            <label class="text-sm text-muted-foreground"
-                                >Pitch Shift ({{
-                                    form.audio_effects.pitch > 0 ? '+' : ''
-                                }}{{
-                                    form.audio_effects.pitch
-                                }}
-                                semitones)</label
-                            >
-                            <input
-                                type="range"
-                                v-model.number="form.audio_effects.pitch"
-                                min="-12"
-                                max="12"
-                                step="1"
-                                class="h-2 w-full cursor-pointer appearance-none rounded-lg bg-muted accent-primary"
-                            />
-                        </div>
-
-                        <div class="grid gap-2">
-                            <label class="text-sm text-muted-foreground"
-                                >Speed ({{ form.audio_effects.speed }}x)</label
-                            >
-                            <input
-                                type="range"
-                                v-model.number="form.audio_effects.speed"
-                                min="0.5"
-                                max="2.0"
-                                step="0.1"
-                                class="h-2 w-full cursor-pointer appearance-none rounded-lg bg-muted accent-primary"
-                            />
-                        </div>
-
-                        <div class="grid gap-2">
-                            <label class="text-sm text-muted-foreground"
-                                >Reverb</label
-                            >
-                            <Select v-model="form.audio_effects.reverb">
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Select Reverb" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        <SelectItem :value="null"
-                                            >None</SelectItem
-                                        >
-                                        <SelectItem value="small_room"
-                                            >Small Room</SelectItem
-                                        >
-                                        <SelectItem value="large_hall"
-                                            >Large Hall</SelectItem
-                                        >
-                                        <SelectItem value="stadium"
-                                            >Stadium</SelectItem
-                                        >
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
-                        </div>
-
-                        <div class="flex items-center justify-between">
-                            <label
-                                class="flex-1 cursor-pointer text-sm text-muted-foreground select-none"
-                                for="bass_boost"
-                            >
-                                Bass Boost
-                            </label>
-                            <Checkbox
-                                id="bass_boost"
-                                class="cursor-pointer"
-                                v-model:checked="form.audio_effects.bass_boost"
-                            />
-                        </div>
-
-                        <div class="flex items-center justify-between">
-                            <label
-                                class="flex-1 cursor-pointer text-sm text-muted-foreground select-none"
-                                for="normalize"
-                            >
-                                Normalize
-                            </label>
-                            <Checkbox
-                                id="normalize"
-                                class="cursor-pointer"
-                                v-model:checked="form.audio_effects.normalize"
-                            />
-                        </div>
+                        <AudioEffectsSelector v-model="form.audio_effects" />
                     </div>
                 </div>
 
@@ -263,13 +175,13 @@ const submit = () => {
                 <div
                     class="flex items-center justify-end gap-4 border-t border-border pt-4"
                 >
-                    <Button type="submit" :disabled="form.processing">
+                    <Button :disabled="form.processing" type="submit">
                         <svg
                             v-if="form.processing"
                             class="mr-3 -ml-1 h-5 w-5 animate-spin text-white"
-                            xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
                         >
                             <circle
                                 class="opacity-25"
@@ -281,8 +193,8 @@ const submit = () => {
                             ></circle>
                             <path
                                 class="opacity-75"
-                                fill="currentColor"
                                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                fill="currentColor"
                             ></path>
                         </svg>
 
