@@ -15,7 +15,6 @@ const model = defineModel<{
     speed: number;
     reverb: string | null;
     bass_boost: boolean;
-    flanger: boolean;
     tremolo: boolean;
     echo: boolean;
     chorus: boolean;
@@ -113,7 +112,6 @@ defineProps<{
                 <div
                     v-for="(label, key) in {
                         bass_boost: 'Bass Boost',
-                        flanger: 'Flanger',
                         tremolo: 'Tremolo',
                         echo: 'Echo',
                         chorus: 'Chorus',

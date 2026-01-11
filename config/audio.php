@@ -80,10 +80,6 @@ return [
             ],
         ],
 
-        'flanger' => [
-            'filter' => 'flanger=delay=0:depth=2:regen=0:width=71:speed=0.5:shape=sine:phase=25',
-        ],
-
         'tremolo' => [
             'filter' => 'tremolo=f=5:d=0.5',
         ],

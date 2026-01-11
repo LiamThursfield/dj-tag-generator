@@ -138,11 +138,6 @@ class FfmpegAudioProcessor implements AudioProcessor
             $filters[] = config('audio.effects.bass_boost.filter', 'bass=g=10:f=110:w=0.3');
         }
 
-        // Flanger
-        if (isset($effects['flanger']) && $effects['flanger']) {
-            $filters[] = config('audio.effects.flanger.filter');
-        }
-
         // Tremolo
         if (isset($effects['tremolo']) && $effects['tremolo']) {
             $filters[] = config('audio.effects.tremolo.filter');

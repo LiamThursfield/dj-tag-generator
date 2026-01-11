@@ -34,7 +34,6 @@ const form = useForm({
         speed: 1.0,
         reverb: 'none',
         bass_boost: false,
-        flanger: false,
         tremolo: false,
         echo: false,
         chorus: false,
