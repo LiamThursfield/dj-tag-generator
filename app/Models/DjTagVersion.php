@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @mixin IdeHelperDjTagVersion
- *
  * @property int $id
  * @property int $dj_tag_id
  * @property int $version_number

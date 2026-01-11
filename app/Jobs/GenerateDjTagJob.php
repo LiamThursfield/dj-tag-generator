@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Contracts\AudioProcessor;
 use App\Models\DjTag;
+use App\Models\DjTagVersion;
 use App\Services\TTS\TtsServiceFactory;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -26,6 +27,7 @@ class GenerateDjTagJob implements ShouldQueue
         AudioProcessor $audioProcessor
     ): void {
         // Create the initial version record
+        /** @var DjTagVersion $version */
         $version = $this->djTag->versions()->create([
             'version_number' => 1,
             'audio_effects' => $this->audioEffects,

@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Contracts\AudioProcessor;
 use App\Models\DjTag;
+use App\Models\DjTagVersion;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Storage;
@@ -29,6 +30,7 @@ class ReprocessDjTagJob implements ShouldQueue
         $versionNumber = $lastVersion + 1;
 
         // 2. Create the version record
+        /** @var DjTagVersion $version */
         $version = $this->djTag->versions()->create([
             'version_number' => $versionNumber,
             'audio_effects' => $this->audioEffects,

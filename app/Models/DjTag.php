@@ -11,18 +11,15 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $text
  * @property string $service
  * @property string $voice_id
- * @property array|null $voice_settings
+ * @property array<array-key, mixed>|null $voice_settings
  * @property string $format
  * @property string|null $raw_audio_path
  * @property float|null $raw_audio_duration
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\User $user
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\DjTagVersion[] $versions
- *
- * @mixin IdeHelperDjTag
- *
  * @property-read \App\Models\DjTagVersion|null $latestVersion
+ * @property-read \App\Models\User $user
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DjTagVersion> $versions
  * @property-read int|null $versions_count
  *
  * @method static \Database\Factories\DjTagFactory factory($count = null, $state = [])

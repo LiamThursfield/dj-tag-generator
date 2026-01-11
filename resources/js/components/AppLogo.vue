@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { AudioLines } from 'lucide-vue-next';
-
 </script>
 
 <template>
