@@ -93,11 +93,11 @@ return [
         ],
 
         'lofi_telephone' => [
-            'filter' => 'bandpass=f=1500:w=1000,highpass=f=300,lowpass=f=3000',
+            'filter' => 'bandpass=f=1500:width_type=h:w=1000',
         ],
 
         'bitcrush' => [
-            'filter' => 'acrusher=level_in=1:level_out=1:bits=8:mode=log:aa=1',
+            'filter' => 'acrusher=bits=8:samples=10:mode=lin:aa=0.4',
         ],
 
         'pitch' => [
