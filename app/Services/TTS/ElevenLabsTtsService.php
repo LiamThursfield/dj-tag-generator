@@ -3,6 +3,9 @@
 namespace App\Services\TTS;
 
 use App\Contracts\TextToSpeechService;
+use App\Exceptions\TTS\MissingElevenLabsPermissionsException;
+use Arr;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 
 class ElevenLabsTtsService implements TextToSpeechService
@@ -97,6 +100,35 @@ class ElevenLabsTtsService implements TextToSpeechService
         } catch (\Exception $e) {
             return false;
         }
+    }
+
+    /**
+     * @throws MissingElevenLabsPermissionsException
+     * @throws ConnectionException
+     */
+    public function getRemainingCredits(): ?int
+    {
+        $response = Http::withHeaders([
+            'xi-api-key' => $this->apiKey,
+        ])->get("{$this->baseUrl}/user/subscription");
+
+        $json = $response->json();
+
+        if ($response->failed()) {
+            if (Arr::get($json, 'detail.status') === 'missing_permissions') {
+                throw new MissingElevenLabsPermissionsException(
+                    Arr::get($json, 'detail.message', 'Missing required permissions to get remaining credits.')
+                );
+            }
+
+            return null;
+        }
+
+        $data = $response->json();
+        $characterLimit = $data['character_limit'] ?? 0;
+        $characterCount = $data['character_count'] ?? 0;
+
+        return max(0, $characterLimit - $characterCount);
     }
 
     protected function getDefaultVoiceId(): string

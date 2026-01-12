@@ -9,6 +9,7 @@ import { dashboard } from '@/routes';
 import { create, index, store } from '@/routes/dj-tags';
 import { type BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/vue3';
+import { LoaderCircle } from 'lucide-vue-next';
 
 const props = defineProps<{
     preferred_service: string;
@@ -42,6 +43,9 @@ const form = useForm({
         normalize: false,
     },
     format: 'mp3',
+    // this isn't accepted on the backend, but allows us to use the error
+    // without a TypeScript complaint
+    rate_limit: null,
 });
 
 const submit = () => {
@@ -175,29 +179,14 @@ const submit = () => {
                     class="flex items-center justify-end gap-4 border-t border-border pt-4"
                 >
                     <Button :disabled="form.processing" type="submit">
-                        <svg
-                            v-if="form.processing"
-                            class="mr-3 -ml-1 h-5 w-5 animate-spin text-white"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <circle
-                                class="opacity-25"
-                                cx="12"
-                                cy="12"
-                                r="10"
-                                stroke="currentColor"
-                                stroke-width="4"
-                            ></circle>
-                            <path
-                                class="opacity-75"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                fill="currentColor"
-                            ></path>
-                        </svg>
+                        <template v-if="form.processing">
+                            <LoaderCircle
+                                class="h-5 w-5 animate-spin text-primary-foreground"
+                            />
 
-                        <span v-if="form.processing">Generating...</span>
+                            <span>Generating...</span>
+                        </template>
+
                         <span v-else>Generate Tag</span>
                     </Button>
                 </div>
