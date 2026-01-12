@@ -158,9 +158,7 @@ const submit = () => {
                             />
                         </div>
 
-                        <div
-                            class="space-y-4 border-t pt-4 border-muted"
-                        >
+                        <div class="space-y-4 border-t border-muted pt-4">
                             <!-- ElevenLabs API Key -->
                             <div class="space-y-2 pt-2">
                                 <Label for="elevenlabs_api_key"

@@ -130,12 +130,12 @@ const statusClass = (status: string) => {
                                     aria-label="Pagination"
                                 >
                                     <!-- Use inertia Links for pagination -->
+
                                     <component
                                         :is="link.url ? Link : 'span'"
                                         v-for="link in tags.links"
                                         :key="link.label"
                                         :href="link.url"
-                                        v-html="link.label"
                                         class="relative inline-flex items-center border border-border bg-card px-4 py-2 text-sm font-medium text-foreground hover:bg-muted"
                                         :class="{
                                             'z-10 border-primary bg-primary/10 text-primary':
@@ -143,7 +143,9 @@ const statusClass = (status: string) => {
                                             'cursor-default text-muted-foreground':
                                                 !link.url,
                                         }"
-                                    />
+                                    >
+                                        <span v-html="link.label"></span>
+                                    </component>
                                 </nav>
                             </div>
                         </div>

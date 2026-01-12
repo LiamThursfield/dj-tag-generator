@@ -13,7 +13,7 @@ test('authenticated user can create a dj tag', function () {
 
     $response = $this->actingAs($user)->post(route('dj-tags.store'), [
         'text' => 'This is a test tag',
-        'service' => 'openai',
+        'service' => 'elevenlabs',
         'voice_id' => 'alloy',
         'voice_settings' => ['speed' => 1.0],
         'format' => 'mp3',
@@ -25,7 +25,7 @@ test('authenticated user can create a dj tag', function () {
     $this->assertDatabaseHas('dj_tags', [
         'user_id' => $user->id,
         'text' => 'This is a test tag',
-        'service' => 'openai',
+        'service' => 'elevenlabs',
     ]);
 
     // Assert Job pushed

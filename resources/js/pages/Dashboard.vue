@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { create } from '@/actions/App/Http/Controllers/DjTagController';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes';
 import { edit } from '@/routes/settings/api-services';
@@ -33,9 +39,7 @@ const formatNumber = (num: number) => {
     return new Intl.NumberFormat().format(num);
 };
 
-const hasReachedTagLimit = computed(
-    () => props.tagsCount >= props.tagLimit,
-)
+const hasReachedTagLimit = computed(() => props.tagsCount >= props.tagLimit);
 </script>
 
 <template>
@@ -62,8 +66,8 @@ const hasReachedTagLimit = computed(
                             >
                                 <AlertCircle class="h-4 w-4" />
                                 <span class="text-sm font-medium">{{
-                                        props.elevenLabsStatus.error
-                                    }}</span>
+                                    props.elevenLabsStatus.error
+                                }}</span>
                             </div>
                             <div v-else>
                                 <div class="text-2xl font-bold">
@@ -92,11 +96,9 @@ const hasReachedTagLimit = computed(
                         <Button
                             as-child
                             variant="secondary"
-                            class="cursor-pointer mt-2 w-full"
+                            class="mt-2 w-full cursor-pointer"
                         >
-                            <Link :href="edit()">
-                                Setup API Key
-                            </Link>
+                            <Link :href="edit()"> Setup API Key </Link>
                         </Button>
                     </CardFooter>
                 </Card>

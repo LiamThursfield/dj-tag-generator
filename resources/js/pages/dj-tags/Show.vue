@@ -90,10 +90,6 @@ const submitReprocess = () => {
 };
 
 const compareVersionId = ref<number | null>(null);
-const compareVersion = computed(
-    () =>
-        props.tag.versions.find((v) => v.id === compareVersionId.value) || null,
-);
 </script>
 
 <template>
