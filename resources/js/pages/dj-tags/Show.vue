@@ -32,7 +32,12 @@ const props = defineProps<{
         created_at: string;
         versions: TagVersion[];
     };
+    tagVersionLimit: number;
 }>();
+
+const versionsLimitReached = computed(() => {
+    return props.tag.versions.length >= props.tagVersionLimit;
+});
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: dashboard.url() },
@@ -222,7 +227,7 @@ const compareVersionId = ref<number | null>(null);
                                         :src="
                                             getAudioUrl(
                                                 latestVersion?.audio_path,
-                                            )
+                                            ) as string
                                         "
                                         type="audio/mpeg"
                                     />
@@ -238,7 +243,11 @@ const compareVersionId = ref<number | null>(null);
                             >
                                 <audio controls class="w-full">
                                     <source
-                                        :src="getAudioUrl(version.audio_path)"
+                                        :src="
+                                            getAudioUrl(
+                                                version.audio_path,
+                                            ) as string
+                                        "
                                         type="audio/mpeg"
                                     />
                                 </audio>
@@ -267,7 +276,11 @@ const compareVersionId = ref<number | null>(null);
                                         }}
                                     </div>
                                     <a
-                                        :href="getAudioUrl(version.audio_path)"
+                                        :href="
+                                            getAudioUrl(
+                                                version.audio_path,
+                                            ) as string
+                                        "
                                         download
                                         class="text-xs font-bold tracking-wider text-indigo-600 uppercase hover:text-indigo-800 hover:underline dark:text-indigo-400 dark:hover:text-indigo-300"
                                     >
@@ -329,15 +342,26 @@ const compareVersionId = ref<number | null>(null);
 
                             <Button
                                 @click="submitReprocess"
-                                :disabled="form.processing"
+                                :disabled="
+                                    form.processing || versionsLimitReached
+                                "
                                 class="mt-4 h-10 w-full text-xs tracking-widest uppercase"
                             >
                                 {{
                                     form.processing
                                         ? 'Generating...'
-                                        : 'Create New Version'
+                                        : versionsLimitReached
+                                          ? 'Version Limit Reached'
+                                          : 'Create New Version'
                                 }}
                             </Button>
+                            <p
+                                v-if="versionsLimitReached"
+                                class="mt-2 text-center text-xs text-destructive"
+                            >
+                                You have reached the maximum of
+                                {{ tagVersionLimit }} versions for this tag.
+                            </p>
                         </div>
                     </div>
                 </div>

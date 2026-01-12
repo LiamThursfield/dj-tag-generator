@@ -116,3 +116,35 @@ it('controller reprocess dispatches reprocess job', function () {
         return $job->djTag->id === $tag->id && $job->audioEffects === ['speed' => 1.5];
     });
 });
+
+it('controller prevents reprocessing when version limit is reached', function () {
+    \Illuminate\Support\Facades\Queue::fake();
+    $user = User::factory()->create(['tag_version_limit' => 2]);
+    $tag = DjTag::factory()->for($user)->create();
+
+    // Create 2 versions
+    DjTagVersion::factory()->for($tag)->count(2)->create();
+
+    $response = $this->actingAs($user)->post(route('dj-tags.reprocess', $tag->id), [
+        'audio_effects' => ['speed' => 1.5],
+    ]);
+
+    $response->assertSessionHasErrors(['rate_limit']);
+    \Illuminate\Support\Facades\Queue::assertNotPushed(ReprocessDjTagJob::class);
+});
+
+it('controller allows reprocessing when under version limit', function () {
+    \Illuminate\Support\Facades\Queue::fake();
+    $user = User::factory()->create(['tag_version_limit' => 3]);
+    $tag = DjTag::factory()->for($user)->create();
+
+    // Create 2 versions
+    DjTagVersion::factory()->for($tag)->count(2)->create();
+
+    $response = $this->actingAs($user)->post(route('dj-tags.reprocess', $tag->id), [
+        'audio_effects' => ['speed' => 1.5],
+    ]);
+
+    $response->assertSessionHasNoErrors();
+    \Illuminate\Support\Facades\Queue::assertPushed(ReprocessDjTagJob::class);
+});

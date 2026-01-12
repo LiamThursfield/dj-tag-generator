@@ -187,7 +187,7 @@ This task list tracks all development work for the DJ Tag Generator application.
 
 #### Advanced Features
 - [ ] Batch tag generation (multiple tags at once)
-- [ ] Tag versioning (regenerate with different settings)
+- [x] Tag versioning (regenerate with different settings)
 - [ ] Tag sharing (public links)
 - [ ] Tag templates (common phrases)
 - [ ] Voice comparison (A/B test voices)

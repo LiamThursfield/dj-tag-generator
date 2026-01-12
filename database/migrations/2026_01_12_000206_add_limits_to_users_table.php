@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->integer('tag_limit')->default(2)->after('preferred_tts_service');
+            $table->integer('tag_version_limit')->default(3)->after('tag_limit');
         });
     }
 
@@ -23,6 +24,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('tag_limit');
+            $table->dropColumn('tag_version_limit');
         });
     }
 };

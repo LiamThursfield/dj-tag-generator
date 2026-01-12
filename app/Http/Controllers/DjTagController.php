@@ -56,6 +56,7 @@ class DjTagController extends Controller
 
         return Inertia::render('dj-tags/Show', [
             'tag' => $djTag->load(['versions' => fn ($q) => $q->latest()]),
+            'tagVersionLimit' => $request->user()->tag_version_limit,
         ]);
     }
 
@@ -63,6 +64,10 @@ class DjTagController extends Controller
     {
         if ($request->user()->id !== $djTag->user_id) {
             abort(403);
+        }
+
+        if ($djTag->versions()->count() >= $request->user()->tag_version_limit) {
+            return back()->withErrors(['rate_limit' => 'You have reached the version limit for this tag.']);
         }
 
         $validated = $request->validate([
