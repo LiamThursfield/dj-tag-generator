@@ -15,6 +15,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
  * @property string|null $openai_api_key
  * @property string|null $elevenlabs_api_key
  * @property string $preferred_tts_service
+ * @property int $tag_limit
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
  * @property string|null $two_factor_secret
@@ -44,6 +45,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePreferredTtsService($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereTagLimit($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereTwoFactorConfirmedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereTwoFactorRecoveryCodes($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereTwoFactorSecret($value)
@@ -68,6 +70,7 @@ class User extends Authenticatable
         'openai_api_key',
         'elevenlabs_api_key',
         'preferred_tts_service',
+        'tag_limit',
     ];
 
     /**
@@ -97,6 +100,7 @@ class User extends Authenticatable
             'openai_api_key' => 'encrypted',
             'elevenlabs_api_key' => 'encrypted',
             'two_factor_confirmed_at' => 'datetime',
+            'tag_limit' => 'integer',
         ];
     }
 

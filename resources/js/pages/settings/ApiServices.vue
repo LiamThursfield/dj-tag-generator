@@ -66,8 +66,8 @@ const submit = () => {
                                     :class="
                                         form.preferred_tts_service ===
                                         'elevenlabs'
-                                            ? 'border-indigo-500 ring-1 ring-indigo-500'
-                                            : 'border-gray-200 dark:border-zinc-800'
+                                            ? 'border-primary ring-1 ring-primary'
+                                            : 'border-muted'
                                     "
                                 >
                                     <input
@@ -79,11 +79,11 @@ const submit = () => {
                                     <div class="flex flex-1">
                                         <div class="flex flex-col">
                                             <span
-                                                class="block text-sm font-medium text-gray-900 dark:text-white"
+                                                class="block text-sm font-medium text-primary"
                                                 >ElevenLabs</span
                                             >
                                             <span
-                                                class="mt-1 flex items-center text-sm text-gray-500 dark:text-gray-400"
+                                                class="mt-1 flex items-center text-sm text-muted-foreground"
                                                 >Premium Quality</span
                                             >
                                         </div>
@@ -93,10 +93,10 @@ const submit = () => {
                                             form.preferred_tts_service ===
                                             'elevenlabs'
                                         "
-                                        class="flex h-5 w-5 items-center justify-center rounded-full bg-indigo-600"
+                                        class="flex h-5 w-5 items-center justify-center rounded-full bg-primary"
                                     >
                                         <svg
-                                            class="h-3 w-3 text-white"
+                                            class="h-3 w-3 text-primary-foreground"
                                             fill="currentColor"
                                             viewBox="0 0 12 12"
                                         >
@@ -111,8 +111,8 @@ const submit = () => {
                                     class="relative flex cursor-not-allowed rounded-lg border bg-white p-4 opacity-50 shadow-sm focus:outline-none dark:bg-zinc-900"
                                     :class="
                                         form.preferred_tts_service === 'openai'
-                                            ? 'border-indigo-500 ring-1 ring-indigo-500'
-                                            : 'border-gray-200 dark:border-zinc-800'
+                                            ? 'border-primary ring-1 ring-primary'
+                                            : 'border-muted'
                                     "
                                 >
                                     <input
@@ -125,11 +125,11 @@ const submit = () => {
                                     <div class="flex flex-1">
                                         <div class="flex flex-col">
                                             <span
-                                                class="block text-sm font-medium text-gray-900 dark:text-white"
+                                                class="block text-sm font-medium text-primary"
                                                 >OpenAI (Coming Soon)</span
                                             >
                                             <span
-                                                class="mt-1 flex items-center text-sm text-gray-500 dark:text-gray-400"
+                                                class="mt-1 flex items-center text-sm text-muted-foreground"
                                                 >Fast & Efficient</span
                                             >
                                         </div>
@@ -139,10 +139,10 @@ const submit = () => {
                                             form.preferred_tts_service ===
                                             'openai'
                                         "
-                                        class="flex h-5 w-5 items-center justify-center rounded-full bg-indigo-600"
+                                        class="flex h-5 w-5 items-center justify-center rounded-full bg-primary"
                                     >
                                         <svg
-                                            class="h-3 w-3 text-white"
+                                            class="h-3 w-3 text-primary-foreground"
                                             fill="currentColor"
                                             viewBox="0 0 12 12"
                                         >
@@ -159,7 +159,7 @@ const submit = () => {
                         </div>
 
                         <div
-                            class="space-y-4 border-t pt-4 dark:border-zinc-800"
+                            class="space-y-4 border-t pt-4 border-muted"
                         >
                             <!-- ElevenLabs API Key -->
                             <div class="space-y-2 pt-2">
@@ -173,7 +173,7 @@ const submit = () => {
                                     autocomplete="off"
                                     placeholder="ElevenLabs API Key"
                                 />
-                                <p class="text-xs text-gray-500">
+                                <p class="text-xs text-muted-foreground">
                                     Required for ElevenLabs premium voices. To
                                     get an API Key
                                     <a
@@ -203,7 +203,7 @@ const submit = () => {
                                     autocomplete="off"
                                     placeholder="OpenAI API Key"
                                 />
-                                <p class="text-xs text-gray-500">
+                                <p class="text-xs text-muted-foreground">
                                     Required for OpenAI TTS voices.
                                 </p>
                                 <InputError
@@ -224,7 +224,7 @@ const submit = () => {
                             >
                                 <p
                                     v-if="form.recentlySuccessful"
-                                    class="text-sm text-gray-600 dark:text-gray-400"
+                                    class="text-sm text-muted-foreground"
                                 >
                                     Saved.
                                 </p>
