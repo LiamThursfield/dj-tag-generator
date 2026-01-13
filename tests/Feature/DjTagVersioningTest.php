@@ -119,7 +119,8 @@ it('controller reprocess dispatches reprocess job', function () {
 
 it('controller prevents reprocessing when version limit is reached', function () {
     \Illuminate\Support\Facades\Queue::fake();
-    $user = User::factory()->create(['tag_version_limit' => 2]);
+    $plan = \App\Models\Plan::factory()->create(['limits' => ['dj_tag_version_limit' => 2]]);
+    $user = User::factory()->for($plan)->create();
     $tag = DjTag::factory()->for($user)->create();
 
     // Create 2 versions
@@ -135,7 +136,8 @@ it('controller prevents reprocessing when version limit is reached', function ()
 
 it('controller allows reprocessing when under version limit', function () {
     \Illuminate\Support\Facades\Queue::fake();
-    $user = User::factory()->create(['tag_version_limit' => 3]);
+    $plan = \App\Models\Plan::factory()->create(['limits' => ['dj_tag_version_limit' => 3]]);
+    $user = User::factory()->for($plan)->create();
     $tag = DjTag::factory()->for($user)->create();
 
     // Create 2 versions

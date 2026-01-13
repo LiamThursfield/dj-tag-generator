@@ -31,7 +31,7 @@ class DashboardController extends Controller
 
         return \Inertia\Inertia::render('Dashboard', [
             'tagsCount' => $user->djTags()->count(),
-            'tagLimit' => $user->tag_limit,
+            'tagLimit' => $user->limit('dj_tag_limit'),
             'elevenLabsStatus' => [
                 'configured' => $elevenLabsConfigured,
                 'remainingCredits' => $elevenLabsCredits,

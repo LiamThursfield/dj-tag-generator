@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
+            PlanSeeder::class,
             DjTagPresetSeeder::class,
             DjTagSeeder::class,
         ]);

@@ -32,8 +32,7 @@ class UserFactory extends Factory
             'two_factor_secret' => Str::random(10),
             'two_factor_recovery_codes' => Str::random(10),
             'two_factor_confirmed_at' => now(),
-            'tag_limit' => fake()->numberBetween(1, 5),
-            'tag_version_limit' => fake()->numberBetween(3, 10),
+            'plan_id' => \App\Models\Plan::whereSlug('free')->value('id') ?? \App\Models\Plan::factory(),
         ];
     }
 
