@@ -1,0 +1,31 @@
+<?php
+
+namespace Database\Factories;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Plan>
+ */
+class PlanFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        $name = fake()->unique()->word();
+
+        return [
+            'name' => ucfirst($name),
+            'slug' => strtolower($name),
+            'limits' => [
+                'dj_tag_limit' => fake()->numberBetween(5, 20),
+                'dj_tag_version_limit' => fake()->numberBetween(1, 5),
+            ],
+            'is_default' => false,
+        ];
+    }
+}

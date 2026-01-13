@@ -10,13 +10,13 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 
 /**
  * @property int $id
+ * @property int|null $plan_id
+ * @property array<array-key, mixed>|null $limits_override
  * @property string $name
  * @property string $email
  * @property string|null $openai_api_key
  * @property string|null $elevenlabs_api_key
  * @property string $preferred_tts_service
- * @property int $tag_limit
- * @property int $tag_version_limit
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
  * @property string|null $two_factor_secret
@@ -31,6 +31,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
  * @property-read int|null $dj_tags_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
+ * @property-read \App\Models\Plan|null $plan
  *
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newModelQuery()
@@ -41,13 +42,13 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmailVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereLimitsOverride($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereOpenaiApiKey($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePlanId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePreferredTtsService($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRememberToken($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereTagLimit($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereTagVersionLimit($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereTwoFactorConfirmedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereTwoFactorRecoveryCodes($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereTwoFactorSecret($value)
@@ -59,6 +60,15 @@ class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, TwoFactorAuthenticatable;
+
+    protected static function booted()
+    {
+        static::creating(function ($user) {
+            if (! $user->plan_id) {
+                $user->plan_id = \App\Models\Plan::where('is_default', true)->value('id');
+            }
+        });
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -72,8 +82,8 @@ class User extends Authenticatable
         'openai_api_key',
         'elevenlabs_api_key',
         'preferred_tts_service',
-        'tag_limit',
-        'tag_version_limit',
+        'plan_id',
+        'limits_override',
     ];
 
     /**
@@ -103,8 +113,7 @@ class User extends Authenticatable
             'openai_api_key' => 'encrypted',
             'elevenlabs_api_key' => 'encrypted',
             'two_factor_confirmed_at' => 'datetime',
-            'tag_limit' => 'integer',
-            'tag_version_limit' => 'integer',
+            'limits_override' => 'array',
         ];
     }
 
@@ -130,5 +139,20 @@ class User extends Authenticatable
     public function hasServiceConfigured(string $service): bool
     {
         return ! empty($this->getApiKeyForService($service));
+    }
+
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class);
+    }
+
+    public function limit(string $key, mixed $default = null): mixed
+    {
+        // Check for override first
+        if (isset($this->limits_override[$key])) {
+            return $this->limits_override[$key];
+        }
+
+        return $this->plan?->limits[$key] ?? $default;
     }
 }

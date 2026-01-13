@@ -22,7 +22,7 @@ class DjTagController extends Controller
         return Inertia::render('dj-tags/Index', [
             'tags' => $tags,
             'tagsCount' => $tags->count(),
-            'tagLimit' => $user->tag_limit,
+            'tagLimit' => $user->limit('dj_tag_limit'),
         ]);
     }
 
@@ -39,7 +39,7 @@ class DjTagController extends Controller
     public function store(\App\Http\Requests\StoreDjTagRequest $request, \App\Actions\GenerateDjTag $generator)
     {
         $user = $request->user();
-        if ($user->djTags->count() >= $user->tag_limit) {
+        if ($user->djTags->count() >= $user->limit('dj_tag_limit')) {
             return back()->withErrors(['rate_limit' => 'You have reached your DJ Tag limit.']);
         }
 
@@ -56,7 +56,7 @@ class DjTagController extends Controller
 
         return Inertia::render('dj-tags/Show', [
             'tag' => $djTag->load(['versions' => fn ($q) => $q->latest()]),
-            'tagVersionLimit' => $request->user()->tag_version_limit,
+            'tagVersionLimit' => $request->user()->limit('dj_tag_version_limit'),
         ]);
     }
 
@@ -66,7 +66,7 @@ class DjTagController extends Controller
             abort(403);
         }
 
-        if ($djTag->versions()->count() >= $request->user()->tag_version_limit) {
+        if ($djTag->versions()->count() >= $request->user()->limit('dj_tag_version_limit')) {
             return back()->withErrors(['rate_limit' => 'You have reached the version limit for this tag.']);
         }
 

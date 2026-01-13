@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Plan;
 use App\Models\User;
 use Illuminate\Support\Facades\Http;
 use Inertia\Testing\AssertableInertia;
@@ -12,7 +13,11 @@ test('guests are redirected to the login page', function () {
 test('dashboard displays correct tag usage', function () {
     $this->withoutExceptionHandling();
 
-    $user = User::factory()->create(['tag_limit' => 50]);
+    $plan = Plan::factory()->create([
+        'limits' => ['dj_tag_limit' => 50, 'dj_tag_version_limit' => 50],
+    ]);
+
+    $user = User::factory()->for($plan)->create();
     // Create tags using factory
     \App\Models\DjTag::factory()->count(5)->for($user)->create();
 

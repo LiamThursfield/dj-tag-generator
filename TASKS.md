@@ -61,6 +61,17 @@ This task list tracks all development work for the DJ Tag Generator application.
 
 ### Phase 2: Backend Logic
 
+#### User Plans & Limits Refactor
+- [x] Create `Plan` model & migration
+- [x] Remove legacy limits migration
+- [x] Add `plan_id` to users table
+- [x] Seed default plans (Free/Premium)
+- [x] Update `User` model relationships & helpers
+- [x] Refactor limit checks in controllers
+- [x] Update tests
+- [x] Refine User Plans (Overrides & Defaults)
+
+
 #### Queue Jobs
 - [x] Create `GenerateDjTagJob` (TTS → Raw Storage → Version 1)
 - [x] Create `ReprocessDjTagJob` (Raw Storage → New Version)

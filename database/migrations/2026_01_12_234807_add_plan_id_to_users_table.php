@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->integer('tag_limit')->default(2)->after('preferred_tts_service');
-            $table->integer('tag_version_limit')->default(3)->after('tag_limit');
+            $table->foreignId('plan_id')->nullable()->after('email')->constrained()->nullOnDelete();
         });
     }
 
@@ -23,8 +22,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('tag_limit');
-            $table->dropColumn('tag_version_limit');
+            $table->dropForeign(['plan_id']);
+            $table->dropColumn('plan_id');
         });
     }
 };
