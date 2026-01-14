@@ -62,7 +62,7 @@ const submit = () => {
     <Head title="Create DJ Tag" />
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="mx-auto w-full max-w-4xl p-4 sm:p-6 lg:p-8">
-            <h1 class="mb-6 text-2xl font-bold">Create New DJ Tag</h1>
+            <h1 class="mb-6 text-xl font-bold">Create New DJ Tag</h1>
 
             <form
                 @submit.prevent="submit"
@@ -70,8 +70,10 @@ const submit = () => {
             >
                 <!-- Service Selector -->
                 <div>
-                    <h3 class="mb-3 text-lg font-medium">1. Select Service</h3>
-                    <ServiceSelector v-model="form.service" />
+                    <label for="service" class="block font-medium">
+                        Service
+                    </label>
+                    <ServiceSelector v-model="form.service" class="mt-1"/>
                     <div
                         v-if="form.errors.service"
                         class="mt-1 text-sm text-destructive"
@@ -80,17 +82,15 @@ const submit = () => {
                     </div>
                 </div>
 
-                <!-- Text Input -->
+                <!-- Script -->
                 <div>
-                    <h3 class="mb-3 text-lg font-medium">2. Script</h3>
                     <div class="space-y-2">
-                        <label
-                            class="block text-sm font-medium text-muted-foreground"
-                            >Text to Speak</label
-                        >
+                        <label for="text" class="block font-medium">
+                            Tag Script
+                        </label>
                         <Textarea
                             v-model="form.text"
-                            class="min-h-24"
+                            class="min-h-18"
                             placeholder="Type your DJ drop text here..."
                         />
                         <div
@@ -107,8 +107,12 @@ const submit = () => {
 
                 <!-- Voice Selection -->
                 <div>
-                    <h3 class="mb-3 text-lg font-medium">3. Choose Voice</h3>
+                    <label for="text" class="block font-medium">
+                        Voice
+                    </label>
+
                     <VoicePicker
+                        class="mt-1"
                         v-model="form.voice_id"
                         :service="form.service"
                     />

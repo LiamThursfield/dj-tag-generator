@@ -72,10 +72,6 @@ onMounted(() => {
 
 <template>
     <div class="space-y-2">
-        <label class="block text-sm font-medium text-muted-foreground">
-            Voice
-        </label>
-
         <div
             v-if="loading"
             class="flex items-center space-x-2 text-sm text-muted-foreground"
