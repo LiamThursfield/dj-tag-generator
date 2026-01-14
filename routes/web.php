@@ -1,13 +1,16 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Models\Plan;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
+    return Inertia::render('Landing', [
+        'canLogin' => Route::has('login'),
         'canRegister' => Features::enabled(Features::registration()),
+        'plans' => Plan::all(),
     ]);
 })->name('home');
 
