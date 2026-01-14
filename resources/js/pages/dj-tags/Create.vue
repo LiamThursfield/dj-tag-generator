@@ -73,7 +73,7 @@ const submit = () => {
                     <label for="service" class="block font-medium">
                         Service
                     </label>
-                    <ServiceSelector v-model="form.service" class="mt-1"/>
+                    <ServiceSelector v-model="form.service" class="mt-1" />
                     <div
                         v-if="form.errors.service"
                         class="mt-1 text-sm text-destructive"
@@ -107,9 +107,7 @@ const submit = () => {
 
                 <!-- Voice Selection -->
                 <div>
-                    <label for="text" class="block font-medium">
-                        Voice
-                    </label>
+                    <label for="text" class="block font-medium"> Voice </label>
 
                     <VoicePicker
                         class="mt-1"
