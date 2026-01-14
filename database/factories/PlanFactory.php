@@ -20,11 +20,14 @@ class PlanFactory extends Factory
 
         return [
             'name' => ucfirst($name),
-            'slug' => strtolower($name),
+            'description' => fake()->sentence(),
             'limits' => [
                 'dj_tag_limit' => fake()->numberBetween(5, 20),
                 'dj_tag_version_limit' => fake()->numberBetween(1, 5),
             ],
+            'price_monthly' => fake()->randomFloat(2, 0, 100),
+            'price_yearly' => fake()->randomFloat(2, 0, 100),
+            'is_active' => fake()->boolean(),
             'is_default' => false,
         ];
     }

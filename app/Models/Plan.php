@@ -2,13 +2,17 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $id
  * @property string $name
- * @property string $slug
  * @property array<array-key, mixed> $limits
+ * @property string|null $description
+ * @property numeric $price_monthly
+ * @property numeric $price_yearly
+ * @property bool $is_active
  * @property bool $is_default
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -20,23 +24,29 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Plan newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Plan query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Plan whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Plan whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Plan whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Plan whereIsActive($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Plan whereIsDefault($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Plan whereLimits($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Plan whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Plan whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Plan wherePriceMonthly($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Plan wherePriceYearly($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Plan whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */
 class Plan extends Model
 {
-    use \Illuminate\Database\Eloquent\Factories\HasFactory;
+    use HasFactory;
 
     protected $fillable = [
         'name',
-        'slug',
         'limits',
+        'description',
+        'price_monthly',
+        'price_yearly',
+        'is_active',
         'is_default',
     ];
 
@@ -44,6 +54,7 @@ class Plan extends Model
     {
         return [
             'limits' => 'array',
+            'is_active' => 'boolean',
             'is_default' => 'boolean',
         ];
     }

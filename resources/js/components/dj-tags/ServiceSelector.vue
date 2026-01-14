@@ -49,9 +49,7 @@ const value = computed({
                     'cursor-pointer': !service.disabled,
                 }"
             >
-                <span class="mb-1 font-semibold">{{
-                    service.name
-                }}</span>
+                <span class="mb-1 font-semibold">{{ service.name }}</span>
                 <span class="text-center text-sm text-muted-foreground">{{
                     service.description
                 }}</span>
