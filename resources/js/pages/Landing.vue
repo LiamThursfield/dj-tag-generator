@@ -17,11 +17,37 @@ defineProps<{
     plans?: Array<{
         id: number;
         name: string;
+        description: string;
         limits: any;
+        price_monthly: number;
+        price_yearly: number;
     }>;
 }>();
 
 const year = new Date().getFullYear();
+
+const futurePlans = [
+    {
+        name: 'Professional',
+        description: 'For power users who need more volume.',
+        limits: {
+            dj_tag_limit: 'More',
+            dj_tag_version_limit: 'More',
+        },
+        price_monthly: 'TBD',
+        price_yearly: 'TBD',
+    },
+    {
+        name: 'Unlimited',
+        description: 'For users who need unlimited access.',
+        limits: {
+            dj_tag_limit: 'Unlimited',
+            dj_tag_version_limit: 'Unlimited',
+        },
+        price_monthly: 'TBD',
+        price_yearly: 'TBD',
+    },
+];
 </script>
 
 <template>
@@ -39,14 +65,15 @@ const year = new Date().getFullYear();
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
                         <div
-                            class="flex h-8 w-8 items-center justify-center rounded-md bg-gradient-to-br from-orange-500 to-orange-700 shadow-[0_0_15px_rgba(249,115,22,0.5)]"
+                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-md bg-gradient-to-br from-orange-500 to-orange-700 shadow-[0_0_15px_rgba(249,115,22,0.5)]"
                         >
                             <AudioLines class="h-5 w-5 fill-white text-white" />
                         </div>
                         <span
                             class="text-lg font-bold tracking-tight text-white"
-                            >DJ Tag Gen</span
                         >
+                            DJ Tag Generator
+                        </span>
                     </div>
 
                     <nav v-if="canLogin" class="flex gap-4">
@@ -273,7 +300,7 @@ const year = new Date().getFullYear();
                     </p>
                 </div>
 
-                <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+                <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
                     <!-- Dynamic Plans -->
                     <div
                         v-for="plan in plans"
@@ -290,7 +317,7 @@ const year = new Date().getFullYear();
                             <span class="ml-2 text-white/40">/ month</span>
                         </div>
                         <p class="mb-6 flex-grow text-white/60">
-                            Perfect for getting started with AI drops.
+                            {{ plan.description }}
                         </p>
                         <ul class="mb-8 space-y-3 text-sm text-white/80">
                             <li class="flex items-center">
@@ -311,10 +338,6 @@ const year = new Date().getFullYear();
                                     Versions per Tag</span
                                 >
                             </li>
-                            <li class="flex items-center">
-                                <Zap class="mr-2 h-4 w-4 text-orange-500" />
-                                <span>Basic Voices</span>
-                            </li>
                         </ul>
                         <Link v-if="canRegister" :href="register()">
                             <Button
@@ -326,6 +349,8 @@ const year = new Date().getFullYear();
 
                     <!-- Professional (Coming Soon) -->
                     <div
+                        v-for="plan in futurePlans"
+                        :key="plan.name"
                         class="relative flex flex-col rounded border border-white/10 bg-gradient-to-br from-white/5 to-transparent p-8 opacity-75"
                     >
                         <div
@@ -333,37 +358,41 @@ const year = new Date().getFullYear();
                         >
                             Coming Soon
                         </div>
+
                         <h3 class="mb-4 text-xl font-bold text-white">
-                            Professional
+                            {{ plan.name }}
                         </h3>
                         <div class="mb-6">
-                            <span class="text-4xl font-bold text-white"
-                                >TBD</span
-                            >
+                            <span class="text-4xl font-bold text-white">
+                                {{ plan.price_monthly }}
+                            </span>
                             <span class="ml-2 text-white/40">/ month</span>
                         </div>
                         <p class="mb-6 flex-grow text-white/60">
-                            For power users who need more volume and features.
+                            {{ plan.description }}
                         </p>
                         <ul class="mb-8 space-y-3 text-sm text-white/60">
                             <li class="flex items-center">
                                 <Zap class="mr-2 h-4 w-4 text-gray-500" />
-                                <span>Unlimited Tags</span>
+                                <span>{{ plan.limits.dj_tag_limit }} Tag</span>
                             </li>
                             <li class="flex items-center">
                                 <Zap class="mr-2 h-4 w-4 text-gray-500" />
-                                <span>Premium Voices</span>
-                            </li>
-                            <li class="flex items-center">
-                                <Zap class="mr-2 h-4 w-4 text-gray-500" />
-                                <span>Priority Processing</span>
+                                <span
+                                    >{{
+                                        plan.limits.dj_tag_version_limit
+                                    }}
+                                    Versions per Tag</span
+                                >
                             </li>
                         </ul>
+
                         <Button
                             disabled
-                            class="w-full cursor-not-allowed rounded-full bg-white/5 text-white/40"
-                            >Coming Soon</Button
+                            class="w-full cursor-not-allowed bg-white/5 text-white/40"
                         >
+                            Coming Soon
+                        </Button>
                     </div>
                 </div>
             </div>
@@ -380,7 +409,7 @@ const year = new Date().getFullYear();
                             <AudioLines class="h-3 w-3 fill-white text-white" />
                         </div>
                         <span class="text-sm font-semibold text-white"
-                            >DJ Tag Gen</span
+                            >DJ Tag Generator</span
                         >
                     </div>
                     <div class="text-sm text-white/40">
@@ -389,8 +418,9 @@ const year = new Date().getFullYear();
                         <a
                             href="https://lxst-digital.com"
                             target="_blank"
-                            class="underline hover:text-white"
-                            >LXST Digital</a
+                            class="underline hover:text-primary"
+                        >
+                            LXST Digital </a
                         >.
                     </div>
                 </div>

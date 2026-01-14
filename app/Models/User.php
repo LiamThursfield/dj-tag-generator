@@ -10,10 +10,10 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 
 /**
  * @property int $id
- * @property int|null $plan_id
- * @property array<array-key, mixed>|null $limits_override
  * @property string $name
  * @property string $email
+ * @property int|null $plan_id
+ * @property array<array-key, mixed>|null $limits_override
  * @property string|null $openai_api_key
  * @property string|null $elevenlabs_api_key
  * @property string $preferred_tts_service

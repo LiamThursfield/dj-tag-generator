@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Plan;
 use Illuminate\Database\Seeder;
 
 class PlanSeeder extends Seeder
@@ -11,13 +12,16 @@ class PlanSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\Plan::create([
+        Plan::create([
             'name' => 'Free',
-            'slug' => 'free',
             'limits' => [
                 'dj_tag_limit' => 3,
                 'dj_tag_version_limit' => 2,
             ],
+            'description' => 'Perfect for getting started.',
+            'price_monthly' => 0,
+            'price_yearly' => 0,
+            'is_active' => true,
             'is_default' => true,
         ]);
     }
