@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Models\Plan;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -9,6 +10,7 @@ Route::get('/', function () {
     return Inertia::render('Landing', [
         'canLogin' => Route::has('login'),
         'canRegister' => Features::enabled(Features::registration()),
+        'plans' => Plan::all(),
     ]);
 })->name('home');
 
@@ -28,4 +30,4 @@ Route::get('voices', [\App\Http\Controllers\VoiceController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('voices.index');
 
-require __DIR__ . '/settings.php';
+require __DIR__.'/settings.php';
