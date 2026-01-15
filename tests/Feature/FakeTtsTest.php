@@ -16,7 +16,7 @@ beforeEach(function () {
     $testFakePath = 'storage/app/fake/test-fake-tag.mp3';
     Config::set('services.tts.fake.file_path', $testFakePath);
 
-    File::ensureDirectoryExists(storage_path('app/private/fake'));
+    File::ensureDirectoryExists(storage_path('app/fake'));
     File::put(base_path($testFakePath), 'fake-audio-content');
 
     // Mock the audio processor globally for these tests
