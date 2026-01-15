@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AudioEffectsSelector from '@/components/dj-tags/AudioEffectsSelector.vue';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
@@ -7,7 +8,7 @@ import { dashboard } from '@/routes';
 import { play } from '@/routes/audio';
 import { index, reprocess, show } from '@/routes/dj-tags';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 
 interface TagVersion {
@@ -39,6 +40,19 @@ const props = defineProps<{
 const versionsLimitReached = computed(() => {
     return props.tag.versions.length >= props.tagVersionLimit;
 });
+
+const isProcessing = computed(() => {
+    return (
+        props.tag.versions.length === 0 ||
+        props.tag.versions.some(
+            (v) => v.status === 'pending' || v.status === 'processing',
+        )
+    );
+});
+
+const refresh = () => {
+    router.reload();
+};
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: dashboard.url() },
@@ -104,6 +118,30 @@ const compareVersionId = ref<number | null>(null);
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="mx-auto max-w-5xl space-y-6 p-4 sm:p-6 lg:p-8">
             <!-- Master Info -->
+            <Alert v-if="isProcessing" class="border-primary/50 bg-primary/10">
+                <AlertTitle class="flex items-center justify-between">
+                    <span class="flex items-center gap-2">
+                        <span
+                            class="h-2 w-2 animate-pulse rounded-full bg-primary"
+                        />
+                        Processing
+                    </span>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        class="h-7 text-xs"
+                        @click="refresh"
+                    >
+                        Refresh Status
+                    </Button>
+                </AlertTitle>
+
+                <AlertDescription class="mt-2">
+                    One or more versions are currently being processed. Please
+                    refresh the page periodically to check for updates.
+                </AlertDescription>
+            </Alert>
+
             <div
                 class="overflow-hidden border border-border bg-card shadow sm:rounded-lg"
             >
@@ -338,7 +376,9 @@ const compareVersionId = ref<number | null>(null);
                             <Button
                                 @click="submitReprocess"
                                 :disabled="
-                                    form.processing || versionsLimitReached
+                                    form.processing ||
+                                    versionsLimitReached ||
+                                    isProcessing
                                 "
                                 class="mt-4 h-10 w-full text-xs tracking-widest uppercase"
                             >
@@ -347,7 +387,9 @@ const compareVersionId = ref<number | null>(null);
                                         ? 'Generating...'
                                         : versionsLimitReached
                                           ? 'Version Limit Reached'
-                                          : 'Create New Version'
+                                          : isProcessing
+                                            ? 'Processing in Progress...'
+                                            : 'Create New Version'
                                 }}
                             </Button>
                             <p
@@ -356,6 +398,12 @@ const compareVersionId = ref<number | null>(null);
                             >
                                 You have reached the maximum of
                                 {{ tagVersionLimit }} versions for this tag.
+                            </p>
+                            <p
+                                v-if="isProcessing"
+                                class="mt-2 text-center text-xs text-muted-foreground"
+                            >
+                                Please wait for current processing to complete.
                             </p>
                         </div>
                     </div>
