@@ -78,8 +78,12 @@ return [
             'secret' => env('R2_SECRET_ACCESS_KEY'),
             'region' => 'auto',
             'bucket' => env('R2_BUCKET'),
+            // If set, this will ensure files are served from a url with caching etc.
+            // assuming it is set up properly
+            'url' => env('R2_URL'),
             'endpoint' => env('R2_ENDPOINT'),
             'use_path_style_endpoint' => false,
+            'retain_visibility' => false,
             'throw' => false,
             'report' => false,
         ],

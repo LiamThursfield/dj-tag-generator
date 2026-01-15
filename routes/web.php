@@ -30,4 +30,8 @@ Route::get('voices', [\App\Http\Controllers\VoiceController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('voices.index');
 
+Route::get('play/{version}', [\App\Http\Controllers\AudioController::class, 'play'])
+    ->middleware(['auth', 'verified'])
+    ->name('audio.play');
+
 require __DIR__.'/settings.php';

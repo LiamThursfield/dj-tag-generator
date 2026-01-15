@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Contracts\AudioProcessor;
 use App\Models\DjTag;
 use App\Models\DjTagVersion;
+use App\Services\Audio\AudioStorageService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Storage;
@@ -23,7 +24,7 @@ class ReprocessDjTagJob implements ShouldQueue
         public array $audioEffects = []
     ) {}
 
-    public function handle(AudioProcessor $audioProcessor): void
+    public function handle(AudioProcessor $audioProcessor, AudioStorageService $storageService): void
     {
         // 1. Determine version number
         $lastVersion = $this->djTag->versions()->max('version_number') ?: 0;
@@ -48,7 +49,7 @@ class ReprocessDjTagJob implements ShouldQueue
                 mkdir(dirname($tempRawPath), 0755, true);
             }
 
-            $rawContent = Storage::disk(config('audio.storage_disk'))->get($this->djTag->raw_audio_path);
+            $rawContent = $storageService->get($this->djTag->raw_audio_path);
             file_put_contents($tempRawPath, $rawContent);
 
             // 4. Apply Audio Effects (FFmpeg)
@@ -61,7 +62,7 @@ class ReprocessDjTagJob implements ShouldQueue
             $fileName = 'tags/processed/'.date('Y-m-d').'/'.Str::uuid().'.'.$this->djTag->format;
             $fileContent = file_get_contents($processedPath);
 
-            Storage::disk(config('audio.storage_disk'))->put(
+            $storageService->store(
                 $fileName,
                 $fileContent,
                 'public'

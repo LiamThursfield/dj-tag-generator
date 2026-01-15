@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Contracts\AudioProcessor;
 use App\Models\DjTag;
 use App\Models\DjTagVersion;
+use App\Services\Audio\AudioStorageService;
 use App\Services\TTS\TtsServiceFactory;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -24,7 +25,8 @@ class GenerateDjTagJob implements ShouldQueue
 
     public function handle(
         TtsServiceFactory $ttsFactory,
-        AudioProcessor $audioProcessor
+        AudioProcessor $audioProcessor,
+        AudioStorageService $storageService
     ): void {
         // Create the initial version record
         /** @var DjTagVersion $version */
@@ -66,7 +68,7 @@ class GenerateDjTagJob implements ShouldQueue
 
             // 4. Store Raw Audio to Permanent Storage
             $rawFileName = 'tags/raw/'.date('Y-m-d').'/'.\Illuminate\Support\Str::uuid().'.mp3';
-            \Illuminate\Support\Facades\Storage::disk(config('audio.storage_disk'))->put(
+            $storageService->store(
                 $rawFileName,
                 $rawAudioContent,
                 'private'
@@ -99,7 +101,7 @@ class GenerateDjTagJob implements ShouldQueue
             $fileName = 'tags/processed/'.date('Y-m-d').'/'.\Illuminate\Support\Str::uuid().'.'.$this->djTag->format;
             $fileContent = file_get_contents($processedPath);
 
-            \Illuminate\Support\Facades\Storage::disk(config('audio.storage_disk'))->put(
+            $storageService->store(
                 $fileName,
                 $fileContent,
                 'public'
