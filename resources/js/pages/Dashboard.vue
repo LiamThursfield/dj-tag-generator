@@ -116,7 +116,7 @@ const hasReachedTagLimit = computed(() => props.tagsCount >= props.tagLimit);
                     <CardContent>
                         <div class="text-2xl font-bold">New Tag</div>
                         <p class="text-xs text-muted-foreground">
-                            Generate a new DJ drop
+                            Generate a new DJ Tag
                         </p>
                     </CardContent>
                     <CardFooter>

@@ -124,12 +124,11 @@ const futurePlans = [
                     <h1
                         class="bg-gradient-to-b from-white to-white/60 bg-clip-text text-5xl font-bold tracking-tighter text-transparent sm:text-7xl"
                     >
-                        Professional DJ drops <br />
+                        Professional DJ Tags <br />
                         in
                         <span
-                            class="bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent"
-                            >seconds</span
-                        >.
+                            class="bg-gradient-to-r pr-[3px] from-orange-400 to-red-500 bg-clip-text text-transparent"
+                        >seconds</span>.
                     </h1>
                     <p
                         class="mt-8 text-lg leading-relaxed text-balance text-white/60"

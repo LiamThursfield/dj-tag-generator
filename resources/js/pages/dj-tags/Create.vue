@@ -91,7 +91,7 @@ const submit = () => {
                         <Textarea
                             v-model="form.text"
                             class="min-h-18"
-                            placeholder="Type your DJ drop text here..."
+                            placeholder="Type your DJ Tag text here..."
                         />
                         <div
                             v-if="form.errors.text"
