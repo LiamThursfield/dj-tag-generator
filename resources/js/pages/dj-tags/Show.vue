@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes';
+import { play } from '@/routes/audio';
 import { index, reprocess, show } from '@/routes/dj-tags';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, useForm } from '@inertiajs/vue3';
@@ -58,9 +59,9 @@ const getStatusColor = (status: string) => {
     }
 };
 
-const getAudioUrl = (path: string | null) => {
-    if (!path) return null;
-    return `/storage/${path}`;
+const getAudioUrl = (versionId: number | undefined | null) => {
+    if (!versionId) return null;
+    return play.url(versionId);
 };
 
 const latestVersion = computed(() => props.tag.versions[0] || null);
@@ -226,7 +227,7 @@ const compareVersionId = ref<number | null>(null);
                                     <source
                                         :src="
                                             getAudioUrl(
-                                                latestVersion?.audio_path,
+                                                latestVersion?.id,
                                             ) as string
                                         "
                                         type="audio/mpeg"
@@ -243,11 +244,7 @@ const compareVersionId = ref<number | null>(null);
                             >
                                 <audio controls class="w-full">
                                     <source
-                                        :src="
-                                            getAudioUrl(
-                                                version.audio_path,
-                                            ) as string
-                                        "
+                                        :src="getAudioUrl(version.id) as string"
                                         type="audio/mpeg"
                                     />
                                 </audio>
@@ -277,9 +274,7 @@ const compareVersionId = ref<number | null>(null);
                                     </div>
                                     <a
                                         :href="
-                                            getAudioUrl(
-                                                version.audio_path,
-                                            ) as string
+                                            getAudioUrl(version.id) as string
                                         "
                                         download
                                         class="text-xs font-bold tracking-wider text-indigo-600 uppercase hover:text-indigo-800 hover:underline dark:text-indigo-400 dark:hover:text-indigo-300"

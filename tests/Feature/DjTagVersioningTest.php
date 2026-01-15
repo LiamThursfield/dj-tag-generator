@@ -6,6 +6,7 @@ use App\Jobs\ReprocessDjTagJob;
 use App\Models\DjTag;
 use App\Models\DjTagVersion;
 use App\Models\User;
+use App\Services\Audio\AudioStorageService;
 use App\Services\TTS\TtsServiceFactory;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
@@ -47,7 +48,7 @@ it('GenerateDjTagJob creates raw audio and version 1', function () {
     ]);
 
     $job = new GenerateDjTagJob($tag, ['reverb' => 'small_room']);
-    $job->handle(new TtsServiceFactory, app(AudioProcessor::class));
+    $job->handle(new TtsServiceFactory, app(AudioProcessor::class), app(AudioStorageService::class));
 
     $tag->refresh();
     expect($tag->raw_audio_path)->not->toBeNull()
@@ -75,7 +76,7 @@ it('ReprocessDjTagJob creates subsequent versions using raw audio', function () 
     DjTagVersion::factory()->for($tag)->create(['version_number' => 1]);
 
     $job = new ReprocessDjTagJob($tag, ['pitch' => 5]);
-    $job->handle(app(AudioProcessor::class));
+    $job->handle(app(AudioProcessor::class), app(AudioStorageService::class));
 
     $tag->refresh();
     expect($tag->versions)->toHaveCount(2);
