@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\ReprocessDjTagJob;
 use App\Models\DjTag;
+use App\Models\DjTagVersion;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -66,7 +67,9 @@ class DjTagController extends Controller
             abort(403);
         }
 
-        if ($djTag->versions()->count() >= $request->user()->limit('dj_tag_version_limit')) {
+        $versions = $djTag->versions();
+
+        if ($versions->count() >= $request->user()->limit('dj_tag_version_limit')) {
             return back()->withErrors(['rate_limit' => 'You have reached the version limit for this tag.']);
         }
 
@@ -74,7 +77,17 @@ class DjTagController extends Controller
             'audio_effects' => ['nullable', 'array'],
         ]);
 
-        ReprocessDjTagJob::dispatch($djTag, $validated['audio_effects'] ?? []);
+        $lastVersion = $versions->max('version_number') ?: 0;
+        $versionNumber = $lastVersion + 1;
+
+        /** @var DjTagVersion $version */
+        $version = $djTag->versions()->create([
+            'version_number' => $versionNumber,
+            'audio_effects' => $validated['audio_effects'] ?? [],
+            'status' => 'processing',
+        ]);
+
+        ReprocessDjTagJob::dispatch($djTag, $version);
 
         return back()->with('success', 'New version is being generated!');
     }

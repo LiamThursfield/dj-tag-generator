@@ -21,29 +21,17 @@ class ReprocessDjTagJob implements ShouldQueue
 
     public function __construct(
         public DjTag $djTag,
-        public array $audioEffects = []
+        public DjTagVersion $djTagVersion,
     ) {}
 
     public function handle(AudioProcessor $audioProcessor, AudioStorageService $storageService): void
     {
-        // 1. Determine version number
-        $lastVersion = $this->djTag->versions()->max('version_number') ?: 0;
-        $versionNumber = $lastVersion + 1;
-
-        // 2. Create the version record
-        /** @var DjTagVersion $version */
-        $version = $this->djTag->versions()->create([
-            'version_number' => $versionNumber,
-            'audio_effects' => $this->audioEffects,
-            'status' => 'processing',
-        ]);
-
         try {
             if (! $this->djTag->hasRawAudio()) {
                 throw new \Exception("Master raw audio not found for tag: {$this->djTag->id}");
             }
 
-            // 3. Download Raw Audio to Temp File
+            // Download Raw Audio to Temp File
             $tempRawPath = storage_path('app/temp/'.Str::uuid().'.mp3');
             if (! file_exists(dirname($tempRawPath))) {
                 mkdir(dirname($tempRawPath), 0755, true);
@@ -52,13 +40,13 @@ class ReprocessDjTagJob implements ShouldQueue
             $rawContent = $storageService->get($this->djTag->raw_audio_path);
             file_put_contents($tempRawPath, $rawContent);
 
-            // 4. Apply Audio Effects (FFmpeg)
-            $processedPath = $audioProcessor->applyEffects($tempRawPath, $this->audioEffects);
+            // Apply Audio Effects (FFmpeg)
+            $processedPath = $audioProcessor->applyEffects($tempRawPath, $this->djTagVersion->audio_effects);
 
-            // 5. Get Processed Duration
+            // Get Processed Duration
             $duration = $audioProcessor->getDuration($processedPath);
 
-            // 6. Store Processed to Permanent Storage
+            // Store Processed to Permanent Storage
             $fileName = 'tags/processed/'.date('Y-m-d').'/'.Str::uuid().'.'.$this->djTag->format;
             $fileContent = file_get_contents($processedPath);
 
@@ -68,26 +56,26 @@ class ReprocessDjTagJob implements ShouldQueue
                 'public'
             );
 
-            // 7. Update Version Record
-            $version->update([
+            // Update Version Record
+            $this->djTagVersion->update([
                 'status' => 'completed',
                 'audio_path' => $fileName,
                 'duration' => $duration,
             ]);
 
-            // 8. Cleanup Temp Files
+            // Cleanup Temp Files
             @unlink($tempRawPath);
             @unlink($processedPath);
 
         } catch (\Throwable $e) {
             \Illuminate\Support\Facades\Log::error('DJ Tag Reprocessing Failed', [
                 'tag_id' => $this->djTag->id,
-                'version_id' => $version->id,
+                'version_id' => $this->djTagVersion->id,
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
 
-            $version->update([
+            $this->djTagVersion->update([
                 'status' => 'failed',
                 'error_message' => $e->getMessage(),
             ]);

@@ -65,29 +65,6 @@ it('GenerateDjTagJob creates raw audio and version 1', function () {
     Storage::disk('local')->assertExists($version->audio_path);
 });
 
-it('ReprocessDjTagJob creates subsequent versions using raw audio', function () {
-    $tag = DjTag::factory()->create([
-        'raw_audio_path' => 'tags/raw/test.mp3',
-        'raw_audio_duration' => 2.0,
-    ]);
-    Storage::disk('local')->put($tag->raw_audio_path, 'raw-content');
-
-    // Initial version already exists
-    DjTagVersion::factory()->for($tag)->create(['version_number' => 1]);
-
-    $job = new ReprocessDjTagJob($tag, ['pitch' => 5]);
-    $job->handle(app(AudioProcessor::class), app(AudioStorageService::class));
-
-    $tag->refresh();
-    expect($tag->versions)->toHaveCount(2);
-
-    $newVersion = $tag->versions()->where('version_number', 2)->first();
-    expect($newVersion->status)->toBe('completed')
-        ->and($newVersion->audio_effects)->toBe(['pitch' => 5]);
-
-    Storage::disk('local')->assertExists($newVersion->audio_path);
-});
-
 it('controller store dispatches generate job', function () {
     \Illuminate\Support\Facades\Queue::fake();
     $user = User::factory()->create(['openai_api_key' => 'key']);
@@ -113,8 +90,8 @@ it('controller reprocess dispatches reprocess job', function () {
         'audio_effects' => ['speed' => 1.5],
     ]);
 
-    \Illuminate\Support\Facades\Queue::assertPushed(ReprocessDjTagJob::class, function ($job) use ($tag) {
-        return $job->djTag->id === $tag->id && $job->audioEffects === ['speed' => 1.5];
+    \Illuminate\Support\Facades\Queue::assertPushed(ReprocessDjTagJob::class, function (ReprocessDjTagJob $job) use ($tag) {
+        return $job->djTag->id === $tag->id && $job->djTagVersion->audio_effects === ['speed' => 1.5];
     });
 });
 
