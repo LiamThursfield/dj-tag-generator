@@ -1,7 +1,7 @@
 # DJ Tag Generator - Development Task List
 
-> **Last Updated**: 2026-01-06  
-> **Status**: Phase 1 - Database & Models (In Progress)
+> **Last Updated**: 2026-01-15  
+> **Status**: Phase 3 - Frontend UI (In Progress)
 
 This task list tracks all development work for the DJ Tag Generator application. Please keep this updated as you complete tasks or add new ones.
 
@@ -24,6 +24,7 @@ This task list tracks all development work for the DJ Tag Generator application.
 - [x] Audio processor interface (`AudioProcessor`)
 - [x] FFmpeg audio processor implementation
 - [x] Audio configuration with effects (reverb, pitch, speed, bass boost, normalize)
+- [x] Audio Storage Service Refactor (`AudioStorageService`)
 
 ### Security & Cost Controls
 - [x] PHP resource limits (5MB upload, 256MB memory, 60s timeout)
@@ -57,7 +58,7 @@ This task list tracks all development work for the DJ Tag Generator application.
 
 ---
 
-## ✅ Completed
+## 🚧 In Progress
 
 ### Phase 2: Backend Logic
 
@@ -76,7 +77,6 @@ This task list tracks all development work for the DJ Tag Generator application.
 - [x] Create `GenerateDjTagJob` (TTS → Raw Storage → Version 1)
 - [x] Create `ReprocessDjTagJob` (Raw Storage → New Version)
 - [x] Implement error handling and retry logic
-- [ ] Create `CleanupOldDjTagsJob` for automatic file cleanup (raw + versions)
 - [ ] Add job monitoring and logging
 
 #### Action Classes
@@ -92,18 +92,9 @@ This task list tracks all development work for the DJ Tag Generator application.
 
 #### Form Requests
 - [x] Create `StoreDjTagRequest` (Validation & Rate Limiting)
-- [ ] Create `UpdateDjTagRequest`
-- [ ] Create `StoreDjTagPresetRequest`
-- [ ] Create `UpdateSettingsRequest` with API key validation
-
-#### Middleware
-- [ ] Create `CheckRateLimit` middleware
-- [ ] Create `ValidateApiKey` middleware
-- [ ] Create `TrackUsage` middleware (cost tracking)
 
 #### API Resources
 - [ ] Create `DjTagResource` for API responses
-- [ ] Create `DjTagPresetResource`
 - [ ] Create `VoiceResource`
 - [ ] Create `DjTagCollection` with pagination
 
@@ -112,22 +103,19 @@ This task list tracks all development work for the DJ Tag Generator application.
 ### Phase 3: Frontend UI
 
 #### Layouts
-- [ ] Create `AppLayout.vue` (authenticated users)
-- [ ] Create `GuestLayout.vue` (login/register)
-- [ ] Add navigation menu
-- [ ] Add breadcrumbs
+- [x] Create `AppLayout.vue` (authenticated users)
+- [x] Add navigation menu
+- [x] Add breadcrumbs
 - [ ] Add notifications/toast system
 
 #### Components - DJ Tag Creation
-- [ ] Create `DjTagForm.vue` (main creation form)
+- [x] Create `DjTagForm.vue` (Integrated into DjTags/Create)
 - [ ] Create `TextInput.vue` (with character counter)
-- [ ] Create `VoiceSelector.vue` (dropdown with voice previews)
-- [ ] Create `EffectsPanel.vue` (pitch, speed, reverb, etc.)
-- [ ] Create `PresetSelector.vue` (load saved presets)
-- [ ] Create `CostEstimator.vue` (show estimated cost)
+- [x] Create `VoiceSelector.vue` (implemented as VoicePicker)
+- [x] Create `EffectsPanel.vue` (implemented as AudioEffectsSelector)
 
 #### Components - Audio Playback
-- [ ] Create `AudioPlayer.vue` (play/pause, seek)
+- [x] Create `AudioPlayer.vue` (Integrated into specific views)
 - [ ] Create `WaveformVisualizer.vue` (audio waveform)
 - [ ] Create `DownloadButton.vue` (with format options)
 
@@ -138,23 +126,21 @@ This task list tracks all development work for the DJ Tag Generator application.
 - [ ] Create `DjTagSearch.vue` (search tags)
 
 #### Components - Settings
-- [ ] Create `ApiKeyInput.vue` (secure input with validation, reusable for both services)
-- [ ] Create `ServiceSelector.vue` (choose OpenAI, ElevenLabs, or both)
+- [x] Create `ApiKeyInput.vue` (secure input with validation, reusable for both services)
+- [x] Create `ServiceSelector.vue` (choose OpenAI, ElevenLabs, or both)
 - [ ] Create `UsageStats.vue` (show usage and costs per service)
 - [ ] Create `ServiceStatusBadge.vue` (show which services are configured)
 
 #### Inertia Pages
-- [ ] Create `Dashboard.vue` (recent tags, quick create)
-- [ ] Create `DjTags/Index.vue` (tag library)
-- [ ] Create `DjTags/Create.vue` (create new tag)
-- [ ] Create `DjTags/Show.vue` (view/download tag)
-- [ ] Create `DjTagPresets/Index.vue` (manage presets)
-- [ ] Create `Settings/Index.vue` (API keys, preferences)
+- [x] Create `Dashboard.vue` (recent tags, quick create)
+- [x] Create `DjTags/Index.vue` (tag library)
+- [x] Create `DjTags/Create.vue` (create new tag)
+- [x] Create `DjTags/Show.vue` (view/download tag)
+- [x] Create `Settings/Index.vue` (API keys, preferences)
 
 #### TypeScript Types
 - [ ] Generate types from Laravel resources
 - [ ] Create `DjTag` type
-- [ ] Create `DjTagPreset` type
 - [ ] Create `Voice` type
 - [ ] Create `AudioEffect` type
 
@@ -163,25 +149,22 @@ This task list tracks all development work for the DJ Tag Generator application.
 ### Phase 4: Testing
 
 #### Feature Tests
-- [ ] Test tag creation flow (TTS → FFmpeg → Storage)
-- [ ] Test rate limiting enforcement
-- [ ] Test API key validation
-- [ ] Test preset creation and usage
-- [ ] Test file cleanup job
-- [ ] Test error handling (invalid API key, TTS failure, etc.)
+- [x] Test tag creation flow (TTS → FFmpeg → Storage)
+- [x] Test rate limiting enforcement
+- [x] Test API key validation
+- [x] Test error handling (invalid API key, TTS failure, etc.)
 
 #### Unit Tests
-- [ ] Test `OpenAiTtsService` (mocked API)
-- [ ] Test `ElevenLabsTtsService` (mocked API)
-- [ ] Test `FfmpegAudioProcessor` effects
+- [x] Test `OpenAiTtsService` (mocked API)
+- [x] Test `ElevenLabsTtsService` (mocked API)
+- [x] Test `FfmpegAudioProcessor` effects
 - [ ] Test cost estimation accuracy
-- [ ] Test rate limiting logic
-- [ ] Test input validation
+- [x] Test rate limiting logic
+- [x] Test input validation
 
 #### Browser Tests (Pest 4)
 - [ ] Test complete tag creation flow in browser
 - [ ] Test audio playback
-- [ ] Test preset management
 - [ ] Test settings page
 - [ ] Test error states and validation
 
@@ -190,7 +173,7 @@ This task list tracks all development work for the DJ Tag Generator application.
 ### Phase 5: Polish & Features
 
 #### User Experience
-- [ ] Add loading states and progress indicators
+- [x] Add loading states and progress indicators
 - [ ] Add error messages and validation feedback
 - [ ] Add success notifications
 - [ ] Add keyboard shortcuts
@@ -220,19 +203,21 @@ This task list tracks all development work for the DJ Tag Generator application.
 ### Phase 6: Deployment
 
 #### Production Setup
-- [ ] Configure production environment variables
-- [ ] Set up production database (MySQL/PostgreSQL)
-- [ ] Configure Redis for production
-- [ ] Set up Cloudflare R2 bucket
-- [ ] Configure queue workers (Supervisor)
-- [ ] Set up SSL certificates
-- [ ] Configure CDN for audio files
+- [x] Configure production environment variables
+- [x] Set up production database (MySQL)
+- [x] Configure Redis for production
+- [x] Set up Cloudflare R2 bucket
+- [x] Configure queue workers (Supervisor)
+- [x] Set up SSL certificates
+- [x] Configure CDN for audio files
+- - [x] Set up monitoring and alerts (Sentry)
+
+This is now live at [DJ Tag Generator](https://dj-tag-generator.lxst-digital.com)
 
 #### CI/CD
-- [ ] Set up GitHub Actions for testing
+- [x] Set up GitHub Actions for testing
 - [ ] Set up automated deployments
 - [ ] Configure database backups
-- [ ] Set up monitoring and alerts
 
 #### Performance
 - [ ] Optimize database queries
@@ -249,6 +234,15 @@ _No known issues yet - add them here as they're discovered_
 ---
 
 ## 💡 Future Ideas
+
+### Preset Management (On Hold)
+- [ ] Create `StoreDjTagPresetRequest`
+- [ ] Create `DjTagPresetResource`
+- [ ] Create `PresetSelector.vue` (load saved presets)
+- [ ] Create `DjTagPresets/Index.vue` (manage presets)
+- [ ] Create `DjTagPreset` type
+- [ ] Test preset creation and usage
+- [ ] Test preset management
 
 ### Potential Features (Not Prioritized)
 - [ ] Mobile app (React Native or Capacitor)
@@ -283,25 +277,23 @@ _No known issues yet - add them here as they're discovered_
 - **Phase 6** (Deployment) when ready for production
 
 ### Conventions:
-- Use `[ ]` for incomplete tasks
-- Use `[x]` for completed tasks
-- Use `[~]` for partially complete tasks
-- Add dates in YYYY-MM-DD format
-- Link to relevant files when helpful
+- **[ ]** Incomplete tasks
+- **[x]** Completed tasks
+- **[~]** Partially complete tasks
+- **Link** to relevant files where helpful
 
 ---
 
 ## 🎯 Current Sprint Focus
 
-**Goal**: Complete Phase 1 - Database & Models
+**Goal**: Complete Frontend UI & Integration
 
 **Target Date**: TBD
 
 **Tasks This Sprint**:
-1. Create all database migrations
-2. Create all models with relationships
-3. Create factories and seeders
-4. Test the full pipeline (TTS → FFmpeg → Storage)
+1. Finish Settings pages
+2. Implement Browser Tests (Pest 4)
+3. Refine UI Components (Toasts, Error states)
 
 ---
 
@@ -311,15 +303,11 @@ _No known issues yet - add them here as they're discovered_
 - **Service Layer**: ✅ 100% Complete
 - **Security**: ✅ 100% Complete
 - **Documentation**: ✅ 100% Complete
-- **Phase 1 (Database)**: 🚧 0% Complete
-- **Phase 2 (Backend)**: ⏳ 0% Not Started
-- **Phase 3 (Frontend)**: ⏳ 0% Not Started
-- **Phase 4 (Testing)**: ⏳ 0% Not Started
-- **Phase 5 (Polish)**: ⏳ 0% Not Started
+- **Phase 1 (Database)**: ✅ 100% Complete
+- **Phase 2 (Backend)**: 🚧 ~75% Complete
+- **Phase 3 (Frontend)**: 🚧 ~65% Complete
+- **Phase 4 (Testing)**: 🚧 ~55% Complete
+- **Phase 5 (Polish)**: ⏳ ~10% Started
 - **Phase 6 (Deployment)**: ⏳ 0% Not Started
 
-**Overall Progress**: ~55% (Infrastructure, Foundation, Database Complete)
-
----
-
-_This task list is a living document. Keep it updated and use it to coordinate work across team members and AI agents._
+**Overall Progress**: ~65%
