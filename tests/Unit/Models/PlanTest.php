@@ -20,8 +20,8 @@ test('plan can have many users', function () {
 });
 
 test('default plan can be retrieved', function () {
-    \App\Models\Plan::factory()->create(['is_default' => false, 'slug' => 'p1']);
-    $default = \App\Models\Plan::factory()->create(['is_default' => true, 'slug' => 'p2']);
+    \App\Models\Plan::factory()->create(['is_default' => false]);
+    $default = \App\Models\Plan::factory()->create(['is_default' => true]);
 
     expect(\App\Models\Plan::where('is_default', true)->first()->id)->toBe($default->id);
 });

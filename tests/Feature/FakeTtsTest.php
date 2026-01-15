@@ -92,7 +92,11 @@ it('GenerateDjTagJob completes correctly with fake service', function () {
     ]);
 
     $job = new GenerateDjTagJob($tag);
-    $job->handle(new TtsServiceFactory, app(\App\Contracts\AudioProcessor::class));
+    $job->handle(
+        new TtsServiceFactory,
+        app(\App\Contracts\AudioProcessor::class),
+        app(\App\Services\Audio\AudioStorageService::class)
+    );
 
     $tag->refresh();
     $version = $tag->latestVersion;
