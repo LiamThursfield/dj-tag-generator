@@ -55,7 +55,7 @@ const futurePlans = [
 
     <!-- Dark Mode Wrapper with Noise Texture Overlay -->
     <div
-        class="min-h-screen bg-[#0a0a0a] font-sans text-white antialiased selection:bg-orange-500/30 selection:text-orange-200"
+        class="min-h-screen overflow-x-hidden bg-[#0a0a0a] font-sans text-white antialiased selection:bg-orange-500/30 selection:text-orange-200"
     >
         <!-- Navigation - Floating Glass Pill -->
         <header class="fixed top-6 z-50 w-full px-4">
@@ -67,10 +67,12 @@ const futurePlans = [
                         <div
                             class="mr-2 flex h-8 w-8 items-center justify-center rounded-md bg-gradient-to-br from-orange-500 to-orange-700 shadow-[0_0_15px_rgba(249,115,22,0.5)]"
                         >
-                            <AudioLines class="h-5 w-5 fill-white text-white" />
+                            <AudioLines
+                                class="h-5 w-5 fill-primary-foreground text-primary-foreground"
+                            />
                         </div>
                         <span
-                            class="text-lg font-bold tracking-tight text-white"
+                            class="text-lg font-bold tracking-tight text-foreground"
                         >
                             DJ Tag Generator
                         </span>
@@ -79,20 +81,17 @@ const futurePlans = [
                     <nav v-if="canLogin" class="flex gap-4">
                         <template v-if="$page.props.auth.user">
                             <Link :href="dashboard()">
-                                <Button
-                                    variant="ghost"
-                                    class="text-white/80 hover:bg-white/10 hover:text-white"
-                                    >Dashboard</Button
-                                >
+                                <Button variant="ghost">Dashboard</Button>
                             </Link>
                         </template>
                         <template v-else>
                             <Link :href="login()">
                                 <Button
                                     variant="ghost"
-                                    class="hidden text-white/80 hover:bg-white/10 hover:text-white sm:inline-flex"
-                                    >Log in</Button
+                                    class="hidden sm:inline-flex"
                                 >
+                                    Log in
+                                </Button>
                             </Link>
                             <Link v-if="canRegister" :href="register()">
                                 <Button
@@ -113,7 +112,7 @@ const futurePlans = [
                 <!-- Glowing Background Blob -->
                 <div
                     class="absolute top-0 left-1/2 -z-10 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-orange-600/20 blur-[120px]"
-                ></div>
+                />
 
                 <div class="mx-auto max-w-3xl text-center">
                     <div
@@ -215,7 +214,7 @@ const futurePlans = [
             </div>
 
             <!-- Bento Grid Features Section -->
-            <div class="mx-auto mt-32 max-w-6xl">
+            <div class="mx-auto mt-32 max-w-6xl px-6 lg:px-8">
                 <div class="mx-auto mb-16 max-w-2xl text-center">
                     <h2
                         class="text-3xl font-bold tracking-tight text-white sm:text-4xl"
