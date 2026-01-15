@@ -1,5 +1,4 @@
 /node_modules
-/public/build
 /public/hot
 /public/storage
 /vendor
@@ -25,7 +24,7 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
- 
+
  _ide_helper.php
  _ide_helper_models.php
  .phpstorm.meta.php
