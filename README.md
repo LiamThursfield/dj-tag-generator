@@ -9,8 +9,8 @@ A Laravel application for generating professional DJ tags - the audio clips that
 ### Core Functionality
 - **Text-to-Speech Generation**: Convert any phrase, word, or DJ name into a professional audio tag
 - **Multiple TTS Providers**: 
-  - **OpenAI TTS**: 6 high-quality voices (alloy, echo, fable, onyx, nova, shimmer)
   - **ElevenLabs**: Ultra-realistic voices with emotion control and voice cloning
+  - **OpenAI TTS** (Coming Soon): 6 high-quality voices (alloy, echo, fable, onyx, nova, shimmer)
 - **Audio Processing**: Professional effects powered by FFmpeg
   - Pitch shifting
   - Speed control
@@ -35,7 +35,7 @@ A Laravel application for generating professional DJ tags - the audio clips that
 ### Backend
 - **PHP**: 8.2+
 - **Laravel**: 12.x
-- **Database**: SQLite (development) / MySQL/PostgreSQL (production)
+- **Database**: SQLite (development) / MySQL (production)
 - **Queue System**: Laravel Queues for async audio processing
 
 ### Frontend
@@ -188,18 +188,6 @@ APP_URL=http://localhost
 QUEUE_CONNECTION=redis
 CACHE_STORE=redis
 
-# Text-to-Speech Service
-TTS_SERVICE=openai  # or elevenlabs
-
-# OpenAI TTS
-OPENAI_API_KEY=your-api-key-here
-OPENAI_TTS_MODEL=tts-1  # or tts-1-hd
-OPENAI_TTS_VOICE=alloy  # alloy, echo, fable, onyx, nova, shimmer
-
-# ElevenLabs (optional)
-ELEVENLABS_API_KEY=your-api-key-here
-ELEVENLABS_MODEL=eleven_monolingual_v1
-
 # Audio Processing
 AUDIO_OUTPUT_FORMAT=mp3
 AUDIO_SAMPLE_RATE=44100
@@ -225,6 +213,7 @@ This application implements several security and cost control measures to preven
 
 - **Text Length Limit**: 500 characters max (typical DJ tag is 20-100 chars)
 - **Rate Limiting**: 10 tags/hour, 50 tags/day per user
+- **Plan Limits**: Different limits based on user subscription plan
 - **Duration Limit**: 10 seconds max audio length
 - **File Size Limit**: 5MB max (DJ tags are typically 100-500KB)
 - **Resource Limits**: 60-second processing timeout, 256MB memory limit
@@ -241,7 +230,7 @@ See [SECURITY.md](file:///Users/liamthursfield/code/dj-tag-generator/SECURITY.md
 
 1. Follow Laravel and Vue.js best practices
 2. Write tests for new features
-3. Run `vendor/bin/sail bin pint` before committing
+3. Run `vendor/bin/sail bin pint && vendor/bin/phpstan analyse` before committing
 4. Ensure all tests pass before submitting PRs
 
 ## License
