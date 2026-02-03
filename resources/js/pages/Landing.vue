@@ -415,12 +415,12 @@ const futurePlans = [
                         &copy; {{ year }} DJ Tag Generator. Made for creators.
                         Built by
                         <a
-                            href="https://lxst-digital.com"
+                            href="https://lxst.digital"
                             target="_blank"
                             class="underline hover:text-primary"
                         >
-                            LXST Digital </a
-                        >.
+                            LXST.digital</a
+                        >
                     </div>
                 </div>
             </footer>

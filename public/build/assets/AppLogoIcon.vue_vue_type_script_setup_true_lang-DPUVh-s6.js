@@ -1,0 +1,1 @@
+import{A as o}from"./audio-lines-BUrMeC-8.js";import{d as e,f as s,u as r,o as a}from"./app-HPfy1-ti.js";const i=e({inheritAttrs:!1,__name:"AppLogoIcon",props:{className:{}},setup(n){return(t,p)=>(a(),s(r(o)))}});export{i as _};
